@@ -119,9 +119,11 @@ class OrderController extends Controller
         $user = $request->user();
 
         if ($user->role === 'admin') {
-            $orders = Order::latest()->get(); // admin sees all
+            // Admin sees all orders with laundry_status = Waiting
+            $orders = Order::where('laundry_status', 'Waiting')->latest()->get();
         } else {
-            $orders = $user->orders()->latest()->get(); // customer sees own
+            // Customer sees their own orders with laundry_status = Waiting
+            $orders = $user->orders()->where('laundry_status', 'Waiting')->latest()->get();
         }
 
         return response()->json([
