@@ -77,7 +77,7 @@ class OrderController extends Controller
         // Return JSON response
         return response()->json([
             'success' => true,
-            'message' => 'Order created successfully!',
+            'message' => 'Inquire placed successfully!, Please check your dashboard for an update. Thanks',
             'order'   => $order,
         ], 201);
     }
