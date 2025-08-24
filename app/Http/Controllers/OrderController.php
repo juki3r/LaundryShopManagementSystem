@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class OrderController extends Controller
@@ -42,6 +44,42 @@ class OrderController extends Controller
 
         return redirect()->route('orders.create')
             ->with('success', 'Order created successfully!');
+    }
+
+    public function storeApi(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'customer_name'  => 'required|string|max:255',
+            'contact_number' => 'required|string|max:20',
+            'address'        => 'required|string|max:500',
+            'service_type'   => 'required|in:Delivery,Pick-up',
+            'weight'         => 'required|numeric|min:0',
+            'total'          => 'required|numeric|min:0',
+            'order_date'     => 'required|date',
+        ]);
+
+        // Create order for the authenticated user
+        $order = Auth::user()->orders()->create([
+            'customer_name'  => $request->customer_name,
+            'contact_number' => $request->contact_number,
+            'address'        => $request->address,
+            'service_type'   => $request->service_type,
+            'weight'         => $request->weight,
+            'laundry_status' => 'Waiting',
+            'claimed'        => 'No',
+            'delivered'      => 'No',
+            'total'          => $request->total,
+            'amount_status'  => 'Pending',
+            'order_date'     => $request->order_date,
+        ]);
+
+        // Return JSON response
+        return response()->json([
+            'success' => true,
+            'message' => 'Order created successfully!',
+            'order'   => $order,
+        ], 201);
     }
 
 
