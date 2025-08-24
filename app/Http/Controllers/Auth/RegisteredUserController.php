@@ -57,17 +57,17 @@ class RegisteredUserController extends Controller
     public function registerapi(Request $request)
     {
         $request->validate([
-            //     'name' => 'required|string|max:255',
-            //     'username' => 'required|string|max:255|unique:users,username',
-            //     'password' => ['required', 'confirmed', Password::min(6)],
-            'expo_token' => 'nullable|string', // <-- add this
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username',
+            'password' => ['required', 'confirmed', Password::min(6)],
+            // 'expo_token' => 'nullable|string', // <-- add this
         ]);
 
         $user = User::create([
-            'name' => 'Demo',
-            'username' => 'demo',
-            'password' => 'demo12345',
-            'expo_token' => $request->expo_token, // <-- save token here
+            'name' => $request->name,
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            // 'expo_token' => $request->expo_token, // <-- save token here
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
