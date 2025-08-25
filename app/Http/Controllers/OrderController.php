@@ -54,8 +54,8 @@ class OrderController extends Controller
             'contact_number' => 'required|string|max:20',
             'address'        => 'required|string|max:500',
             'service_type'   => 'required|in:Delivery,Pick-up',
-            'weight'         => 'required|numeric|min:0',
-            'total'          => 'required|numeric|min:0',
+            // 'weight'         => 'required|numeric|min:0',
+            // 'total'          => 'required|numeric|min:0',
             'order_date'     => 'required|date',
         ]);
 
@@ -65,11 +65,11 @@ class OrderController extends Controller
             'contact_number' => $request->contact_number,
             'address'        => $request->address,
             'service_type'   => $request->service_type,
-            'weight'         => $request->weight,
+            'weight'         => 0,
             'laundry_status' => 'Waiting',
             'claimed'        => 'No',
             'delivered'      => 'No',
-            'total'          => $request->total,
+            'total'          => 0,
             'amount_status'  => 'Pending',
             'order_date'     => $request->order_date,
         ]);
