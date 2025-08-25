@@ -83,18 +83,38 @@ class OrderController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
+
         if (auth()->user()->role === 'admin') {
-            // Admin sees all orders, paginated
-            $orders = \App\Models\Order::latest()->paginate(10);
+            $orders = \App\Models\Order::query()
+                ->when($search, function ($query, $search) {
+                    $query->where('customer_name', 'like', "%{$search}%")
+                        ->orWhere('service_type', 'like', "%{$search}%")
+                        ->orWhere('laundry_status', 'like', "%{$search}%");
+                })
+                ->latest()
+                ->paginate(10)
+                ->withQueryString();
         } else {
-            // Customer sees own orders, paginated
-            $orders = auth()->user()->orders()->latest()->paginate(10);
+            $orders = auth()->user()->orders()
+                ->when($search, function ($query, $search) {
+                    $query->where('service_type', 'like', "%{$search}%")
+                        ->orWhere('laundry_status', 'like', "%{$search}%");
+                })
+                ->latest()
+                ->paginate(10)
+                ->withQueryString();
         }
 
-        return view('orders.index', compact('orders'));
+        if ($request->ajax()) {
+            return view('orders.partials.orders-table', compact('orders'))->render();
+        }
+
+        return view('orders.index', compact('orders', 'search'));
     }
+
 
 
     public function approve(Order $order)
