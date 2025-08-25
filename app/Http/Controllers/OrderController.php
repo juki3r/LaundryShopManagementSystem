@@ -86,13 +86,16 @@ class OrderController extends Controller
     public function index()
     {
         if (auth()->user()->role === 'admin') {
-            $orders = \App\Models\Order::latest()->get(); // admin sees all
+            // Admin sees all orders, paginated
+            $orders = \App\Models\Order::latest()->paginate(10);
         } else {
-            $orders = auth()->user()->orders()->latest()->get(); // customer sees own
+            // Customer sees own orders, paginated
+            $orders = auth()->user()->orders()->latest()->paginate(10);
         }
 
         return view('orders.index', compact('orders'));
     }
+
 
     public function approve(Order $order)
     {
