@@ -51,4 +51,22 @@ class CustomerController extends Controller
             ], 500);
         }
     }
+
+    public function delete($id)
+    {
+        try {
+            $customer = User::where('role', 'customer')->findOrFail($id);
+            $customer->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Customer deleted successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete customer.'
+            ], 500);
+        }
+    }
 }

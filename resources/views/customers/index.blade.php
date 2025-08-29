@@ -28,6 +28,7 @@
                                     <th>Username</th>
                                     <th>Address</th>
                                     <th>Contact</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="customersTable">
@@ -37,6 +38,13 @@
                                         <td>{{ $customer->username }}</td>
                                        <td>{{ $customer->address ?? '-' }}</td>
                                        <td>{{ $customer->contact_number ?? '-' }}</td>
+                                        <td>
+                                            <button 
+                                                class="btn btn-sm btn-danger deleteCustomerBtn" 
+                                                data-id="{{ $customer->id }}">
+                                                Delete
+                                            </button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
