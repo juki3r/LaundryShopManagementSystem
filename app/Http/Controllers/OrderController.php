@@ -42,7 +42,7 @@ class OrderController extends Controller
         $orderDate = Carbon::now('Asia/Manila');
 
         // Create order
-        $order = Auth::user()->orders()->create([
+        $order = Order::create([
             'user_id'        => $id,
             'customer_name'  => $request->customer_name,
             'contact_number' => $request->contact_number,
@@ -56,6 +56,7 @@ class OrderController extends Controller
             'amount_status'  => 'Pending',
             'order_date'     => $orderDate,
         ]);
+
 
         return redirect()->route('orders.index')
             ->with('success', 'Order created successfully!');
