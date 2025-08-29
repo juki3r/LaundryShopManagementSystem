@@ -113,7 +113,7 @@
                                 <div class="modal-body">
                                     <div class="mb-3">
                                         <label class="form-label">Customer Name</label>
-                                        <input type="text" name="customer_name" class="form-control" required>
+                                        <input type="text" name="customer_name" class="form-control" required readonly>
                                     </div>
 
                                     <div class="mb-3">
@@ -137,7 +137,7 @@
 
                                     <div class="mb-3">
                                         <label class="form-label">Order Date</label>
-                                        <input type="date" name="order_date" class="form-control" required>
+                                        <input type="text" name="order_date" class="form-control" readonly>
                                     </div>
                                 </div>
 
@@ -157,15 +157,16 @@
     {{-- Scripts --}}
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById("addCustomerForm");
+            const addCustomerForm = document.getElementById("addCustomerForm");
             const messageBox = document.getElementById("ajaxMessage");
             const tableBody = document.getElementById("customersTable");
-            const modalEl = document.getElementById("addModal");
+            const addModal = document.getElementById("addModal");
+            const addOrderModal = document.getElementById("addOrderModal");
 
             // Delete customer
             document.addEventListener("click", function (e) {
                 if (e.target.classList.contains("deleteCustomerBtn")) {
-                    let customerId = e.target.getAttribute("data-id");
+                    const customerId = e.target.dataset.id;
                     if (!confirm("Are you sure you want to delete this customer?")) return;
 
                     fetch(`/customers/${customerId}`, {
@@ -182,7 +183,7 @@
                             messageBox.classList.add("alert-success");
                             messageBox.innerText = data.message;
 
-                            let row = document.getElementById(`customerRow${customerId}`);
+                            const row = document.getElementById(`customerRow${customerId}`);
                             if (row) row.remove();
 
                             if (tableBody.children.length === 0) {
@@ -205,11 +206,11 @@
             });
 
             // Add customer via AJAX
-            form.addEventListener("submit", function (e) {
+            addCustomerForm.addEventListener("submit", function (e) {
                 e.preventDefault();
-                let formData = new FormData(form);
+                const formData = new FormData(addCustomerForm);
 
-                fetch(form.action, {
+                fetch(addCustomerForm.action, {
                     method: "POST",
                     headers: {
                         "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
@@ -253,13 +254,13 @@
                             </tr>
                         `);
 
-                        form.reset();
+                        addCustomerForm.reset();
                     } else {
                         messageBox.classList.add("alert-danger");
                         messageBox.innerText = data.message;
                     }
 
-                    let modalInstance = bootstrap.Modal.getInstance(modalEl);
+                    const modalInstance = bootstrap.Modal.getInstance(addModal);
                     if (modalInstance) modalInstance.hide();
                 })
                 .catch(err => {
@@ -268,12 +269,12 @@
                     messageBox.classList.add("alert-danger");
                     messageBox.innerText = "Server error. Please try again.";
 
-                    let modalInstance = bootstrap.Modal.getInstance(modalEl);
+                    const modalInstance = bootstrap.Modal.getInstance(addModal);
                     if (modalInstance) modalInstance.hide();
                 });
             });
 
-            // Fill Add Order Modal dynamically
+            // Fill Add Order Modal dynamically and auto-fill Manila date
             document.addEventListener("click", function (e) {
                 if (e.target.classList.contains("addOrderBtn")) {
                     const customerId = e.target.dataset.id;
@@ -287,6 +288,15 @@
                     addOrderForm.querySelector('input[name="customer_name"]').value = customerName;
                     addOrderForm.querySelector('input[name="contact_number"]').value = customerContact;
                     addOrderForm.querySelector('textarea[name="address"]').value = customerAddress;
+
+                    // Auto-fill Order Date in Manila timezone
+                    const orderDateInput = addOrderForm.querySelector('input[name="order_date"]');
+                    const manilaTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" });
+                    const manilaDate = new Date(manilaTime);
+                    const yyyy = manilaDate.getFullYear();
+                    const mm = String(manilaDate.getMonth() + 1).padStart(2, '0');
+                    const dd = String(manilaDate.getDate()).padStart(2, '0');
+                    orderDateInput.value = `${yyyy}-${mm}-${dd}`;
                 }
             });
         });

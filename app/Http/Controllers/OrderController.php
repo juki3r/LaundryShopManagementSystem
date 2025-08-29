@@ -29,8 +29,7 @@ class OrderController extends Controller
         ]);
 
         // Convert order_date to PHT
-        $orderDate = Carbon::parse($request->order_date)
-            ->setTimezone('Asia/Manila');
+        $orderDate = Carbon::now('Asia/Manila');
 
         // Create order for the authenticated user
         $order = Auth::user()->orders()->create([
