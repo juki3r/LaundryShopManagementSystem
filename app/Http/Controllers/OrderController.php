@@ -157,4 +157,33 @@ class OrderController extends Controller
             'orders' => $orders,
         ]);
     }
+
+
+    public function update(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+
+        $request->validate([
+            'weight' => 'required|numeric|min:1',
+            'amount_status' => 'required|in:Pending,Paid',
+            'laundry_status' => 'required|in:Waiting,Processing,Completed',
+        ]);
+
+        // Auto-calculate total
+        $weight = $request->weight;
+        if ($weight <= 6) {
+            $total = 130;
+        } else {
+            $total = 130 + ($weight - 6) * 20;
+        }
+
+        $order->update([
+            'weight' => $weight,
+            'total' => $total,
+            'amount_status' => $request->amount_status,
+            'laundry_status' => $request->laundry_status,
+        ]);
+
+        return redirect()->back()->with('success', 'Order updated successfully!');
+    }
 }
