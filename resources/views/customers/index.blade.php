@@ -223,6 +223,12 @@
                                 <td>${data.customer.contact_number ?? '-'}</td>
                                 <td>
                                     <button 
+                                        class="btn btn-sm btn-success" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#addOrderModal{{ $customer->id }}">
+                                        Add Order
+                                    </button>
+                                    <button 
                                         class="btn btn-sm btn-danger deleteCustomerBtn" 
                                         data-id="${data.customer.id}">
                                         Delete
