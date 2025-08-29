@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    {{-- ✅ Message container for AJAX --}}
+                    {{-- Message container for AJAX --}}
                     <div id="ajaxMessage" class="alert d-none"></div>
 
                     <h4 class="mb-4 d-flex justify-content-between align-items-center">
@@ -98,6 +98,42 @@
         const messageBox = document.getElementById("ajaxMessage");
         const tableBody = document.getElementById("customersTable");
         const modalEl = document.getElementById("addModal");
+
+        // Handle delete button click
+        document.addEventListener("click", function (e) {
+            if (e.target.classList.contains("deleteCustomerBtn")) {
+                let customerId = e.target.getAttribute("data-id");
+                if (!confirm("Are you sure you want to delete this customer?")) return;
+
+                fetch(`/customers/${customerId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    messageBox.classList.remove("d-none", "alert-success", "alert-danger");
+
+                    if (data.success) {
+                        messageBox.classList.add("alert-success");
+                        messageBox.innerText = data.message;
+
+                        // Remove row from table
+                        document.getElementById(`customerRow${customerId}`).remove();
+                    } else {
+                        messageBox.classList.add("alert-danger");
+                        messageBox.innerText = data.message;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    messageBox.classList.remove("d-none");
+                    messageBox.classList.add("alert-danger");
+                    messageBox.innerText = "Server error. Please try again.";
+                });
+            }
+        });
 
         form.addEventListener("submit", function (e) {
             e.preventDefault();
