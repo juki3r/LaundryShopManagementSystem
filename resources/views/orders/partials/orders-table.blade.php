@@ -18,28 +18,26 @@
             </thead>
             <tbody>
                 @forelse($orders as $order)
-                <tr id="orderRow{{ $order->id }}">
+                @php
+                    $rowClass = match($order->laundry_status) {
+                        'Waiting' => 'table-warning',      // Yellow
+                        'Processing' => 'table-primary text-white', // Blue with white text
+                        'Completed' => 'table-success',    // Green
+                        default => '',                      // Default
+                    };
+                @endphp
+                <tr id="orderRow{{ $order->id }}" class="{{ $rowClass }}">
                     <td>{{ $order->customer_name }}</td>
                     <td>{{ $order->contact_number }}</td>
                     <td>{{ $order->address }}</td>
                     <td class="weight">{{ $order->weight }}</td>
                     <td class="total">{{ $order->total }}</td>
                     <td class="amount_status">{{ $order->amount_status }}</td>
-                    <td class="total">{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y h:i A') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y h:i A') }}</td>
                     <td>{{ $order->service_type }}</td>
-                    <td class="laundry_status">
-                        @php
-                            $statusClass = match($order->laundry_status) {
-                                'Waiting' => 'bg-warning text-dark',
-                                'Processing' => 'bg-primary text-light',
-                                'Completed' => 'bg-success text-light',
-                                default => 'bg-secondary text-light',
-                            };
-                        @endphp
-                        <span class="badge {{ $statusClass }}">{{ $order->laundry_status }}</span>
-                    </td>
+                    <td class="laundry_status">{{ $order->laundry_status }}</td>
                     <td>
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
+                        <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
                             Edit
                         </button>
                     </td>
