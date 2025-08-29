@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="container mt-4">
-        {{-- AJAX Messages --}}
+        {{-- Messages --}}
         <div id="ajaxMessageContainer" style="position: fixed; top: 20px; right: 20px; z-index: 1050;"></div>
 
         {{-- Search Input --}}
@@ -29,42 +29,15 @@
     <script>
     $(document).ready(function() {
 
-        // ===============================
-        // LIVE SEARCH + PAGINATION
-        // ===============================
-        function fetchOrders(query = '', page = 1) {
-            $.ajax({
-                url: "{{ route('orders.index') }}",
-                type: 'GET',
-                data: { search: query, page: page },
-                success: function(data) {
-                    $('#ordersTableContainer').html(data);
-                }
-            });
-        }
-
-        $('#searchInput').on('keyup', function() {
-            fetchOrders($(this).val());
-        });
-
-        $(document).on('click', '.pagination a', function(e) {
-            e.preventDefault();
-            let page = $(this).attr('href').split('page=')[1];
-            fetchOrders($('#searchInput').val(), page);
-        });
-
-        // ===============================
-        // MODAL EDIT FUNCTIONALITY
-        // ===============================
+        // Auto-calculate total
         $(document).on('input', '.weight-input', function() {
             const orderId = $(this).data('order-id');
             const weight = parseFloat($(this).val()) || 0;
-            let total = 0;
-            if(weight <= 6) total = 130;
-            else total = 130 + (weight - 6) * 20;
+            let total = weight <= 6 ? 130 : 130 + (weight - 6) * 20;
             $('#total' + orderId).val(total.toFixed(2));
         });
 
+        // Show message
         function showMessage(message, type = 'success') {
             const msgId = 'msg' + Date.now();
             const html = `
@@ -73,9 +46,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>`;
             $('#ajaxMessageContainer').append(html);
-            setTimeout(() => {
-                $('#' + msgId).alert('close');
-            }, 4000);
+            setTimeout(() => { $('#' + msgId).alert('close'); }, 4000);
         }
 
         // AJAX update
@@ -100,24 +71,11 @@
                     laundry_status
                 },
                 success: function(res){
-                    // Update table row
-                    const row = $('#orderRow' + orderId);
-                    row.find('.weight').text(weight);
-                    row.find('.total').text(total);
-                    row.find('.amount_status').text(amount_status);
-                    row.find('.laundry_status').text(laundry_status);
+                    // Optional: show success message before reload
+                    showMessage('Order updated successfully!', 'success');
 
-                    // Close modal properly
-                    const modalEl = document.getElementById('editOrderModal' + orderId);
-                    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-                    modal.hide();
-
-                    // Remove leftover backdrop and body class
-                    $('.modal-backdrop').remove();
-                    $('body').removeClass('modal-open');
-
-                    // Show success message
-                    showMessage(res.message, 'success');
+                    // Reload page after 500ms
+                    setTimeout(() => { location.reload(); }, 500);
                 },
                 error: function(err){
                     showMessage('Update failed. Please try again.', 'danger');
