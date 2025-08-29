@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 
 
@@ -54,10 +55,12 @@ class OrderController extends Controller
             'contact_number' => 'required|string|max:20',
             'address'        => 'required|string|max:500',
             'service_type'   => 'required|in:Delivery,Pick-up',
-            // 'weight'         => 'required|numeric|min:0',
-            // 'total'          => 'required|numeric|min:0',
             'order_date'     => 'required|date',
         ]);
+
+        // Convert order_date to PHT
+        $orderDate = Carbon::parse($request->order_date)
+            ->setTimezone('Asia/Manila');
 
         // Create order for the authenticated user
         $order = Auth::user()->orders()->create([
@@ -71,7 +74,7 @@ class OrderController extends Controller
             'delivered'      => 'No',
             'total'          => 0,
             'amount_status'  => 'Pending',
-            'order_date'     => $request->order_date,
+            'order_date'     => $orderDate,
         ]);
 
         // Return JSON response
