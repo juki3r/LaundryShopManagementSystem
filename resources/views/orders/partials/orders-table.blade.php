@@ -77,7 +77,6 @@
                         </form>
                       </div>
                     </div>
-
                 @empty
                     <tr>
                         <td colspan="9" class="text-center">No orders found.</td>
@@ -92,92 +91,39 @@
     </div>
 </div>
 
-<!-- jQuery required for AJAX -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function(){
-
-    // Auto-calculate total
-    $('.weight-input').on('input', function(){
-        const orderId = $(this).data('order-id');
-        const weight = parseFloat($(this).val()) || 0;
-        let total = 0;
-        if(weight <= 6) total = 130;
-        else total = 130 + (weight - 6) * 20;
-        $('#total' + orderId).val(total.toFixed(2));
-    });
-
-    // AJAX form submission
-    $('.edit-order-form').on('submit', function(e){
-        e.preventDefault();
-        const orderId = $(this).data('order-id');
-        const weight = parseFloat($(this).find('.weight-input').val()) || 0;
-        const total = parseFloat($(this).find('.total-input').val()) || 0;
-        const amount_status = $(this).find('.amount_status-input').val();
-        const laundry_status = $(this).find('.laundry_status-input').val();
-
-        $.ajax({
-            url: '/orders/' + orderId,
-            method: 'PUT',
-            data: {
-                _token: '{{ csrf_token() }}',
-                weight: weight,
-                total: total,
-                amount_status: amount_status,
-                laundry_status: laundry_status
-            },
-            success: function(res){
-                // Update table row without reload
-                const row = $('#orderRow' + orderId);
-                row.find('.weight').text(weight);
-                row.find('.total').text(total);
-                row.find('.amount_status').text(amount_status);
-                row.find('.laundry_status').text(laundry_status);
-
-                // Close modal
-                $('#editOrderModal' + orderId).modal('hide');
-            },
-            error: function(err){
-                alert('Update failed. Please try again.');
-            }
-        });
-    });
-
-});
-</script>
 @else
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <table class="table table-bordered table-hover">
-                <thead class="table-light">
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Service</th>
+                    <th>Weight</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($orders as $order)
                     <tr>
-                        <th>Order ID</th>
-                        <th>Service</th>
-                        <th>Weight</th>
-                        <th>Total Amount</th>
-                        <th>Status</th>
+                        <td>{{ $order->id }}</td>
+                        <td>{{ $order->service_type }}</td>
+                        <td>{{ $order->weight }}</td>
+                        <td>{{ $order->total }}</td>
+                        <td>{{ $order->laundry_status }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    @forelse($orders as $order)
-                        <tr>
-                            <td>{{ $order->id }}</td>
-                            <td>{{ $order->service_type }}</td>
-                            <td>{{ $order->weight }}</td>
-                            <td>{{ $order->total }}</td>
-                            <td>{{ $order->laundry_status }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center">No orders found.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center">No orders found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
 
-            <div class="d-flex justify-content-center">
-                {{ $orders->links('pagination::bootstrap-5') }}
-            </div>
+        <div class="d-flex justify-content-center">
+            {{ $orders->links('pagination::bootstrap-5') }}
         </div>
     </div>
+</div>
 @endif
