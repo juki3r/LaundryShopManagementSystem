@@ -15,7 +15,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
-Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+Route::post('/orders/{id}', [OrderController::class, 'store'])->name('orders.store');
 Route::middleware('auth')->group(function () {
     Route::resource('orders', OrderController::class);
 });
