@@ -242,7 +242,8 @@ class OrderController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Walk-in client and order created successfully.',
+            // 'message' => 'Walk-in client and order created successfully.',
+            'message' => 'OKAY',
             // 'order_id' => $order->id
         ]);
     }
