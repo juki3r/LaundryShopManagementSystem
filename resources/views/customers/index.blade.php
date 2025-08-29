@@ -159,10 +159,10 @@
                     data.customers.forEach(customer => {
                         tableBody.insertAdjacentHTML('beforeend', `
                             <tr id="customerRow${customer.id}">
-                                <td>{{ $customer['name'] }}</td>
-                                <td>{{ $customer['username'] }}</td>
-                                <td>{{ $customer['address'] }}</td>
-                                <td>{{ $customer['contact_number'] }}</td>
+                                <td>${customer.name}</td>
+                                <td>${customer.username}</td>
+                                <td>${customer.address ?? '-'}</td>
+                                <td>${customer.contact_number ?? '-'}</td>
                                 <td>
                                     <button class="btn btn-sm btn-success addOrderBtn" 
                                         data-bs-toggle="modal" data-bs-target="#addOrderModal"
