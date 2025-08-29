@@ -27,7 +27,17 @@
                     <td class="amount_status">{{ $order->amount_status }}</td>
                     <td class="total">{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y h:i A') }}</td>
                     <td>{{ $order->service_type }}</td>
-                    <td class="laundry_status">{{ $order->laundry_status }}</td>
+                    <td class="laundry_status">
+                        @php
+                            $statusClass = match($order->laundry_status) {
+                                'Waiting' => 'bg-warning text-dark',
+                                'Processing' => 'bg-primary text-light',
+                                'Completed' => 'bg-success text-light',
+                                default => 'bg-secondary text-light',
+                            };
+                        @endphp
+                        <span class="badge {{ $statusClass }}">{{ $order->laundry_status }}</span>
+                    </td>
                     <td>
                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
                             Edit
@@ -36,9 +46,10 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="9" class="text-center">No orders found.</td>
+                    <td colspan="10" class="text-center">No orders found.</td>
                 </tr>
                 @endforelse
+
             </tbody>
         </table>
 
