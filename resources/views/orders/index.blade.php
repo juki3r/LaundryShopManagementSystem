@@ -76,16 +76,16 @@
                     amount_status,
                     laundry_status
                 },
-                // success: function(res){
-                //     // Optional: show success message before reload
-                //     showMessage('Order updated successfully!', 'success');
+                success: function(res){
+                    // Optional: show success message before reload
+                    showMessage('Order updated successfully!', 'success');
 
-                //     // Reload page after 500ms
-                //     setTimeout(() => { location.reload(); }, 500);
-                // },
-                // error: function(err){
-                //     showMessage('Update failed. Please try again.', 'danger');
-                // }
+                    // Reload page after 500ms
+                    setTimeout(() => { location.reload(); }, 500);
+                },
+                error: function(err){
+                    showMessage('Update failed. Please try again.', 'danger');
+                }
             });
         });
 
