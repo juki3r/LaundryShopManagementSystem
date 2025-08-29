@@ -17,16 +17,34 @@ class CustomerController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('username', 'like', "%{$search}%")
-                    ->orWhere('address', 'like', "%{$search}%")
-                    ->orWhere('contact_number', 'like', "%{$search}%");
+                    // address & contact_number are in orders, so we filter via relation
+                    ->orWhereHas('orders', function ($q2) use ($search) {
+                        $q2->where('address', 'like', "%{$search}%")
+                            ->orWhere('contact_number', 'like', "%{$search}%");
+                    });
             });
         }
 
-        $customers = $query->orderBy('name')->paginate(10);
+        // Load latest order for each user
+        $customers = $query->with(['orders' => function ($q) {
+            $q->latest()->limit(1);
+        }])->orderBy('name')->paginate(10);
+
+        // Transform data to include latest order info
+        $customersTransformed = $customers->map(function ($user) {
+            $latestOrder = $user->orders->first();
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'username' => $user->username,
+                'address' => $latestOrder->address ?? '-',
+                'contact_number' => $latestOrder->contact_number ?? '-',
+            ];
+        });
 
         if ($request->ajax()) {
             return response()->json([
-                'customers' => $customers->items(),
+                'customers' => $customersTransformed,
                 'pagination' => [
                     'current_page' => $customers->currentPage(),
                     'last_page' => $customers->lastPage(),
@@ -34,8 +52,12 @@ class CustomerController extends Controller
             ]);
         }
 
-        return view('customers.index', compact('customers'));
+        return view('customers.index', [
+            'customers' => $customersTransformed,
+            'pagination' => $customers
+        ]);
     }
+
 
 
     public function registercustomer(Request $request)
