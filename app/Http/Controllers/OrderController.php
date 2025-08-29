@@ -183,7 +183,16 @@ class OrderController extends Controller
             'laundry_status' => $request->laundry_status,
         ]);
 
-        // Redirect back to orders index with success message
+        // Return JSON for AJAX
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Order updated successfully!',
+                'order' => $order
+            ]);
+        }
+
+        // Fallback for traditional requests
         return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
     }
 }
