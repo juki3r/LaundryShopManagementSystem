@@ -144,10 +144,15 @@
                     row.find('.amount_status').text(amount_status);
                     row.find('.laundry_status').text(laundry_status);
 
-                    // Close modal
+                    // Close modal properly
                     const modalEl = document.getElementById('editOrderModal' + orderId);
-                    const modal = bootstrap.Modal.getOrCreateInstance(modalEl); // <- ensures instance exists
-                    modal.hide();
+                    const modal = bootstrap.Modal.getInstance(modalEl); // get the existing instance
+                    if (modal) {
+                        modal.hide();
+                        // Also remove the backdrop manually in case it sticks
+                        $('.modal-backdrop').remove();
+                    }
+
 
                     // Show success message
                     showMessage('Order updated successfully!', 'success');
