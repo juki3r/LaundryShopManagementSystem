@@ -46,7 +46,7 @@
     </div>
 </div>
 
-{{-- MODALS OUTSIDE TABLE --}}
+{{-- Modals --}}
 @foreach($orders as $order)
 <div class="modal fade" id="editOrderModal{{ $order->id }}" tabindex="-1" aria-labelledby="editOrderModalLabel{{ $order->id }}" aria-hidden="true">
   <div class="modal-dialog">
@@ -61,12 +61,10 @@
           <label class="form-label">Weight (kg)</label>
           <input type="number" min="1" class="form-control weight-input" data-order-id="{{ $order->id }}" value="{{ $order->weight }}">
         </div>
-
         <div class="mb-3">
           <label class="form-label">Total (PHP)</label>
           <input type="text" class="form-control total-input" id="total{{ $order->id }}" value="{{ $order->total }}" readonly>
         </div>
-
         <div class="mb-3">
           <label class="form-label">Amount Status</label>
           <select class="form-select amount_status-input">
@@ -74,7 +72,6 @@
             <option value="Paid" {{ $order->amount_status === 'Paid' ? 'selected' : '' }}>Paid</option>
           </select>
         </div>
-
         <div class="mb-3">
           <label class="form-label">Laundry Status</label>
           <select class="form-select laundry_status-input">

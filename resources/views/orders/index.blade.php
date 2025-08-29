@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="container mt-4">
-        {{-- Message container --}}
+        {{-- AJAX Messages --}}
         <div id="ajaxMessageContainer" style="position: fixed; top: 20px; right: 20px; z-index: 1050;"></div>
 
         {{-- Search Input --}}
@@ -43,34 +43,29 @@
             });
         }
 
-        // Live search
         $('#searchInput').on('keyup', function() {
-            let query = $(this).val();
-            fetchOrders(query);
+            fetchOrders($(this).val());
         });
 
-        // Pagination links
         $(document).on('click', '.pagination a', function(e) {
             e.preventDefault();
             let page = $(this).attr('href').split('page=')[1];
-            let query = $('#searchInput').val();
-            fetchOrders(query, page);
+            fetchOrders($('#searchInput').val(), page);
         });
 
         // ===============================
         // MODAL EDIT FUNCTIONALITY
         // ===============================
-
-        // Auto-calculate total
         $(document).on('input', '.weight-input', function() {
             const orderId = $(this).data('order-id');
             const weight = parseFloat($(this).val()) || 0;
-            let total = weight <= 6 ? 130 : 130 + (weight - 6) * 20;
+            let total = 0;
+            if(weight <= 6) total = 130;
+            else total = 130 + (weight - 6) * 20;
             $('#total' + orderId).val(total.toFixed(2));
         });
 
-        // Show message function
-        function showMessage(message, type='success'){
+        function showMessage(message, type = 'success') {
             const msgId = 'msg' + Date.now();
             const html = `
                 <div id="${msgId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -78,10 +73,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>`;
             $('#ajaxMessageContainer').append(html);
-            setTimeout(() => { $('#' + msgId).alert('close'); }, 4000);
+            setTimeout(() => {
+                $('#' + msgId).alert('close');
+            }, 4000);
         }
 
-        // AJAX form submission
+        // AJAX update
         $(document).on('submit', '.edit-order-form', function(e){
             e.preventDefault();
 
@@ -110,10 +107,14 @@
                     row.find('.amount_status').text(amount_status);
                     row.find('.laundry_status').text(laundry_status);
 
-                    // Properly close modal
+                    // Close modal properly
                     const modalEl = document.getElementById('editOrderModal' + orderId);
-                    const modal = bootstrap.Modal.getInstance(modalEl);
-                    if (modal) modal.hide();
+                    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                    modal.hide();
+
+                    // Remove leftover backdrop and body class
+                    $('.modal-backdrop').remove();
+                    $('body').removeClass('modal-open');
 
                     // Show success message
                     showMessage(res.message, 'success');
