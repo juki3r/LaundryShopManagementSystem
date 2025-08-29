@@ -53,7 +53,7 @@
                     {{-- ADD CUSTOMER MODAL --}}
                     <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
-                            <form action="{{ route('register') }}" method="POST" class="modal-content">
+                            <form action="{{ route('registercustomer') }}" method="POST" class="modal-content">
                                 @csrf
                                 <div class="modal-header">
                                     <h5 class="modal-title">Add Customer</h5>
