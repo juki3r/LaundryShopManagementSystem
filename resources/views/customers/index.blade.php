@@ -82,11 +82,12 @@
     </div>
 
     {{-- Ajax Script --}}
-    <script>
+<script>
     document.addEventListener("DOMContentLoaded", function () {
         const form = document.getElementById("addCustomerForm");
         const messageBox = document.getElementById("ajaxMessage");
         const tableBody = document.getElementById("customersTable");
+        const modalEl = document.getElementById("addModal");
 
         form.addEventListener("submit", function (e) {
             e.preventDefault();
@@ -96,18 +97,11 @@
             fetch(form.action, {
                 method: "POST",
                 headers: {
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
-                    "Accept": "application/json" // tell Laravel to return JSON
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
                 },
                 body: formData
             })
-            .then(async (res) => {
-                if (!res.ok) {
-                    let error = await res.json();
-                    throw error;
-                }
-                return res.json();
-            })
+            .then(res => res.json())
             .then(data => {
                 messageBox.classList.remove("d-none", "alert-success", "alert-danger");
 
@@ -115,37 +109,37 @@
                     messageBox.classList.add("alert-success");
                     messageBox.innerText = data.message;
 
-                    // Add new row
+                    // Append new customer to table
                     tableBody.insertAdjacentHTML("beforeend", `
                         <tr>
-                            <td>${data.customer.id}</td>
+                            <td>New</td>
                             <td>${data.customer.name}</td>
                             <td>${data.customer.username}</td>
                         </tr>
                     `);
 
                     form.reset();
-                    bootstrap.Modal.getInstance(document.getElementById("addModal")).hide();
                 } else {
                     messageBox.classList.add("alert-danger");
-                    messageBox.innerText = data.message ?? "Something went wrong.";
+                    messageBox.innerText = data.message;
                 }
+
+                // ✅ Always close modal after submit
+                let modalInstance = bootstrap.Modal.getInstance(modalEl);
+                if (modalInstance) modalInstance.hide();
             })
             .catch(err => {
                 console.error(err);
                 messageBox.classList.remove("d-none");
                 messageBox.classList.add("alert-danger");
+                messageBox.innerText = "Server error. Please try again.";
 
-                if (err.errors) {
-                    // Show validation errors
-                    let errors = Object.values(err.errors).flat().join("\n");
-                    messageBox.innerText = errors;
-                } else {
-                    messageBox.innerText = "Server error. Please try again.";
-                }
+                // ✅ Still close modal even if error
+                let modalInstance = bootstrap.Modal.getInstance(modalEl);
+                if (modalInstance) modalInstance.hide();
             });
         });
     });
-    </script>
+</script>
 
 </x-app-layout>
