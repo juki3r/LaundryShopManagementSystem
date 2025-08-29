@@ -26,7 +26,7 @@ return new class extends Migration
             $table->enum('service_type', ['Delivery', 'Pick-up']);
             $table->decimal('weight', 8, 2);
 
-            $table->enum('laundry_status', ['Waiting', 'In-progress', 'Done'])->default('Waiting');
+            $table->enum('laundry_status', ['Waiting', 'Processing', 'Completed'])->default('Waiting');
             $table->enum('claimed', ['Yes', 'No'])->default('No');
             $table->enum('delivered', ['Yes', 'No'])->default('No');
 
