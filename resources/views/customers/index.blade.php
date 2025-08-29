@@ -30,21 +30,9 @@
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $customer->name }}</td>
                                         <td>{{ $customer->username }}</td>
-                                        <td>
-                                            <a href="{{ route('customers.show', $customer->id) }}" class="btn btn-sm btn-info">
-                                                View
-                                            </a>
-                                            <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-sm btn-warning">
-                                                Edit
-                                            </a>
-                                            <form action="{{ route('customers.destroy', $customer->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </td>
+                                        <td>{{ $customer->address }}</td>
+                                        <td>{{ $customer->phone_number }}</td>
+                                        <td>EDIT</td>
                                     </tr>
                                 @endforeach
                             </tbody>
