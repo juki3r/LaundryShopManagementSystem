@@ -141,8 +141,8 @@
 
                     // Close modal
                     const modalEl = document.getElementById('editOrderModal' + orderId);
-                    const modal = bootstrap.Modal.getInstance(modalEl);
-                    if (modal) modal.hide();
+                    const modal = bootstrap.Modal.getOrCreateInstance(modalEl); // <- ensures instance exists
+                    modal.hide();
 
                     // Show success message
                     showMessage('Order updated successfully!', 'success');
