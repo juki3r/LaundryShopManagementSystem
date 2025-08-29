@@ -37,8 +37,8 @@ class CustomerController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'username' => $user->username,
-                'address' => $latestOrder->address ?? '-',
-                'contact_number' => $latestOrder->contact_number ?? '-',
+                'address' => $latestOrder->address ?? '',
+                'contact_number' => $latestOrder->contact_number ?? '',
             ];
         });
 
