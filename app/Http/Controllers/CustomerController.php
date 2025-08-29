@@ -29,10 +29,12 @@ class CustomerController extends Controller
             'password' => Hash::make($request->password),
             // 'expo_token' => $request->expo_token, // <-- save token here
         ]);
+        $customers = User::where('role', '!=', 'admin')->paginate(10);
         if (!$user) {
-            return view('customers.index')->with("error", "Customer added failed!");
+            return view('customers.index', compact('customers'))->with("error", "Customer added failed!");
         }
 
-        return view('customers.index')->with("message", "Customer added successfully!");
+
+        return view('customers.index', compact('customers'))->with("message", "Customer added successfully!");
     }
 }
