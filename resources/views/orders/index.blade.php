@@ -14,12 +14,6 @@
             <div class="col-md-4">
                 <input type="text" id="searchInput" class="form-control" placeholder="Search Orders..." value="{{ $search ?? '' }}">
             </div>
-            <div class="col-md-4">
-                {{-- 🚀 Walk-in Order Button --}}
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#walkInOrderModal">
-                    + Walk-in Order
-                </button>
-            </div>
         </div>
 
         {{-- Orders Table --}}
@@ -71,64 +65,6 @@
             </div>
         </div>
         @endforeach
-
-        {{-- 🚀 Walk-In Order Modal --}}
-        <div class="modal fade" id="walkInOrderModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <form id="walkInOrderForm" class="modal-content">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">New Walk-in Order</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Customer Name</label>
-                            <input type="text" name="customer_name" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Contact Number</label>
-                            <input type="text" name="contact_number" class="form-control" required>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Address</label>
-                            <input type="text" name="address" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Service Type</label>
-                            <select name="service_type" class="form-select" required>
-                                <option value="Wash">Wash</option>
-                                <option value="Wash & Fold">Wash & Fold</option>
-                                <option value="Dry Clean">Dry Clean</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Weight (kg)</label>
-                            <input type="number" name="weight" min="1" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Amount Status</label>
-                            <select name="amount_status" class="form-select" required>
-                                <option value="Pending">Pending</option>
-                                <option value="Paid">Paid</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Laundry Status</label>
-                            <select name="laundry_status" class="form-select" required>
-                                <option value="Waiting">Waiting</option>
-                                <option value="Processing">Processing</option>
-                                <option value="Completed">Completed</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-success">Save Order</button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </div>
 
     {{-- jQuery & Bootstrap --}}
@@ -191,26 +127,6 @@
                 },
                 error: function(err){
                     showMessage('Update failed. Please try again.', 'danger');
-                }
-            });
-        });
-
-        //  Walk-in order AJAX
-        $('#walkInOrderForm').on('submit', function(e){
-            e.preventDefault();
-            const form = $(this);
-            $.ajax({
-                url: "{{ route('orders.walkin.store') }}",
-                method: 'POST',
-                data: form.serialize(),
-                success: function(res){
-                    const modalEl = document.getElementById('walkInOrderModal');
-                    const modal = bootstrap.Modal.getInstance(modalEl);
-                    if (modal) { modal.hide(); $('.modal-backdrop').remove(); }
-                    showMessage(res.message);
-                },
-                error: function(err){
-                    showMessage('Failed to create walk-in order.', 'danger');
                 }
             });
         });

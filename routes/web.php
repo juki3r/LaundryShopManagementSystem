@@ -20,8 +20,6 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
-    Route::get('/orders/walkin', [OrderController::class, 'createWalkIn'])->name('orders.walkin.create');
-    Route::post('/orders/walkin', [OrderController::class, 'storeWalkInOrder'])->name('orders.walkin.store');
 });
 
 
