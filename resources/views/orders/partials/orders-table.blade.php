@@ -19,10 +19,9 @@
             <tbody>
                 @forelse($orders as $order)
                 @php
-                    $rowClass = match($order->laundry_status) {
-                        'Waiting' => 'table-danger',      // Yellow
-                        'Processing' => 'table-primary text-white', // Blue with white text
-                        'Completed' => 'table-success',    // Green
+                    $rowClass = match($order->amount_status) {
+                        'Pending' => 'table-warning',      // Yellow
+                        'Paid' => 'table-success',    // Green
                         default => '',                      // Default
                     };
                 @endphp
