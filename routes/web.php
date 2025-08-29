@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
@@ -19,7 +20,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+
     Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
+
+    // Customers Control
+    Route::get('/customers', [CustomerController::class, 'showCustomers'])->name('show.customers');
 });
 
 
