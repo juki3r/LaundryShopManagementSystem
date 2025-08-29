@@ -143,30 +143,6 @@ class OrderController extends Controller
         ]);
     }
 
-
-    // public function update(Request $request, Order $order)
-    // {
-    //     $request->validate([
-    //         'weight' => 'required|numeric|min:1',
-    //         'total' => 'required|numeric|min:0',
-    //         'amount_status' => 'required|in:Pending,Paid',
-    //         'laundry_status' => 'required|in:Waiting,Processing,Completed',
-    //     ]);
-
-    //     $order->update([
-    //         'weight' => $request->weight,
-    //         'total' => $request->total,
-    //         'amount_status' => $request->amount_status,
-    //         'laundry_status' => $request->laundry_status,
-    //     ]);
-
-    //     // RETURN JSON
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'Order updated successfully',
-    //         'order' => $order
-    //     ]);
-    // }
     public function update(Request $request, Order $order)
     {
         $request->validate([
