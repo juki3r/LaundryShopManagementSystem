@@ -71,10 +71,15 @@
                     laundry_status
                 },
                 success: function(res){
-                    // Optional: show success message before reload
+                    // Close the modal
+                    const modalEl = document.getElementById('editOrderModal' + orderId);
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) modal.hide();
+
+                    // Show success message
                     showMessage('Order updated successfully!', 'success');
 
-                    // Reload page after 500ms
+                    // Reload the page after 500ms
                     setTimeout(() => { location.reload(); }, 500);
                 },
                 error: function(err){
