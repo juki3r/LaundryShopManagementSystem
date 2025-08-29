@@ -43,7 +43,7 @@
                     </div>
 
                     {{-- ADD ORDER MODAL --}}
-                    <div class="modal fade" id="editOrderModal{{ $order->id }}" tabindex="-1" aria-hidden="true">
+                    {{-- <div class="modal fade" id="editOrderModal{{ $order->id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
                             <form class="modal-content edit-order-form" data-order-id="{{ $order->id }}">
                                 @csrf
@@ -83,7 +83,7 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
+                    </div> --}}
 
                 </div>
             </div>
