@@ -75,22 +75,4 @@ class RegisteredUserController extends Controller
             'user' => $user,
         ]);
     }
-    public function registercustomer(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username',
-            'password' => 'required',
-            // 'expo_token' => 'nullable|string', // <-- add this
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-            // 'expo_token' => $request->expo_token, // <-- save token here
-        ]);
-
-        return view('customers.index')->with("message", "Customer added successfully!");
-    }
 }

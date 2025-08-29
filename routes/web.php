@@ -26,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Customers Control
     Route::get('/customers', [CustomerController::class, 'showCustomers'])->name('show.customers');
-    Route::post('registercustomer', [RegisteredUserController::class, 'registercustomer'])->name('register.customer');
+    Route::post('registercustomer', [CustomerController::class, 'registercustomer'])->name('register.customer');
 });
 
 
