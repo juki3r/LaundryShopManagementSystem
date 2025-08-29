@@ -76,12 +76,27 @@
     $(document).ready(function() {
 
         // Auto-calculate total
+        // $(document).on('input', '.weight-input', function() {
+        //     const orderId = $(this).data('order-id');
+        //     const weight = parseFloat($(this).val()) || 0;
+        //     const total = weight <= 6 ? 130 : 130 + (weight - 6) * 20;
+        //     $('#total' + orderId).val(total.toFixed(2));
+        // });
+        // Auto-calculate total and update table live
         $(document).on('input', '.weight-input', function() {
             const orderId = $(this).data('order-id');
             const weight = parseFloat($(this).val()) || 0;
             const total = weight <= 6 ? 130 : 130 + (weight - 6) * 20;
+
+            // Update modal total
             $('#total' + orderId).val(total.toFixed(2));
+
+            // Update table row total live
+            const row = $('#orderRow' + orderId);
+            row.find('.weight').text(weight);
+            row.find('.total').text(total.toFixed(2));
         });
+
 
         // Show message
         function showMessage(message, type = 'success') {
