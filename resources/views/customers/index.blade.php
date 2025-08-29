@@ -9,19 +9,9 @@
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    @if(session('message'))
-                        <div class="alert alert-success">
-                            {{ session('message') }}
-                        </div>
-                    @endif
 
-                    @if(session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-
-
+                    {{-- ✅ Message container for AJAX --}}
+                    <div id="ajaxMessage" class="alert d-none"></div>
 
                     <h4 class="mb-4 d-flex justify-content-between align-items-center">
                         <strong>Customers lists</strong>
@@ -30,28 +20,21 @@
                         </button>
                     </h4>
 
-        
                     <div class="table-responsive">
                         <table class="table table-striped table-hover align-middle">
                             <thead class="table-dark">
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Username</th>
-                                    <th scope="col">Actions</th>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Username</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="customersTable">
                                 @foreach ($customers as $index => $customer)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $customer->name }}</td>
                                         <td>{{ $customer->username }}</td>
-                                        {{-- <td>
-                                             <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
-                                            Add customer
-                                            </button>
-                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -61,7 +44,7 @@
                     {{-- ADD CUSTOMER MODAL --}}
                     <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
-                            <form action="{{ route('register.customer') }}" method="POST" class="modal-content">
+                            <form id="addCustomerForm" action="{{ route('register.customer') }}" method="POST" class="modal-content">
                                 @csrf
                                 <div class="modal-header">
                                     <h5 class="modal-title">Add Customer</h5>
@@ -69,31 +52,19 @@
                                 </div>
 
                                 <div class="modal-body">
-                                    {{-- Name --}}
                                     <div class="mb-3">
                                         <label class="form-label">Full Name</label>
-                                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
-                                        @error('name') 
-                                            <small class="text-danger">{{ $message }}</small> 
-                                        @enderror
+                                        <input type="text" name="name" class="form-control" required>
                                     </div>
 
-                                    {{-- Username --}}
                                     <div class="mb-3">
                                         <label class="form-label">Username</label>
-                                        <input type="text" name="username" class="form-control" value="{{ old('username') }}" required>
-                                        @error('username') 
-                                            <small class="text-danger">{{ $message }}</small> 
-                                        @enderror
+                                        <input type="text" name="username" class="form-control" required>
                                     </div>
 
-                                    {{-- Password --}}
                                     <div class="mb-3">
                                         <label class="form-label">Password</label>
                                         <input type="password" name="password" class="form-control" required>
-                                        @error('password') 
-                                            <small class="text-danger">{{ $message }}</small> 
-                                        @enderror
                                     </div>
                                 </div>
 
@@ -105,10 +76,61 @@
                         </div>
                     </div>
 
-
-
                 </div>
             </div>
         </div>
     </div>
+
+    {{-- ✅ Ajax Script --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("addCustomerForm");
+            const messageBox = document.getElementById("ajaxMessage");
+            const tableBody = document.getElementById("customersTable");
+
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                let formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    messageBox.classList.remove("d-none", "alert-success", "alert-danger");
+
+                    if (data.success) {
+                        messageBox.classList.add("alert-success");
+                        messageBox.innerText = data.message;
+
+                        // Append new customer to table
+                        tableBody.insertAdjacentHTML("beforeend", `
+                            <tr>
+                                <td>New</td>
+                                <td>${data.customer.name}</td>
+                                <td>${data.customer.username}</td>
+                            </tr>
+                        `);
+
+                        form.reset();
+                        bootstrap.Modal.getInstance(document.getElementById("addModal")).hide();
+                    } else {
+                        messageBox.classList.add("alert-danger");
+                        messageBox.innerText = data.message;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    messageBox.classList.remove("d-none");
+                    messageBox.classList.add("alert-danger");
+                    messageBox.innerText = "Server error. Please try again.";
+                });
+            });
+        });
+    </script>
 </x-app-layout>

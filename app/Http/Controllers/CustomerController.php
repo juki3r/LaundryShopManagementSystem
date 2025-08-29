@@ -16,24 +16,30 @@ class CustomerController extends Controller
 
     public function registercustomer(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username',
             'password' => 'required|string|min:6',
         ]);
 
         try {
-            User::create([
-                'name' => $request->name,
-                'username' => $request->username,
-                'password' => Hash::make($request->password),
+            $user = User::create([
+                'name' => $validated['name'],
+                'username' => $validated['username'],
+                'password' => Hash::make($validated['password']),
+                'role' => 'customer',
             ]);
 
-            return redirect()->route('customers.index')
-                ->with('message', 'Customer added successfully!');
+            return response()->json([
+                'success' => true,
+                'message' => 'Customer added successfully!',
+                'customer' => $user
+            ]);
         } catch (\Exception $e) {
-            return redirect()->route('customers.index')
-                ->with('error', 'Failed to add customer! ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to add customer! ' . $e->getMessage()
+            ], 500);
         }
     }
 }
