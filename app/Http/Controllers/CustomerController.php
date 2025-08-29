@@ -16,17 +16,26 @@ class CustomerController extends Controller
 
     public function registercustomer(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username',
-            'password' => 'required|string|min:8',
-        ]);
+        // Simple checks
+        if (User::where('username', $request->username)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Username already taken!'
+            ], 400);
+        }
+
+        if (strlen($request->password) < 8) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Password must be at least 8 characters!'
+            ], 400);
+        }
 
         try {
             $user = User::create([
-                'name' => $validated['name'],
-                'username' => $validated['username'],
-                'password' => Hash::make($validated['password']),
+                'name' => $request->name,
+                'username' => $request->username,
+                'password' => Hash::make($request->password),
                 'role' => 'customer',
             ]);
 
@@ -38,7 +47,7 @@ class CustomerController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to add customer! ' . $e->getMessage()
+                'message' => 'Failed to add customer!'
             ], 500);
         }
     }
