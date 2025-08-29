@@ -5,6 +5,7 @@
                 <thead class="table-light">
                     <tr>
                         <th>Customer</th>
+                        <th>Contact #</th>
                         <th>Service</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -14,6 +15,7 @@
                     @forelse($orders as $order)
                         <tr>
                             <td>{{ $order->customer_name }}</td>
+                            <td>{{ $order->contact_number }}</td>
                             <td>{{ $order->service_type }}</td>
                             <td>{{ $order->laundry_status }}</td>
                             <td>
