@@ -144,31 +144,27 @@ class OrderController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Order $order)
     {
-        $order = Order::findOrFail($id);
-
         $request->validate([
             'weight' => 'required|numeric|min:1',
+            'total' => 'required|numeric|min:0',
             'amount_status' => 'required|in:Pending,Paid',
             'laundry_status' => 'required|in:Waiting,Processing,Completed',
         ]);
 
-        // Auto-calculate total
-        $weight = $request->weight;
-        if ($weight <= 6) {
-            $total = 130;
-        } else {
-            $total = 130 + ($weight - 6) * 20;
-        }
-
         $order->update([
-            'weight' => $weight,
-            'total' => $total,
+            'weight' => $request->weight,
+            'total' => $request->total,
             'amount_status' => $request->amount_status,
             'laundry_status' => $request->laundry_status,
         ]);
 
-        return redirect()->back()->with('success', 'Order updated successfully!');
+        // RETURN JSON
+        return response()->json([
+            'success' => true,
+            'message' => 'Order updated successfully',
+            'order' => $order
+        ]);
     }
 }
