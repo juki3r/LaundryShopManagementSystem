@@ -24,8 +24,8 @@
                     <td>{{ $order->address }}</td>
                     <td class="weight">{{ $order->weight }}</td>
                     <td class="total">{{ $order->total }}</td>
-                    <td class="total">{{ $order->order_date }}</td>
                     <td class="amount_status">{{ $order->amount_status }}</td>
+                    <td class="total">{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y h:i A') }}</td>
                     <td>{{ $order->service_type }}</td>
                     <td class="laundry_status">{{ $order->laundry_status }}</td>
                     <td>
