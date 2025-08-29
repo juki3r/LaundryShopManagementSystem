@@ -112,7 +112,7 @@
                     // Append new customer to table
                     tableBody.insertAdjacentHTML("beforeend", `
                         <tr>
-                            <td>New</td>
+                            <td>${data.customer.id}</td>
                             <td>${data.customer.name}</td>
                             <td>${data.customer.username}</td>
                         </tr>
