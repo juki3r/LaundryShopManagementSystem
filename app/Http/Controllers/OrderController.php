@@ -48,7 +48,7 @@ class OrderController extends Controller
         ]);
 
 
-        return redirect()->route('order.index')
+        return redirect()->route('orders.index')
             ->with('success', 'Order created successfully!');
     }
 
