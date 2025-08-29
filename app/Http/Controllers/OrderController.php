@@ -17,35 +17,41 @@ class OrderController extends Controller
         return view('orders.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
+        // Validate input
         $request->validate([
-            'customer_name'   => 'required|string|max:255',
-            'contact_number'  => 'required|string|max:20',
-            'address'         => 'required|string|max:500',
-            'service_type'    => 'required|in:Delivery,Pick-up',
-            'weight'          => 'required|numeric|min:0',
-            'total'           => 'required|numeric|min:0',
-            'order_date'      => 'required|date',
+            'customer_name'  => 'required|string|max:255',
+            'contact_number' => 'required|string|max:20',
+            'address'        => 'required|string|max:500',
+            'service_type'   => 'required|in:Delivery,Pick-up',
+            'order_date'     => 'required|date',
         ]);
 
-        auth()->user()->orders()->create([
-            'customer_name'   => $request->customer_name,
-            'contact_number'  => $request->contact_number,
-            'address'         => $request->address,
-            'service_type'    => $request->service_type,
-            'weight'          => $request->weight,
-            'laundry_status'  => 'Waiting', // default
-            'claimed'         => 'No',
-            'delivered'       => 'No',
-            'total'           => $request->total,
-            'amount_status'   => 'Pending',
-            'order_date'      => $request->order_date,
+        // Convert order_date to PHT
+        $orderDate = Carbon::parse($request->order_date)
+            ->setTimezone('Asia/Manila');
+
+        // Create order for the authenticated user
+        $order = Auth::user()->orders()->create([
+            'user_id' => $id,
+            'customer_name'  => $request->customer_name,
+            'contact_number' => $request->contact_number,
+            'address'        => $request->address,
+            'service_type'   => $request->service_type,
+            'weight'         => 0,
+            'laundry_status' => 'Waiting',
+            'claimed'        => 'No',
+            'delivered'      => 'No',
+            'total'          => 0,
+            'amount_status'  => 'Pending',
+            'order_date'     => $orderDate,
         ]);
 
 
-        return redirect()->route('orders.create')
-            ->with('success', 'Order created successfully!');
+        // return redirect()->route('orders.create')
+        //     ->with('success', 'Order created successfully!');
+        return "ok";
     }
 
     public function storeApi(Request $request)
