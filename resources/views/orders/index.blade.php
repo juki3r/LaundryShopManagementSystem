@@ -203,15 +203,15 @@
                 url: "{{ route('orders.walkin.store') }}",
                 method: 'POST',
                 data: form.serialize(),
-                // success: function(res){
-                //     const modalEl = document.getElementById('walkInOrderModal');
-                //     const modal = bootstrap.Modal.getInstance(modalEl);
-                //     if (modal) { modal.hide(); $('.modal-backdrop').remove(); }
-                //     showMessage('Walk-in order created successfully!', 'success');
-                // },
-                // error: function(err){
-                //     showMessage('Failed to create walk-in order.', 'danger');
-                // }
+                success: function(res){
+                    const modalEl = document.getElementById('walkInOrderModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) { modal.hide(); $('.modal-backdrop').remove(); }
+                    showMessage('Walk-in order created successfully!', 'success');
+                },
+                error: function(err){
+                    showMessage('Failed to create walk-in order.', 'danger');
+                }
             });
         });
 
