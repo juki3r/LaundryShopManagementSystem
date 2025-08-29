@@ -92,7 +92,7 @@
                         </div>
                     </div>
                     <!-- Add Order Modal -->
-                    <div class="modal fade" id="addOrderModal" tabindex="-1" aria-labelledby="addOrderModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="addOrderModal{{ $customer->id }}" tabindex="-1" aria-labelledby="addOrderModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
