@@ -11,9 +11,6 @@
                 <div class="p-6 text-gray-900">
 
                     <h4 class="mb-4">Users List</h4>
-                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
-                           Add customer
-                        </button>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover align-middle">
                             <thead class="table-dark">
@@ -34,7 +31,11 @@
                                         <td>{{ $customer->username }}</td>
                                         <td>{{ $customer->address }}</td>
                                         <td>{{ $customer->phone_number }}</td>
-                                        <td>Add order</td>
+                                        {{-- <td>
+                                             <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
+                                            Add customer
+                                            </button>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
