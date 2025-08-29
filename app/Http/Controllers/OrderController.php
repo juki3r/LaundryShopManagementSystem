@@ -240,12 +240,10 @@ class OrderController extends Controller
         //     'order_date'     => now(),
         // ]);
 
-        // return response()->json([
-        //     'success' => true,
-        //     'message' => 'Walk-in client and order created successfully.',
-        //     'order_id' => $order->id
-        // ]);
-
-        echo "hello";
+        return response()->json([
+            'success' => true,
+            'message' => 'Walk-in client and order created successfully.',
+            // 'order_id' => $order->id
+        ]);
     }
 }
