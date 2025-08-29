@@ -29,13 +29,9 @@ class CustomerController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            $customers = User::where('role', '!=', 'admin')->paginate(10);
-
             return redirect()->route('customers.index')
                 ->with('message', 'Customer added successfully!');
         } catch (\Exception $e) {
-            $customers = User::where('role', '!=', 'admin')->paginate(10);
-
             return redirect()->route('customers.index')
                 ->with('error', 'Failed to add customer! ' . $e->getMessage());
         }
