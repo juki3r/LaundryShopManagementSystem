@@ -35,7 +35,7 @@ class OrderController extends Controller
 
         if ($pendingOrder) {
             return redirect()->route('orders.index')
-                ->with('error', 'This customer already has a pending order.');
+                ->with('error', 'This customer still has a pending payment.');
         }
 
         // Convert order_date to PHT
