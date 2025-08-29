@@ -7,12 +7,14 @@
 
     <div class="container mt-4">
         {{-- Search Input --}}
+        <div id="ajaxMessageContainer" style="position: fixed; top: 20px; right: 20px; z-index: 1050;"></div>
+
         <div class="row mb-3">
             <div class="col-md-4">
                 <input type="text" id="searchInput" class="form-control" placeholder="Search Orders..." value="{{ $search ?? '' }}">
             </div>
         </div>
-
+        
         {{-- Orders Table --}}
         <div id="ordersTableContainer">
             @include('orders.partials.orders-table', ['orders' => $orders])
@@ -68,8 +70,23 @@
             $('#total' + orderId).val(total.toFixed(2));
         });
 
-        // AJAX form submission
-        $(document).on('submit', '.edit-order-form', function(e) {
+        function showMessage(message, type = 'success') {
+            // type: success / danger
+            const msgId = 'msg' + Date.now();
+            const html = `
+                <div id="${msgId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>`;
+            $('#ajaxMessageContainer').append(html);
+
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                $('#' + msgId).alert('close');
+            }, 4000);
+        }
+
+        $(document).on('submit', '.edit-order-form', function(e){
             e.preventDefault();
             const orderId = $(this).data('order-id');
             const weight = parseFloat($(this).find('.weight-input').val()) || 0;
@@ -80,6 +97,7 @@
             $.ajax({
                 url: '/orders/' + orderId,
                 method: 'PUT',
+                dataType: 'json',
                 data: {
                     _token: '{{ csrf_token() }}',
                     weight: weight,
@@ -87,8 +105,8 @@
                     amount_status: amount_status,
                     laundry_status: laundry_status
                 },
-                success: function(res) {
-                    // Update row without reload
+                success: function(res){
+                    // Update table row without reload
                     const row = $('#orderRow' + orderId);
                     row.find('.weight').text(weight);
                     row.find('.total').text(total);
@@ -96,15 +114,18 @@
                     row.find('.laundry_status').text(laundry_status);
 
                     // Close modal
-                    const modalEl = document.getElementById('editOrderModal' + orderId);
-                    const modal = bootstrap.Modal.getInstance(modalEl);
-                    modal.hide();
+                    $('#editOrderModal' + orderId).modal('hide');
+
+                    // Show success message
+                    showMessage('Order updated successfully!', 'success');
                 },
-                error: function(err) {
-                    alert('Update failed. Please try again.');
+                error: function(err){
+                    // Show error message
+                    showMessage('Update failed. Please try again.', 'danger');
                 }
             });
         });
+
 
     });
     </script>
