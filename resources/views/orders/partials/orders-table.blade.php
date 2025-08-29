@@ -26,19 +26,6 @@
                             <td>{{ $order->amount_status }}</td>
                             <td>{{ $order->service_type }}</td>
                             <td>{{ $order->laundry_status }}</td>
-                            <td>
-                                <form action="{{ route('orders.approve', $order->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
-                                </form>
-
-                                <form action="{{ route('orders.deny', $order->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="btn btn-danger btn-sm">Deny</button>
-                                </form>
-                            </td>
                         </tr>
                     @empty
                         <tr>
