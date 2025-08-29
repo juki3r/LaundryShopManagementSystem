@@ -1,33 +1,36 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-xl font-semibold leading-tight">
-            {{ __('Customers Management') }}
+        <h2 class="text-2xl font-bold text-gray-800">
+            Customers Management
         </h2>
     </x-slot>
 
     <div class="py-5">
-        <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-
-                    {{-- Message container for AJAX --}}
-                    <div id="ajaxMessage" class="alert d-none"></div>
-
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4><strong>Customers Lists</strong></h4>
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
-                            Add Customer
-                        </button>
-                    </div>
+        <div class="container-fluid">
+            <div class="card shadow-sm rounded-3">
+                <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-people-fill me-2"></i>Customers List</h4>
+                    <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="bi bi-plus-circle"></i> Add Customer
+                    </button>
+                </div>
+                <div class="card-body">
+                    
+                    {{-- AJAX Message --}}
+                    <div id="ajaxMessage" class="alert d-none rounded-3"></div>
 
                     {{-- Search --}}
                     <div class="mb-3">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search customers...">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search customers by name, username, address or contact...">
+                        </div>
                     </div>
 
+                    {{-- Customers Table --}}
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover align-middle">
-                            <thead class="table-dark">
+                        <table class="table table-hover align-middle table-bordered border-secondary">
+                            <thead class="table-dark text-center">
                                 <tr>
                                     <th>Name</th>
                                     <th>Username</th>
@@ -36,93 +39,95 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="customersTable">
+                            <tbody id="customersTable" class="text-center">
                                 {{-- Rows will be loaded via AJAX --}}
                             </tbody>
                         </table>
                     </div>
 
                     {{-- Pagination --}}
-                    <nav>
-                        <ul class="pagination" id="paginationContainer"></ul>
+                    <nav class="mt-3">
+                        <ul class="pagination justify-content-center" id="paginationContainer"></ul>
                     </nav>
-
-                    {{-- ADD CUSTOMER MODAL --}}
-                    <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <form id="addCustomerForm" action="{{ route('register.customer') }}" method="POST" class="modal-content">
-                                @csrf
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Add Customer</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label">Full Name</label>
-                                        <input type="text" name="name" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Username</label>
-                                        <input type="text" name="username" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Password</label>
-                                        <input type="password" name="password" class="form-control" required>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Add</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    {{-- ADD ORDER MODAL --}}
-                    <div class="modal fade" id="addOrderModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <form id="addOrderForm" method="POST" class="modal-content">
-                                @csrf
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Add New Order</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label">Customer Name</label>
-                                        <input type="text" name="customer_name" class="form-control" required readonly>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Contact Number</label>
-                                        <input type="text" name="contact_number" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Address</label>
-                                        <textarea name="address" class="form-control" rows="2" required></textarea>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Service Type</label>
-                                        <select name="service_type" class="form-select" required>
-                                            <option value="">-- Select --</option>
-                                            <option value="Delivery">Delivery</option>
-                                            <option value="Pick-up">Pick-up</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Order Date</label>
-                                        <input type="text" name="order_date" class="form-control" readonly>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Add Order</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
 
                 </div>
             </div>
+        </div>
+    </div>
+
+    {{-- Add Customer Modal --}}
+    <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form id="addCustomerForm" action="{{ route('register.customer') }}" method="POST" class="modal-content border-0 shadow">
+                @csrf
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="bi bi-person-plus-fill me-2"></i>Add Customer</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Full Name</label>
+                        <input type="text" name="name" class="form-control form-control-lg" placeholder="John Doe" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Username</label>
+                        <input type="text" name="username" class="form-control form-control-lg" placeholder="johndoe123" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Password</label>
+                        <input type="password" name="password" class="form-control form-control-lg" placeholder="••••••••" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-check-circle"></i> Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- Add Order Modal --}}
+    <div class="modal fade" id="addOrderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <form id="addOrderForm" method="POST" class="modal-content border-0 shadow">
+                @csrf
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="bi bi-cart-plus-fill me-2"></i>Add New Order</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Customer Name</label>
+                            <input type="text" name="customer_name" class="form-control form-control-lg" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Contact Number</label>
+                            <input type="text" name="contact_number" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Address</label>
+                            <textarea name="address" class="form-control form-control-lg" rows="2" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Service Type</label>
+                            <select name="service_type" class="form-select form-select-lg" required>
+                                <option value="">-- Select --</option>
+                                <option value="Delivery">Delivery</option>
+                                <option value="Pick-up">Pick-up</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Order Date</label>
+                            <input type="text" name="order_date" class="form-control form-control-lg" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Cancel</button>
+                    <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-check-circle"></i> Add Order</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -139,7 +144,6 @@
             let currentPage = 1;
             let currentSearch = '';
 
-            // Function to fetch customers with search & pagination
             function fetchCustomers(search = '', page = 1) {
                 currentSearch = search;
                 currentPage = page;
@@ -163,24 +167,23 @@
                                 <td>${customer.username}</td>
                                 <td>${customer.address ?? ''}</td>
                                 <td>${customer.contact_number ?? ''}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-success addOrderBtn" 
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-success addOrderBtn me-1" 
                                         data-bs-toggle="modal" data-bs-target="#addOrderModal"
                                         data-id="${customer.id}"
                                         data-name="${customer.name}"
                                         data-contact="${customer.contact_number ?? ''}"
                                         data-address="${customer.address ?? ''}">
-                                        Add Order
+                                        <i class="bi bi-cart-plus-fill"></i> Add Order
                                     </button>
                                     <button class="btn btn-sm btn-danger deleteCustomerBtn" data-id="${customer.id}">
-                                        Delete
+                                        <i class="bi bi-trash-fill"></i> Delete
                                     </button>
                                 </td>
                             </tr>
                         `);
                     });
 
-                    // Pagination
                     renderPagination(data.pagination.current_page, data.pagination.last_page);
                 })
                 .catch(err => console.error(err));
@@ -198,7 +201,6 @@
                 }
             }
 
-            // Pagination click
             paginationContainer.addEventListener('click', function(e) {
                 e.preventDefault();
                 if (e.target.tagName === 'A') {
@@ -207,15 +209,12 @@
                 }
             });
 
-            // Search input
             searchInput.addEventListener('input', function() {
                 fetchCustomers(this.value, 1);
             });
 
-            // Initial load
             fetchCustomers();
 
-            // Delete customer
             document.addEventListener("click", function (e) {
                 if (e.target.classList.contains("deleteCustomerBtn")) {
                     const customerId = e.target.dataset.id;
@@ -246,7 +245,6 @@
                 }
             });
 
-            // Add customer via AJAX
             addCustomerForm.addEventListener("submit", function(e) {
                 e.preventDefault();
                 const formData = new FormData(addCustomerForm);
@@ -273,7 +271,6 @@
                 .catch(err => console.error(err));
             });
 
-            // Add order modal pre-fill
             document.addEventListener("click", function (e) {
                 if (e.target.classList.contains("addOrderBtn")) {
                     const customerId = e.target.dataset.id;
@@ -298,4 +295,8 @@
             });
         });
     </script>
+
+    {{-- Bootstrap Icons CDN --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 </x-app-layout>
