@@ -81,56 +81,71 @@
         </div>
     </div>
 
-    {{-- ✅ Ajax Script --}}
+    {{-- Ajax Script --}}
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById("addCustomerForm");
-            const messageBox = document.getElementById("ajaxMessage");
-            const tableBody = document.getElementById("customersTable");
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("addCustomerForm");
+        const messageBox = document.getElementById("ajaxMessage");
+        const tableBody = document.getElementById("customersTable");
 
-            form.addEventListener("submit", function (e) {
-                e.preventDefault();
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
 
-                let formData = new FormData(form);
+            let formData = new FormData(form);
 
-                fetch(form.action, {
-                    method: "POST",
-                    headers: {
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: formData
-                })
-                .then(res => res.json())
-                .then(data => {
-                    messageBox.classList.remove("d-none", "alert-success", "alert-danger");
+            fetch(form.action, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                    "Accept": "application/json" // tell Laravel to return JSON
+                },
+                body: formData
+            })
+            .then(async (res) => {
+                if (!res.ok) {
+                    let error = await res.json();
+                    throw error;
+                }
+                return res.json();
+            })
+            .then(data => {
+                messageBox.classList.remove("d-none", "alert-success", "alert-danger");
 
-                    if (data.success) {
-                        messageBox.classList.add("alert-success");
-                        messageBox.innerText = data.message;
+                if (data.success) {
+                    messageBox.classList.add("alert-success");
+                    messageBox.innerText = data.message;
 
-                        // Append new customer to table
-                        tableBody.insertAdjacentHTML("beforeend", `
-                            <tr>
-                                <td>New</td>
-                                <td>${data.customer.name}</td>
-                                <td>${data.customer.username}</td>
-                            </tr>
-                        `);
+                    // Add new row
+                    tableBody.insertAdjacentHTML("beforeend", `
+                        <tr>
+                            <td>${data.customer.id}</td>
+                            <td>${data.customer.name}</td>
+                            <td>${data.customer.username}</td>
+                        </tr>
+                    `);
 
-                        form.reset();
-                        bootstrap.Modal.getInstance(document.getElementById("addModal")).hide();
-                    } else {
-                        messageBox.classList.add("alert-danger");
-                        messageBox.innerText = data.message;
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    messageBox.classList.remove("d-none");
+                    form.reset();
+                    bootstrap.Modal.getInstance(document.getElementById("addModal")).hide();
+                } else {
                     messageBox.classList.add("alert-danger");
+                    messageBox.innerText = data.message ?? "Something went wrong.";
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                messageBox.classList.remove("d-none");
+                messageBox.classList.add("alert-danger");
+
+                if (err.errors) {
+                    // Show validation errors
+                    let errors = Object.values(err.errors).flat().join("\n");
+                    messageBox.innerText = errors;
+                } else {
                     messageBox.innerText = "Server error. Please try again.";
-                });
+                }
             });
         });
+    });
     </script>
+
 </x-app-layout>
