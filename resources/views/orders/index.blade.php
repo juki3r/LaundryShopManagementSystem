@@ -114,7 +114,7 @@
                     row.find('.laundry_status').text(laundry_status);
 
                     // Close modal
-                    $('#editOrderModal' + orderId).modal('hide');
+                    // $('#editOrderModal' + orderId).modal('hide');
 
                     // Show success message
                     showMessage('Order updated successfully!', 'success');
