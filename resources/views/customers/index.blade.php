@@ -43,6 +43,7 @@
                                                 class="btn btn-sm btn-success addOrderBtn" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#addOrderModal"
+                                                data-id="{{ $customer->id }}"
                                                 data-name="{{ $customer->name }}"
                                                 data-contact="{{ $customer->contact_number ?? '' }}"
                                                 data-address="{{ $customer->address ?? '' }}">
@@ -99,53 +100,52 @@
                         </div>
                     </div>
 
-                    {{-- DYNAMIC ADD ORDER MODAL --}}
+                    {{-- ADD ORDER MODAL --}}
                     <div class="modal fade" id="addOrderModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
+                            <form id="addOrderForm" method="POST" class="modal-content">
+                                @csrf
                                 <div class="modal-header">
                                     <h5 class="modal-title">Add New Order</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-                                <form action="{{ route('orders.store') }}" method="POST">
-                                    @csrf
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label class="form-label">Customer Name</label>
-                                            <input type="text" name="customer_name" class="form-control" required>
-                                        </div>
 
-                                        <div class="mb-3">
-                                            <label class="form-label">Contact Number</label>
-                                            <input type="text" name="contact_number" class="form-control" required>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Address</label>
-                                            <textarea name="address" class="form-control" rows="2" required></textarea>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Service Type</label>
-                                            <select name="service_type" class="form-select" required>
-                                                <option value="">-- Select --</option>
-                                                <option value="Delivery">Delivery</option>
-                                                <option value="Pick-up">Pick-up</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Order Date</label>
-                                            <input type="date" name="order_date" class="form-control" required>
-                                        </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Customer Name</label>
+                                        <input type="text" name="customer_name" class="form-control" required>
                                     </div>
 
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-primary">Add Order</button>
+                                    <div class="mb-3">
+                                        <label class="form-label">Contact Number</label>
+                                        <input type="text" name="contact_number" class="form-control" required>
                                     </div>
-                                </form>
-                            </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Address</label>
+                                        <textarea name="address" class="form-control" rows="2" required></textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Service Type</label>
+                                        <select name="service_type" class="form-select" required>
+                                            <option value="">-- Select --</option>
+                                            <option value="Delivery">Delivery</option>
+                                            <option value="Pick-up">Pick-up</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Order Date</label>
+                                        <input type="date" name="order_date" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Add Order</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
@@ -154,7 +154,7 @@
         </div>
     </div>
 
-    {{-- Ajax Script --}}
+    {{-- Scripts --}}
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.getElementById("addCustomerForm");
@@ -185,7 +185,6 @@
                             let row = document.getElementById(`customerRow${customerId}`);
                             if (row) row.remove();
 
-                            // Show "No customers found" if table empty
                             if (tableBody.children.length === 0) {
                                 tableBody.innerHTML = `<tr id="noCustomersRow">
                                     <td colspan="5" class="text-center">No customers found</td>
@@ -205,7 +204,7 @@
                 }
             });
 
-            // Add customer
+            // Add customer via AJAX
             form.addEventListener("submit", function (e) {
                 e.preventDefault();
                 let formData = new FormData(form);
@@ -225,11 +224,9 @@
                         messageBox.classList.add("alert-success");
                         messageBox.innerText = data.message;
 
-                        // Remove "No customers found" if exists
                         const noDataRow = document.getElementById('noCustomersRow');
                         if (noDataRow) noDataRow.remove();
 
-                        // Append new customer row
                         tableBody.insertAdjacentHTML("beforeend", `
                             <tr id="customerRow${data.customer.id}">
                                 <td>${data.customer.name}</td>
@@ -241,6 +238,7 @@
                                         class="btn btn-sm btn-success addOrderBtn" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#addOrderModal"
+                                        data-id="${data.customer.id}"
                                         data-name="${data.customer.name}"
                                         data-contact="${data.customer.contact_number ?? ''}"
                                         data-address="${data.customer.address ?? ''}">
@@ -261,7 +259,6 @@
                         messageBox.innerText = data.message;
                     }
 
-                    // Close modal
                     let modalInstance = bootstrap.Modal.getInstance(modalEl);
                     if (modalInstance) modalInstance.hide();
                 })
@@ -279,10 +276,17 @@
             // Fill Add Order Modal dynamically
             document.addEventListener("click", function (e) {
                 if (e.target.classList.contains("addOrderBtn")) {
-                    const modal = document.getElementById("addOrderModal");
-                    modal.querySelector('input[name="customer_name"]').value = e.target.dataset.name;
-                    modal.querySelector('input[name="contact_number"]').value = e.target.dataset.contact;
-                    modal.querySelector('textarea[name="address"]').value = e.target.dataset.address;
+                    const customerId = e.target.dataset.id;
+                    const customerName = e.target.dataset.name;
+                    const customerContact = e.target.dataset.contact;
+                    const customerAddress = e.target.dataset.address;
+
+                    const addOrderForm = document.getElementById("addOrderForm");
+                    addOrderForm.action = `/orders/${customerId}`;
+
+                    addOrderForm.querySelector('input[name="customer_name"]').value = customerName;
+                    addOrderForm.querySelector('input[name="contact_number"]').value = customerContact;
+                    addOrderForm.querySelector('textarea[name="address"]').value = customerAddress;
                 }
             });
         });
