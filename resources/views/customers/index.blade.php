@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900">
 
                     <h4 class="mb-4 d-flex justify-content-between align-items-center">
-                        <strong>Customers</strong>
+                        <strong>Customers lists</strong>
                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
                             Add Customer
                         </button>
@@ -25,8 +25,6 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Username</th>
-                                    <th scope="col">Address</th>
-                                     <th scope="col">Phone number</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -36,8 +34,6 @@
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $customer->name }}</td>
                                         <td>{{ $customer->username }}</td>
-                                        <td>{{ $customer->address }}</td>
-                                        <td>{{ $customer->phone_number }}</td>
                                         {{-- <td>
                                              <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
                                             Add customer
@@ -49,27 +45,60 @@
                         </table>
                     </div>
 
-                    {{-- ADD ORDER MODAL --}}
+                    {{-- ADD CUSTOMER MODAL --}}
                     <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
-                            <form class="modal-content edit-order-form">
+                            <form action="{{ route('register') }}" method="POST" class="modal-content">
                                 @csrf
-                                @method('POST')
                                 <div class="modal-header">
                                     <h5 class="modal-title">Add Customer</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
+
                                 <div class="modal-body">
-                                    
-                                    hello
+                                    {{-- Name --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Full Name</label>
+                                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
+                                        @error('name') 
+                                            <small class="text-danger">{{ $message }}</small> 
+                                        @enderror
+                                    </div>
+
+                                    {{-- Username --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Username</label>
+                                        <input type="text" name="username" class="form-control" value="{{ old('username') }}" required>
+                                        @error('username') 
+                                            <small class="text-danger">{{ $message }}</small> 
+                                        @enderror
+                                    </div>
+
+                                    {{-- Password --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" name="password" class="form-control" required>
+                                        @error('password') 
+                                            <small class="text-danger">{{ $message }}</small> 
+                                        @enderror
+                                    </div>
+
+                                    {{-- Confirm Password --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Confirm Password</label>
+                                        <input type="password" name="password_confirmation" class="form-control" required>
+                                    </div>
                                 </div>
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <button type="submit" class="btn btn-primary">Add</button>
                                 </div>
                             </form>
                         </div>
                     </div>
+
+
 
                 </div>
             </div>
