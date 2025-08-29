@@ -31,12 +31,12 @@ class CustomerController extends Controller
 
             $customers = User::where('role', '!=', 'admin')->paginate(10);
 
-            return view('customers.index', compact('customers'))
-                ->with('message', ' Customer added successfully!');
+            return redirect()->route('customers.index')
+                ->with('message', 'Customer added successfully!');
         } catch (\Exception $e) {
             $customers = User::where('role', '!=', 'admin')->paginate(10);
 
-            return view('customers.index', compact('customers'))
+            return redirect()->route('customers.index')
                 ->with('error', 'Failed to add customer! ' . $e->getMessage());
         }
     }
