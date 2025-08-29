@@ -6,7 +6,8 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-
+use Illuminate\Support\Str;
+use App\Models\User;
 
 
 class OrderController extends Controller
@@ -170,5 +171,79 @@ class OrderController extends Controller
 
         // Fallback for traditional requests
         return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
+    }
+
+    // CustomerController.php
+    // public function storeorder(Request $request)
+    // {
+    //     $request->validate([
+    //         'customer_name' => 'required|string|max:255',
+    //         'contact_number' => 'required|string|max:11',
+    //         'address' => 'required|string|max:500',
+    //         'service_type' => 'required|string',
+    //         'weight' => 'required|numeric|min:1',
+    //         'amount_status' => 'required|in:Pending,Paid',
+    //         'laundry_status' => 'required|in:Waiting,Processing,Completed',
+    //     ]);
+
+    //     Order::create([
+    //         'customer_name' => $request->customer_name,
+    //         'contact_number' => $request->contact_number,
+    //         'address' => $request->address,
+    //         'service_type' => $request->service_type,
+    //         'weight' => $request->weight,
+    //         'total' => $request->weight <= 6 ? 130 : 130 + ($request->weight - 6) * 20,
+    //         'amount_status' => $request->amount_status,
+    //         'laundry_status' => $request->laundry_status,
+    //         'order_date' => now(),
+    //     ]);
+
+    //     return response()->json(['success' => true]);
+    // }
+
+
+    public function storeWalkInOrder(Request $request)
+    {
+        $request->validate([
+            'customer_name'   => 'required|string|max:255',
+            'contact_number'  => 'required|string|max:11',
+            'address'         => 'required|string|max:500',
+            'service_type'    => 'required|string',
+            'weight'          => 'required|numeric|min:1',
+            'amount_status'   => 'required|in:Pending,Paid',
+            'laundry_status'  => 'required|in:Waiting,Processing,Completed',
+        ]);
+
+        // generate unique username for walk-in
+        $username = 'walkin_' . Str::random(6);
+
+        // create walk-in user (linked customer)
+        $user = User::create([
+            'name'     => $request->customer_name,
+            'username' => $username,
+            'email'    => null,
+            'password' => Hash::make(Str::random(10)), // random password
+            'role'     => 'customer',
+        ]);
+
+        // create order linked to the new user
+        $order = Order::create([
+            'user_id'        => $user->id, // link to walk-in user
+            'customer_name'  => $request->customer_name,
+            'contact_number' => $request->contact_number,
+            'address'        => $request->address,
+            'service_type'   => $request->service_type,
+            'weight'         => $request->weight,
+            'total'          => $request->weight <= 6 ? 130 : 130 + ($request->weight - 6) * 20,
+            'amount_status'  => $request->amount_status,
+            'laundry_status' => $request->laundry_status,
+            'order_date'     => now(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Walk-in client and order created successfully.',
+            'order_id' => $order->id
+        ]);
     }
 }
