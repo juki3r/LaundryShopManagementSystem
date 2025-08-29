@@ -9,7 +9,12 @@
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
                     <h4 class="mb-4 d-flex justify-content-between align-items-center">
                         <strong>Customers lists</strong>
                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
@@ -81,12 +86,6 @@
                                         @error('password') 
                                             <small class="text-danger">{{ $message }}</small> 
                                         @enderror
-                                    </div>
-
-                                    {{-- Confirm Password --}}
-                                    <div class="mb-3">
-                                        <label class="form-label">Confirm Password</label>
-                                        <input type="password" name="password_confirmation" class="form-control" required>
                                     </div>
                                 </div>
 
