@@ -24,17 +24,19 @@
                         <table class="table table-striped table-hover align-middle">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>#</th>
                                     <th>Name</th>
                                     <th>Username</th>
+                                    <th>Address</th>
+                                    <th>Contact</th>
                                 </tr>
                             </thead>
                             <tbody id="customersTable">
                                 @foreach ($customers as $index => $customer)
                                     <tr>
-                                        <td>{{ $index + 1 }}</td>
                                         <td>{{ $customer->name }}</td>
                                         <td>{{ $customer->username }}</td>
+                                       <td>{{ $customer->address ?? '-' }}</td>
+                                       <td>{{ $customer->contact_number ?? '-' }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -112,7 +114,6 @@
                     // Append new customer to table
                     tableBody.insertAdjacentHTML("beforeend", `
                         <tr>
-                            <td>${data.customer.id}</td>
                             <td>${data.customer.name}</td>
                             <td>${data.customer.username}</td>
                         </tr>
