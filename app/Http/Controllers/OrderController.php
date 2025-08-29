@@ -28,12 +28,23 @@ class OrderController extends Controller
             'order_date'     => 'required|date',
         ]);
 
+        // Check if there is already a pending order for this customer
+        $pendingOrder = Auth::user()->orders()
+            ->where('user_id', $id)
+            ->where('amount_status', 'Pending')
+            ->first();
+
+        if ($pendingOrder) {
+            return redirect()->route('orders.index')
+                ->with('error', 'This customer already has a pending order.');
+        }
+
         // Convert order_date to PHT
         $orderDate = Carbon::now('Asia/Manila');
 
-        // Create order for the authenticated user
+        // Create order
         $order = Auth::user()->orders()->create([
-            'user_id' => $id,
+            'user_id'        => $id,
             'customer_name'  => $request->customer_name,
             'contact_number' => $request->contact_number,
             'address'        => $request->address,
@@ -47,10 +58,10 @@ class OrderController extends Controller
             'order_date'     => $orderDate,
         ]);
 
-
         return redirect()->route('orders.index')
             ->with('success', 'Order created successfully!');
     }
+
 
     public function storeApi(Request $request)
     {
