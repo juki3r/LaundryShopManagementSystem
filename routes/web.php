@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Customers Control
     Route::get('/customers', [CustomerController::class, 'showCustomers'])->name('show.customers');
+    Route::post('registercustomer', [RegisteredUserController::class, 'registercustomer'])->name('register.customer');
 });
 
 
