@@ -7,7 +7,13 @@
 
     <div class="container mt-4">
         {{-- Messages --}}
-        <div id="ajaxMessageContainer" style="position: fixed; top: 20px; right: 20px; z-index: 1050;"></div>
+        {{-- <div id="ajaxMessageContainer" style="position: fixed; top: 20px; right: 20px; z-index: 1050;"></div> --}}
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
         {{-- Search Input --}}
         <div class="row mb-3">
@@ -70,21 +76,16 @@
                     amount_status,
                     laundry_status
                 },
-                success: function(res){
-                    // Close the modal
-                    const modalEl = document.getElementById('editOrderModal' + orderId);
-                    const modal = bootstrap.Modal.getInstance(modalEl);
-                    if (modal) modal.hide();
+                // success: function(res){
+                //     // Optional: show success message before reload
+                //     showMessage('Order updated successfully!', 'success');
 
-                    // Show success message
-                    showMessage('Order updated successfully!', 'success');
-
-                    // Reload the page after 500ms
-                    setTimeout(() => { location.reload(); }, 500);
-                },
-                error: function(err){
-                    showMessage('Update failed. Please try again.', 'danger');
-                }
+                //     // Reload page after 500ms
+                //     setTimeout(() => { location.reload(); }, 500);
+                // },
+                // error: function(err){
+                //     showMessage('Update failed. Please try again.', 'danger');
+                // }
             });
         });
 
