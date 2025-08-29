@@ -98,7 +98,7 @@
         });
 
 
-        // Show message
+        // Show message and reload after 500ms
         function showMessage(message, type = 'success') {
             const msgId = 'msg' + Date.now();
             const html = `
@@ -107,7 +107,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>`;
             $('#ajaxMessageContainer').append(html);
+
+            // Automatically close the alert after 4 seconds
             setTimeout(() => { $('#' + msgId).alert('close'); }, 4000);
+
+            // Reload page after 500ms
+            setTimeout(() => { location.reload(); }, 500);
         }
 
         // AJAX update
