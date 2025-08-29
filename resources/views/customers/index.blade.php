@@ -10,14 +10,16 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    <h4 class="mb-4">Users List</h4>
-          
-                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
-                        Add customer
-                    </button>
-     
-
-
+                    <h4 class="mb-4 flex-1">
+                        <strong>
+                            Customers
+                        </strong>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addModal" class="me-0">
+                            Add customer
+                        </button>
+                    
+                    </h4>
+        
                     <div class="table-responsive">
                         <table class="table table-striped table-hover align-middle">
                             <thead class="table-dark">
