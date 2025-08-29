@@ -113,8 +113,11 @@
                     row.find('.amount_status').text(amount_status);
                     row.find('.laundry_status').text(laundry_status);
 
-                    // Close modal
-                    // $('#editOrderModal' + orderId).modal('hide');
+                    const modalEl = document.getElementById('editOrderModal' + orderId);
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) {
+                        modal.hide();
+                    }
 
                     // Show success message
                     showMessage('Order updated successfully!', 'success');
