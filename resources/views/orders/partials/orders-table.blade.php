@@ -6,6 +6,9 @@
                     <tr>
                         <th>Customer</th>
                         <th>Contact #</th>
+                        <th>Address</th>
+                        <th>Weight</th>
+                        <th>Total amount</th>
                         <th>Service</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -16,6 +19,9 @@
                         <tr>
                             <td>{{ $order->customer_name }}</td>
                             <td>{{ $order->contact_number }}</td>
+                            <td>{{ $order->address }}</td>
+                            <td>{{ $order->weight }}</td>
+                            <td>{{ $order->total }}</td>
                             <td>{{ $order->service_type }}</td>
                             <td>{{ $order->laundry_status }}</td>
                             <td>
