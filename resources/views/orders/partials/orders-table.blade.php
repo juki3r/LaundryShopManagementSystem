@@ -20,7 +20,7 @@
                 @forelse($orders as $order)
                 @php
                     $rowClass = match($order->laundry_status) {
-                        'Waiting' => 'table-warning',      // Yellow
+                        'Waiting' => 'table-danger',      // Yellow
                         'Processing' => 'table-primary text-white', // Blue with white text
                         'Completed' => 'table-success',    // Green
                         default => '',                      // Default
@@ -37,7 +37,7 @@
                     <td>{{ $order->service_type }}</td>
                     <td class="laundry_status">{{ $order->laundry_status }}</td>
                     <td>
-                        <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
                             Edit
                         </button>
                     </td>
