@@ -6,15 +6,16 @@
     </x-slot>
 
     <div class="container mt-4">
-        {{-- Search Input --}}
+        {{-- Message container --}}
         <div id="ajaxMessageContainer" style="position: fixed; top: 20px; right: 20px; z-index: 1050;"></div>
 
+        {{-- Search Input --}}
         <div class="row mb-3">
             <div class="col-md-4">
                 <input type="text" id="searchInput" class="form-control" placeholder="Search Orders..." value="{{ $search ?? '' }}">
             </div>
         </div>
-        
+
         {{-- Orders Table --}}
         <div id="ordersTableContainer">
             @include('orders.partials.orders-table', ['orders' => $orders])
@@ -64,14 +65,12 @@
         $(document).on('input', '.weight-input', function() {
             const orderId = $(this).data('order-id');
             const weight = parseFloat($(this).val()) || 0;
-            let total = 0;
-            if(weight <= 6) total = 130;
-            else total = 130 + (weight - 6) * 20;
+            let total = weight <= 6 ? 130 : 130 + (weight - 6) * 20;
             $('#total' + orderId).val(total.toFixed(2));
         });
 
-        function showMessage(message, type = 'success') {
-            // type: success / danger
+        // Show message function
+        function showMessage(message, type='success'){
             const msgId = 'msg' + Date.now();
             const html = `
                 <div id="${msgId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -79,15 +78,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>`;
             $('#ajaxMessageContainer').append(html);
-
-            // Auto remove after 4 seconds
-            setTimeout(() => {
-                $('#' + msgId).alert('close');
-            }, 4000);
+            setTimeout(() => { $('#' + msgId).alert('close'); }, 4000);
         }
 
+        // AJAX form submission
         $(document).on('submit', '.edit-order-form', function(e){
             e.preventDefault();
+
             const orderId = $(this).data('order-id');
             const weight = parseFloat($(this).find('.weight-input').val()) || 0;
             const total = parseFloat($(this).find('.total-input').val()) || 0;
@@ -100,35 +97,32 @@
                 dataType: 'json',
                 data: {
                     _token: '{{ csrf_token() }}',
-                    weight: weight,
-                    total: total,
-                    amount_status: amount_status,
-                    laundry_status: laundry_status
+                    weight,
+                    total,
+                    amount_status,
+                    laundry_status
                 },
                 success: function(res){
-                    // Update table row without reload
+                    // Update table row
                     const row = $('#orderRow' + orderId);
                     row.find('.weight').text(weight);
                     row.find('.total').text(total);
                     row.find('.amount_status').text(amount_status);
                     row.find('.laundry_status').text(laundry_status);
 
+                    // Properly close modal
                     const modalEl = document.getElementById('editOrderModal' + orderId);
                     const modal = bootstrap.Modal.getInstance(modalEl);
-                    if (modal) {
-                        modal.hide();
-                    }
+                    if (modal) modal.hide();
 
                     // Show success message
-                    showMessage('Order updated successfully!', 'success');
+                    showMessage(res.message, 'success');
                 },
                 error: function(err){
-                    // Show error message
                     showMessage('Update failed. Please try again.', 'danger');
                 }
             });
         });
-
 
     });
     </script>
