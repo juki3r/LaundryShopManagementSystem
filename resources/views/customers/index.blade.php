@@ -32,12 +32,12 @@
                                 </tr>
                             </thead>
                             <tbody id="customersTable">
-                                @foreach ($customers as $index => $customer)
-                                    <tr>
+                                @foreach ($customers as $customer)
+                                    <tr id="customerRow{{ $customer->id }}">
                                         <td>{{ $customer->name }}</td>
                                         <td>{{ $customer->username }}</td>
-                                       <td>{{ $customer->address ?? '-' }}</td>
-                                       <td>{{ $customer->contact_number ?? '-' }}</td>
+                                        <td>{{ $customer->address ?? '-' }}</td>
+                                        <td>{{ $customer->contact_number ?? '-' }}</td>
                                         <td>
                                             <button 
                                                 class="btn btn-sm btn-danger deleteCustomerBtn" 
@@ -92,24 +92,62 @@
     </div>
 
     {{-- Ajax Script --}}
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("addCustomerForm");
-        const messageBox = document.getElementById("ajaxMessage");
-        const tableBody = document.getElementById("customersTable");
-        const modalEl = document.getElementById("addModal");
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("addCustomerForm");
+            const messageBox = document.getElementById("ajaxMessage");
+            const tableBody = document.getElementById("customersTable");
+            const modalEl = document.getElementById("addModal");
 
-        // Handle delete button click
-        document.addEventListener("click", function (e) {
-            if (e.target.classList.contains("deleteCustomerBtn")) {
-                let customerId = e.target.getAttribute("data-id");
-                if (!confirm("Are you sure you want to delete this customer?")) return;
+            // Delete customer
+            document.addEventListener("click", function (e) {
+                if (e.target.classList.contains("deleteCustomerBtn")) {
+                    let customerId = e.target.getAttribute("data-id");
+                    if (!confirm("Are you sure you want to delete this customer?")) return;
 
-                fetch(`/customers/${customerId}`, {
-                    method: "DELETE",
+                    fetch(`/customers/${customerId}`, {
+                        method: "DELETE",
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        messageBox.classList.remove("d-none", "alert-success", "alert-danger");
+
+                        if (data.success) {
+                            messageBox.classList.add("alert-success");
+                            messageBox.innerText = data.message;
+
+                            // ✅ Remove row from table
+                            let row = document.getElementById(`customerRow${customerId}`);
+                            if (row) row.remove();
+                        } else {
+                            messageBox.classList.add("alert-danger");
+                            messageBox.innerText = data.message;
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        messageBox.classList.remove("d-none");
+                        messageBox.classList.add("alert-danger");
+                        messageBox.innerText = "Server error. Please try again.";
+                    });
+                }
+            });
+
+            // Add customer
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                let formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: "POST",
                     headers: {
                         "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                    }
+                    },
+                    body: formData
                 })
                 .then(res => res.json())
                 .then(data => {
@@ -119,72 +157,44 @@
                         messageBox.classList.add("alert-success");
                         messageBox.innerText = data.message;
 
-                        // Remove row from table
-                        document.getElementById(`customerRow${customerId}`).remove();
+                        // ✅ Append full row
+                        tableBody.insertAdjacentHTML("beforeend", `
+                            <tr id="customerRow${data.customer.id}">
+                                <td>${data.customer.name}</td>
+                                <td>${data.customer.username}</td>
+                                <td>${data.customer.address ?? '-'}</td>
+                                <td>${data.customer.contact_number ?? '-'}</td>
+                                <td>
+                                    <button 
+                                        class="btn btn-sm btn-danger deleteCustomerBtn" 
+                                        data-id="${data.customer.id}">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+
+                        form.reset();
                     } else {
                         messageBox.classList.add("alert-danger");
                         messageBox.innerText = data.message;
                     }
+
+                    // ✅ Close modal
+                    let modalInstance = bootstrap.Modal.getInstance(modalEl);
+                    if (modalInstance) modalInstance.hide();
                 })
                 .catch(err => {
                     console.error(err);
                     messageBox.classList.remove("d-none");
                     messageBox.classList.add("alert-danger");
                     messageBox.innerText = "Server error. Please try again.";
+
+                    let modalInstance = bootstrap.Modal.getInstance(modalEl);
+                    if (modalInstance) modalInstance.hide();
                 });
-            }
-        });
-
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            let formData = new FormData(form);
-
-            fetch(form.action, {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                messageBox.classList.remove("d-none", "alert-success", "alert-danger");
-
-                if (data.success) {
-                    messageBox.classList.add("alert-success");
-                    messageBox.innerText = data.message;
-
-                    // Append new customer to table
-                    tableBody.insertAdjacentHTML("beforeend", `
-                        <tr>
-                            <td>${data.customer.name}</td>
-                            <td>${data.customer.username}</td>
-                        </tr>
-                    `);
-
-                    form.reset();
-                } else {
-                    messageBox.classList.add("alert-danger");
-                    messageBox.innerText = data.message;
-                }
-
-                // Always close modal after submit
-                let modalInstance = bootstrap.Modal.getInstance(modalEl);
-                if (modalInstance) modalInstance.hide();
-            })
-            .catch(err => {
-                console.error(err);
-                messageBox.classList.remove("d-none");
-                messageBox.classList.add("alert-danger");
-                messageBox.innerText = "Server error. Please try again.";
-
-                // ✅ Still close modal even if error
-                let modalInstance = bootstrap.Modal.getInstance(modalEl);
-                if (modalInstance) modalInstance.hide();
             });
         });
-    });
-</script>
+    </script>
 
 </x-app-layout>
