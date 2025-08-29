@@ -17,8 +17,10 @@ Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 Route::middleware('auth')->group(function () {
     Route::resource('orders', OrderController::class);
 });
-Route::patch('/orders/{order}/approve', [OrderController::class, 'approve'])->name('orders.approve');
-Route::patch('/orders/{order}/deny', [OrderController::class, 'deny'])->name('orders.deny');
+
+Route::middleware(['auth'])->group(function () {
+    Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
+});
 
 
 Route::middleware('auth')->group(function () {

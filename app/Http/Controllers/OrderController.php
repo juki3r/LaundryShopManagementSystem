@@ -120,21 +120,6 @@ class OrderController extends Controller
 
 
 
-    public function approve(Order $order)
-    {
-        $order->update([
-            'laundry_status' => 'Approved',
-        ]);
-
-        return redirect()->route('orders.index')->with('success', 'Order approved successfully.');
-    }
-
-    public function deny(Order $order)
-    {
-        $order->delete();
-
-        return redirect()->route('orders.index')->with('error', 'Order deleted.');
-    }
 
 
 
