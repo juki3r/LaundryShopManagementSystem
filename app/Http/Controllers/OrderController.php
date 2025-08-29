@@ -29,8 +29,7 @@ class OrderController extends Controller
         ]);
 
         // Check if there is already a pending order for this customer
-        $pendingOrder = Auth::user()->orders()
-            ->where('user_id', $id)
+        $pendingOrder = Order::where('user_id', $id)
             ->where('amount_status', 'Pending')
             ->first();
 
