@@ -48,9 +48,8 @@ class OrderController extends Controller
         ]);
 
 
-        // return redirect()->route('orders.create')
-        //     ->with('success', 'Order created successfully!');
-        return "ok";
+        return redirect()->route('order.index')
+            ->with('success', 'Order created successfully!');
     }
 
     public function storeApi(Request $request)

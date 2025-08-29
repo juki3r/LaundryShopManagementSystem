@@ -14,15 +14,21 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
-Route::post('/orders/{customer_id}', [OrderController::class, 'store'])->name('orders.store');
+
+
+
+
 Route::middleware('auth')->group(function () {
     Route::resource('orders', OrderController::class);
 });
 
 Route::middleware(['auth'])->group(function () {
 
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
+    Route::post('/orders/{customer_id}', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+
 
     // Customers Control
     Route::get('/customers', [CustomerController::class, 'showCustomers'])->name('show.customers');

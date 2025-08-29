@@ -8,11 +8,35 @@ use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
-    public function showCustomers()
+    public function showCustomers(Request $request)
     {
-        $customers = User::where('role', '!=', 'admin')->paginate(10);
+        $query = User::where('role', '!=', 'admin');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%")
+                    ->orWhere('address', 'like', "%{$search}%")
+                    ->orWhere('contact_number', 'like', "%{$search}%");
+            });
+        }
+
+        $customers = $query->orderBy('name')->paginate(10);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'customers' => $customers->items(),
+                'pagination' => [
+                    'current_page' => $customers->currentPage(),
+                    'last_page' => $customers->lastPage(),
+                ]
+            ]);
+        }
+
         return view('customers.index', compact('customers'));
     }
+
 
     public function registercustomer(Request $request)
     {
