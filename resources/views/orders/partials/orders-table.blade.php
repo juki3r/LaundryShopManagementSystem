@@ -9,6 +9,7 @@
                         <th>Address</th>
                         <th>Weight</th>
                         <th>Total amount</th>
+                        <th>Payment</th>
                         <th>Service</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -22,6 +23,7 @@
                             <td>{{ $order->address }}</td>
                             <td>{{ $order->weight }}</td>
                             <td>{{ $order->total }}</td>
+                            <td>{{ $order->amount_status }}</td>
                             <td>{{ $order->service_type }}</td>
                             <td>{{ $order->laundry_status }}</td>
                             <td>
