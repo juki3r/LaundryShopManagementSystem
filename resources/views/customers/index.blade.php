@@ -52,6 +52,70 @@
                                             </button>
                                         </td>
                                     </tr>
+
+                                    <!-- Add Order Modal -->
+                                    <div class="modal fade" id="addOrderModal{{ $customer->id }}" tabindex="-1" aria-labelledby="addOrderModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="addOrderModalLabel">Add New Order</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ route('orders.store') }}" method="POST">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        
+                                                        <div class="mb-3">
+                                                            <label for="customer_name" class="form-label">Customer Name</label>
+                                                            <input type="text" name="customer_name" id="customer_name" class="form-control" required>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="contact_number" class="form-label">Contact Number</label>
+                                                            <input type="text" name="contact_number" id="contact_number" class="form-control" required>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="address" class="form-label">Address</label>
+                                                            <textarea name="address" id="address" class="form-control" rows="2" required></textarea>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="service_type" class="form-label">Service Type</label>
+                                                            <select name="service_type" id="service_type" class="form-select" required>
+                                                                <option value="">-- Select --</option>
+                                                                <option value="Delivery">Delivery</option>
+                                                                <option value="Pick-up">Pick-up</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="order_date" class="form-label">Order Date</label>
+                                                            <input type="date" name="order_date" id="order_date" class="form-control" required>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-primary">Add Order</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 @endforeach
                             </tbody>
                         </table>
@@ -91,56 +155,7 @@
                             </form>
                         </div>
                     </div>
-                    <!-- Add Order Modal -->
-                    <div class="modal fade" id="addOrderModal{{ $customer->id }}" tabindex="-1" aria-labelledby="addOrderModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="addOrderModalLabel">Add New Order</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form action="{{ route('orders.store') }}" method="POST">
-                                    @csrf
-                                    <div class="modal-body">
-                                        
-                                        <div class="mb-3">
-                                            <label for="customer_name" class="form-label">Customer Name</label>
-                                            <input type="text" name="customer_name" id="customer_name" class="form-control" required>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="contact_number" class="form-label">Contact Number</label>
-                                            <input type="text" name="contact_number" id="contact_number" class="form-control" required>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="address" class="form-label">Address</label>
-                                            <textarea name="address" id="address" class="form-control" rows="2" required></textarea>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="service_type" class="form-label">Service Type</label>
-                                            <select name="service_type" id="service_type" class="form-select" required>
-                                                <option value="">-- Select --</option>
-                                                <option value="Delivery">Delivery</option>
-                                                <option value="Pick-up">Pick-up</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="order_date" class="form-label">Order Date</label>
-                                            <input type="date" name="order_date" id="order_date" class="form-control" required>
-                                        </div>
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-primary">Add Order</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    
 
 
                 </div>
