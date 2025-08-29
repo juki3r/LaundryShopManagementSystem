@@ -32,7 +32,7 @@
                                 </tr>
                             </thead>
                             <tbody id="customersTable">
-                                @foreach ($customers as $customer)
+                                @forelse ($customers as $customer)
                                     <tr id="customerRow{{ $customer->id }}">
                                         <td>{{ $customer->name }}</td>
                                         <td>{{ $customer->username }}</td>
@@ -55,7 +55,11 @@
                                             </button>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr id="noCustomersRow">
+                                        <td colspan="5" class="text-center">No customers found</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -178,9 +182,15 @@
                             messageBox.classList.add("alert-success");
                             messageBox.innerText = data.message;
 
-                            // Remove row from table
                             let row = document.getElementById(`customerRow${customerId}`);
                             if (row) row.remove();
+
+                            // Show "No customers found" if table empty
+                            if (tableBody.children.length === 0) {
+                                tableBody.innerHTML = `<tr id="noCustomersRow">
+                                    <td colspan="5" class="text-center">No customers found</td>
+                                </tr>`;
+                            }
                         } else {
                             messageBox.classList.add("alert-danger");
                             messageBox.innerText = data.message;
@@ -198,7 +208,6 @@
             // Add customer
             form.addEventListener("submit", function (e) {
                 e.preventDefault();
-
                 let formData = new FormData(form);
 
                 fetch(form.action, {
@@ -215,6 +224,10 @@
                     if (data.success) {
                         messageBox.classList.add("alert-success");
                         messageBox.innerText = data.message;
+
+                        // Remove "No customers found" if exists
+                        const noDataRow = document.getElementById('noCustomersRow');
+                        if (noDataRow) noDataRow.remove();
 
                         // Append new customer row
                         tableBody.insertAdjacentHTML("beforeend", `
@@ -248,7 +261,7 @@
                         messageBox.innerText = data.message;
                     }
 
-                    //Close modal
+                    // Close modal
                     let modalInstance = bootstrap.Modal.getInstance(modalEl);
                     if (modalInstance) modalInstance.hide();
                 })
@@ -274,5 +287,4 @@
             });
         });
     </script>
-
 </x-app-layout>
