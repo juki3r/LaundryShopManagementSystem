@@ -124,7 +124,7 @@
                     messageBox.innerText = data.message;
                 }
 
-                // ✅ Always close modal after submit
+                // Always close modal after submit
                 let modalInstance = bootstrap.Modal.getInstance(modalEl);
                 if (modalInstance) modalInstance.hide();
             })
