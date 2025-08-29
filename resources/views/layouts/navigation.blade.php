@@ -28,19 +28,19 @@
             </div>
         </x-nav-link>
         <!-- Orders Nav Link -->
-        <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')" class="">
+        <x-nav-link :href="route('show.customers')" :active="request()->routeIs('show.customers.*')" class="mb-2">
             <div class="flex items-center">
                 <svg class="w-5 h-5 mr-2 text-light" xmlns="http://www.w3.org/2000/svg" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 12h6m-6 4h6M5 7h14M5 7a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5z" />
                 </svg>
-                <span class="mx-1" style="font-size: 14px">{{ __('Orders') }}</span>
+                <span class="mx-1" style="font-size: 14px">{{ __('Customers') }}</span>
             </div>
         </x-nav-link>
 
         <!-- Orders Nav Link -->
-        <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')" class="">
+        <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')" class="mb2">
             <div class="flex items-center">
                 <svg class="w-5 h-5 mr-2 text-light" xmlns="http://www.w3.org/2000/svg" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
