@@ -36,7 +36,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/customers/{id}', [CustomerController::class, 'delete'])->name('delete.customer');
 
 
-    Route::get('/reports', [OrderController::class, 'showreprots'])->name('reports.index');
+    Route::get('/reports', [OrderController::class, 'showreports'])->name('reports.index');
+
+
+
+    Route::get('/feedbacks', [OrderController::class, 'feedbacks'])->name('feedbacks.index');
 });
 
 

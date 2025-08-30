@@ -221,4 +221,9 @@ class OrderController extends Controller
     {
         return "Reports";
     }
+
+    public function feedbacks()
+    {
+        return "Feedbacks";
+    }
 }
