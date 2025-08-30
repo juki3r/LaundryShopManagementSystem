@@ -40,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    Route::get('/feedbacks', [OrderController::class, 'feedbacks'])->name('feedbacks.index');
+    Route::get('/feedbacks', [OrderController::class, 'feedbacks']);
 });
 
 
