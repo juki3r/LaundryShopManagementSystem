@@ -64,7 +64,7 @@
         </x-nav-link>
 
         <!-- Reports Nav Link -->
-        <x-nav-link :href="route('feedback.index')" :active="request()->routeIs('feedback.*')" class="mb-2">
+        <x-nav-link :href="route('feedbacks.index')" :active="request()->routeIs('feedbacks.*')" class="mb-2">
             <div class="flex items-center">
                 <svg class="w-5 h-5 mr-2 text-light" xmlns="http://www.w3.org/2000/svg" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
