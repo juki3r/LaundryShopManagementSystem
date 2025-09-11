@@ -241,7 +241,8 @@ class OrderController extends Controller
         }
 
         // Fallback for traditional requests
-        return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
+        // return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
+        return $request->rider_id;
     }
 
     // CustomerController.php
