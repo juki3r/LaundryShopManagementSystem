@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-2xl font-bold text-gray-800">
-            Customers Management
+            Riders Management
         </h2>
     </x-slot>
 
@@ -11,7 +11,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
                     <h4 class="mb-0"><i class="bi bi-people-fill me-2"></i>Customers List</h4>
                     <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
-                        <i class="bi bi-plus-circle"></i> Add Customer
+                        <i class="bi bi-plus-circle"></i> Add Rider
                     </button>
                 </div>
                 <div class="card-body">
@@ -61,7 +61,7 @@
             <form id="addCustomerForm" action="{{ route('register.customer') }}" method="POST" class="modal-content border-0 shadow">
                 @csrf
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title"><i class="bi bi-person-plus-fill me-2"></i>Add Customer</h5>
+                    <h5 class="modal-title"><i class="bi bi-person-plus-fill me-2"></i>Add Rider</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
