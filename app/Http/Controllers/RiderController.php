@@ -51,10 +51,9 @@ class RiderController extends Controller
             ]);
         }
 
-        // return view('riders.index', [
-        //     'riders' => $ridersTransformed,
-        //     'pagination' => $riders
-        // ]);
-        return $riders;
+        return view('riders.index', [
+            'riders' => $ridersTransformed,
+            'pagination' => $riders
+        ]);
     }
 }
