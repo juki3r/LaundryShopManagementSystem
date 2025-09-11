@@ -227,7 +227,7 @@ class OrderController extends Controller
             'total' => $request->total,
             'amount_status' => $request->amount_status,
             'laundry_status' => $request->laundry_status,
-            'rider' => $request->rider_id,
+            'rider' => $request->name,
 
         ]);
 
@@ -241,8 +241,7 @@ class OrderController extends Controller
         }
 
         // Fallback for traditional requests
-        // return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
-        return $request->rider_id;
+        return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
     }
 
     // CustomerController.php
