@@ -227,6 +227,8 @@ class OrderController extends Controller
             'total' => $request->total,
             'amount_status' => $request->amount_status,
             'laundry_status' => $request->laundry_status,
+            'rider' => $request->rider_id,
+
         ]);
 
         // Return JSON for AJAX
