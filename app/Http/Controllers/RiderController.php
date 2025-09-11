@@ -25,12 +25,12 @@ class RiderController extends Controller
         }
 
         // Load latest order for each user
-        $customers = $query->with(['orders' => function ($q) {
+        $riders = $query->with(['orders' => function ($q) {
             $q->latest()->limit(1);
         }])->orderBy('name')->paginate(10);
 
         // Transform data to include latest order info
-        $customersTransformed = $customers->map(function ($user) {
+        $ridersTransformed = $riders->map(function ($user) {
             $latestOrder = $user->orders->first();
             return [
                 'id' => $user->id,
@@ -43,19 +43,17 @@ class RiderController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'customers' => $customersTransformed,
+                'riders' => $ridersTransformed,
                 'pagination' => [
-                    'current_page' => $customers->currentPage(),
-                    'last_page' => $customers->lastPage(),
+                    'current_page' => $riders->currentPage(),
+                    'last_page' => $riders->lastPage(),
                 ]
             ]);
         }
 
-        // return view('riders.index', [
-        //     'customers' => $customersTransformed,
-        //     'pagination' => $customers
-        // ]);
-
-        return "hello";
+        return view('riders.index', [
+            'riders' => $ridersTransformed,
+            'pagination' => $riders
+        ]);
     }
 }

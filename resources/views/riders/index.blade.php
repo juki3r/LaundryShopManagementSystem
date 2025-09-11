@@ -9,7 +9,7 @@
         <div class="container-fluid">
             <div class="card shadow-sm rounded-3">
                 <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
-                    <h4 class="mb-0"><i class="bi bi-people-fill me-2"></i>Customers List</h4>
+                    <h4 class="mb-0"><i class="bi bi-people-fill me-2"></i>Riders List</h4>
                     <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
                         <i class="bi bi-plus-circle"></i> Add Rider
                     </button>
@@ -27,7 +27,7 @@
                         </div>
                     </div>
 
-                    {{-- Customers Table --}}
+                    {{-- Riders Table --}}
                     <div class="table-responsive">
                         <table class="table table-hover align-middle table-bordered border-secondary">
                             <thead class="table-dark text-center">
@@ -144,7 +144,7 @@
             let currentPage = 1;
             let currentSearch = '';
 
-            function fetchCustomers(search = '', page = 1) {
+            function fetchRiders(search = '', page = 1) {
                 currentSearch = search;
                 currentPage = page;
 
@@ -154,29 +154,29 @@
                 .then(res => res.json())
                 .then(data => {
                     tableBody.innerHTML = '';
-                    if (data.customers.length === 0) {
-                        tableBody.innerHTML = `<tr><td colspan="5" class="text-center">No customers found</td></tr>`;
+                    if (data.riders.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="5" class="text-center">No riders found</td></tr>`;
                         paginationContainer.innerHTML = '';
                         return;
                     }
 
-                    data.customers.forEach(customer => {
+                    data.riders.forEach(rider => {
                         tableBody.insertAdjacentHTML('beforeend', `
-                            <tr id="customerRow${customer.id}">
-                                <td>${customer.name}</td>
-                                <td>${customer.username}</td>
-                                <td>${customer.address ?? ''}</td>
-                                <td>${customer.contact_number ?? ''}</td>
+                            <tr id="customerRow${riders.id}">
+                                <td>${riders.name}</td>
+                                <td>${riders.username}</td>
+                                <td>${riders.address ?? ''}</td>
+                                <td>${riders.contact_number ?? ''}</td>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-success addOrderBtn me-1" 
                                         data-bs-toggle="modal" data-bs-target="#addOrderModal"
-                                        data-id="${customer.id}"
-                                        data-name="${customer.name}"
-                                        data-contact="${customer.contact_number ?? ''}"
-                                        data-address="${customer.address ?? ''}">
+                                        data-id="${riders.id}"
+                                        data-name="${riders.name}"
+                                        data-contact="${riders.contact_number ?? ''}"
+                                        data-address="${riders.address ?? ''}">
                                         <i class="bi bi-cart-plus-fill"></i> Add Order
                                     </button>
-                                    <button class="btn btn-sm btn-danger deleteCustomerBtn" data-id="${customer.id}">
+                                    <button class="btn btn-sm btn-danger deleteRidersBtn" data-id="${riders.id}">
                                         <i class="bi bi-trash-fill"></i> Delete
                                     </button>
                                 </td>
@@ -205,15 +205,15 @@
                 e.preventDefault();
                 if (e.target.tagName === 'A') {
                     const page = parseInt(e.target.dataset.page);
-                    if (!isNaN(page)) fetchCustomers(currentSearch, page);
+                    if (!isNaN(page)) fetchRiders(currentSearch, page);
                 }
             });
 
             searchInput.addEventListener('input', function() {
-                fetchCustomers(this.value, 1);
+                fetchRiders(this.value, 1);
             });
 
-            fetchCustomers();
+            fetchRiders();
 
             document.addEventListener("click", function (e) {
                 if (e.target.classList.contains("deleteCustomerBtn")) {
@@ -230,7 +230,7 @@
                         if (data.success) {
                             messageBox.classList.add("alert-success");
                             messageBox.innerText = data.message;
-                            fetchCustomers(currentSearch, currentPage);
+                            fetchRiders(currentSearch, currentPage);
                         } else {
                             messageBox.classList.add("alert-danger");
                             messageBox.innerText = data.message;
@@ -259,7 +259,7 @@
                     if (data.success) {
                         messageBox.classList.add("alert-success");
                         messageBox.innerText = data.message;
-                        fetchCustomers(currentSearch, currentPage);
+                        fetchRiders(currentSearch, currentPage);
                         addCustomerForm.reset();
                         const modalInstance = bootstrap.Modal.getInstance(addModal);
                         if (modalInstance) modalInstance.hide();
