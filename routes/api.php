@@ -20,7 +20,11 @@ Route::middleware('auth:sanctum')->post('/save-expo-token', [RegisteredUserContr
 Route::middleware('auth:sanctum')->post('/orders', [OrderController::class, 'storeApi']);
 Route::middleware('auth:sanctum')->get('/rider/orders', [OrderController::class, 'riderOrders']);
 Route::middleware('auth:sanctum')->put('/rider/orders/{order}/deliver', [OrderController::class, 'markDelivered']);
-Route::middleware('auth:sanctum')->post('/feedback', [FeedbackController::class, 'store']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/feedback', [FeedbackController::class, 'index']);
+    Route::post('/feedback', [FeedbackController::class, 'store']);
+});
 
 
 
