@@ -58,7 +58,7 @@ class RiderController extends Controller
     }
 
 
-    public function registerrider(Request $request)
+    public function register(Request $request)
     {
         // Simple checks
         if (User::where('username', $request->username)->exists()) {
