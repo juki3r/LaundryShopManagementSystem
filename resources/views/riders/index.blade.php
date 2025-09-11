@@ -23,7 +23,7 @@
                     <div class="mb-3">
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-search"></i></span>
-                            <input type="text" id="searchInput" class="form-control" placeholder="Search customers by name, username, address or contact...">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search riders by name, username, address or contact...">
                         </div>
                     </div>
 
@@ -39,7 +39,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="customersTable" class="text-center">
+                            <tbody id="ridersTable" class="text-center">
                                 {{-- Rows will be loaded via AJAX --}}
                             </tbody>
                         </table>
@@ -55,10 +55,10 @@
         </div>
     </div>
 
-    {{-- Add Customer Modal --}}
+    {{-- Add Rider Modal --}}
     <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <form id="addCustomerForm" action="{{ route('register.customer') }}" method="POST" class="modal-content border-0 shadow">
+            <form id="addRiderForm" action="{{ route('register.rider') }}" method="POST" class="modal-content border-0 shadow">
                 @csrf
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title"><i class="bi bi-person-plus-fill me-2"></i>Add Rider</h5>
@@ -86,59 +86,14 @@
         </div>
     </div>
 
-    {{-- Add Order Modal --}}
-    <div class="modal fade" id="addOrderModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <form id="addOrderForm" method="POST" class="modal-content border-0 shadow">
-                @csrf
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title"><i class="bi bi-cart-plus-fill me-2"></i>Add New Order</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Customer Name</label>
-                            <input type="text" name="customer_name" class="form-control form-control-lg" readonly>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Contact Number</label>
-                            <input type="text" name="contact_number" class="form-control form-control-lg" required>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label fw-semibold">Address</label>
-                            <textarea name="address" class="form-control form-control-lg" rows="2" required></textarea>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Service Type</label>
-                            <select name="service_type" class="form-select form-select-lg" required>
-                                <option value="">-- Select --</option>
-                                <option value="Delivery">Delivery</option>
-                                <option value="Pick-up">Pick-up</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Order Date</label>
-                            <input type="text" name="order_date" class="form-control form-control-lg" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Cancel</button>
-                    <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-check-circle"></i> Add Order</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     {{-- Scripts --}}
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const messageBox = document.getElementById("ajaxMessage");
-            const tableBody = document.getElementById("customersTable");
+            const tableBody = document.getElementById("ridersTable");
             const searchInput = document.getElementById("searchInput");
             const paginationContainer = document.getElementById("paginationContainer");
-            const addCustomerForm = document.getElementById("addCustomerForm");
+            const addCustomerForm = document.getElementById("addRiderForm");
             const addModal = document.getElementById("addModal");
 
             let currentPage = 1;
@@ -148,7 +103,7 @@
                 currentSearch = search;
                 currentPage = page;
 
-                fetch(`/customers?search=${encodeURIComponent(search)}&page=${page}`, {
+                fetch(`/riders?search=${encodeURIComponent(search)}&page=${page}`, {
                     headers: { "X-Requested-With": "XMLHttpRequest" }
                 })
                 .then(res => res.json())
@@ -162,21 +117,13 @@
 
                     data.riders.forEach(rider => {
                         tableBody.insertAdjacentHTML('beforeend', `
-                            <tr id="customerRow${riders.id}">
-                                <td>${riders.name}</td>
-                                <td>${riders.username}</td>
-                                <td>${riders.address ?? ''}</td>
-                                <td>${riders.contact_number ?? ''}</td>
+                            <tr id="customerRow${rider.id}">
+                                <td>${rider.name}</td>
+                                <td>${rider.username}</td>
+                                <td>${rider.address ?? ''}</td>
+                                <td>${rider.contact_number ?? ''}</td>
                                 <td class="text-center">
-                                    <button class="btn btn-sm btn-success addOrderBtn me-1" 
-                                        data-bs-toggle="modal" data-bs-target="#addOrderModal"
-                                        data-id="${riders.id}"
-                                        data-name="${riders.name}"
-                                        data-contact="${riders.contact_number ?? ''}"
-                                        data-address="${riders.address ?? ''}">
-                                        <i class="bi bi-cart-plus-fill"></i> Add Order
-                                    </button>
-                                    <button class="btn btn-sm btn-danger deleteRidersBtn" data-id="${riders.id}">
+                                    <button class="btn btn-sm btn-danger deleteRidersBtn" data-id="${rider.id}">
                                         <i class="bi bi-trash-fill"></i> Delete
                                     </button>
                                 </td>
@@ -216,11 +163,11 @@
             fetchRiders();
 
             document.addEventListener("click", function (e) {
-                if (e.target.classList.contains("deleteCustomerBtn")) {
-                    const customerId = e.target.dataset.id;
-                    if (!confirm("Are you sure you want to delete this customer?")) return;
+                if (e.target.classList.contains("deleteRiderBtn")) {
+                    const riderId = e.target.dataset.id;
+                    if (!confirm("Are you sure you want to delete this rider?")) return;
 
-                    fetch(`/customers/${customerId}`, {
+                    fetch(`/riders/${riderId}`, {
                         method: "DELETE",
                         headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content }
                     })
@@ -245,10 +192,10 @@
                 }
             });
 
-            addCustomerForm.addEventListener("submit", function(e) {
+            addRiderForm.addEventListener("submit", function(e) {
                 e.preventDefault();
-                const formData = new FormData(addCustomerForm);
-                fetch(addCustomerForm.action, {
+                const formData = new FormData(addRiderForm);
+                fetch(addRiderForm.action, {
                     method: "POST",
                     headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content },
                     body: formData
@@ -260,7 +207,7 @@
                         messageBox.classList.add("alert-success");
                         messageBox.innerText = data.message;
                         fetchRiders(currentSearch, currentPage);
-                        addCustomerForm.reset();
+                        addRiderForm.reset();
                         const modalInstance = bootstrap.Modal.getInstance(addModal);
                         if (modalInstance) modalInstance.hide();
                     } else {
@@ -271,28 +218,6 @@
                 .catch(err => console.error(err));
             });
 
-            document.addEventListener("click", function (e) {
-                if (e.target.classList.contains("addOrderBtn")) {
-                    const customerId = e.target.dataset.id;
-                    const customerName = e.target.dataset.name;
-                    const customerContact = e.target.dataset.contact;
-                    const customerAddress = e.target.dataset.address;
-                    const addOrderForm = document.getElementById("addOrderForm");
-
-                    addOrderForm.action = `/orders/${customerId}`;
-                    addOrderForm.querySelector('input[name="customer_name"]').value = customerName;
-                    addOrderForm.querySelector('input[name="contact_number"]').value = customerContact;
-                    addOrderForm.querySelector('textarea[name="address"]').value = customerAddress;
-
-                    const orderDateInput = addOrderForm.querySelector('input[name="order_date"]');
-                    const manilaTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" });
-                    const manilaDate = new Date(manilaTime);
-                    const yyyy = manilaDate.getFullYear();
-                    const mm = String(manilaDate.getMonth() + 1).padStart(2, '0');
-                    const dd = String(manilaDate.getDate()).padStart(2, '0');
-                    orderDateInput.value = `${yyyy}-${mm}-${dd}`;
-                }
-            });
         });
     </script>
 
