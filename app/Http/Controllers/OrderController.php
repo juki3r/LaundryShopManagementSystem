@@ -255,6 +255,7 @@ class OrderController extends Controller
 
         $orders = \App\Models\Order::where('rider', $user->name)
             ->where('delivered', 'No') // only active orders
+            ->where('Laundry_status', 'Completed') // only active orders
             ->with('user') // if you want customer details
             ->latest()
             ->get();
