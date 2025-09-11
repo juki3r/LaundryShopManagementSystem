@@ -260,11 +260,22 @@ class OrderController extends Controller
             ->latest()
             ->get();
 
+        $orders_completed = \App\Models\Order::where('rider', $user->name)
+            ->where('delivered', 'Yes') // only active orders
+            ->where('Laundry_status', 'Completed') // only active orders
+            ->with('user') // if you want customer details
+            ->latest()
+            ->get();
+
         return response()->json([
             'count' => $orders->count(),
             'orders' => $orders,
+            'count_completed' => $orders_completed->count(),
+            'orders_completed' => $orders_completed
         ]);
     }
+
+
 
     public function markDelivered(Request $request, \App\Models\Order $order)
     {
