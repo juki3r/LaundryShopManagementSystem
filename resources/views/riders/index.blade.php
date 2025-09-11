@@ -123,7 +123,7 @@
                                 <td>${rider.address ?? ''}</td>
                                 <td>${rider.contact_number ?? ''}</td>
                                 <td class="text-center">
-                                    <button class="btn btn-sm btn-danger deleteRidersBtn" data-id="${rider.id}">
+                                    <button class="btn btn-sm btn-danger deleteRiderBtn" data-id="${rider.id}">
                                         <i class="bi bi-trash-fill"></i> Delete
                                     </button>
                                 </td>

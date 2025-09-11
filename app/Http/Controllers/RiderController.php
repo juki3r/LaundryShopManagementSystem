@@ -58,7 +58,7 @@ class RiderController extends Controller
     }
 
 
-    public function registerrider(Request $request)
+    public function register(Request $request)
     {
         // Simple checks
         if (User::where('username', $request->username)->exists()) {
@@ -99,17 +99,17 @@ class RiderController extends Controller
     public function delete($id)
     {
         try {
-            $customer = User::where('role', 'customer')->findOrFail($id);
+            $customer = User::where('role', 'rider')->findOrFail($id);
             $customer->delete();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Customer deleted successfully!'
+                'message' => 'Rider deleted successfully!'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete customer.'
+                'message' => 'Failed to delete Rider.'
             ], 500);
         }
     }
