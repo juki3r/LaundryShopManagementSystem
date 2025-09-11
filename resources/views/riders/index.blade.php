@@ -195,12 +195,9 @@
             addRiderForm.addEventListener("submit", function(e) {
                 e.preventDefault();
                 const formData = new FormData(addRiderForm);
-
                 fetch(addRiderForm.action, {
                     method: "POST",
-                    headers: {
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                    },
+                    headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content },
                     body: formData
                 })
                 .then(res => res.json())
@@ -211,22 +208,15 @@
                         messageBox.innerText = data.message;
                         fetchRiders(currentSearch, currentPage);
                         addRiderForm.reset();
-
-                        const modalInstance = bootstrap.Modal.getOrCreateInstance(addModal);
-                        modalInstance.hide();
+                        const modalInstance = bootstrap.Modal.getInstance(addModal);
+                        if (modalInstance) modalInstance.hide();
                     } else {
                         messageBox.classList.add("alert-danger");
                         messageBox.innerText = data.message;
                     }
                 })
-                .catch(err => {
-                    console.error("Error:", err);
-                    messageBox.classList.remove("d-none");
-                    messageBox.classList.add("alert-danger");
-                    messageBox.innerText = "Failed to add rider. Please try again.";
-                });
+                .catch(err => console.error(err));
             });
-
 
         });
     </script>
