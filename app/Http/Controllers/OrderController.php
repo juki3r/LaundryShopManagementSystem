@@ -178,12 +178,14 @@ class OrderController extends Controller
                 ->paginate(10)
                 ->withQueryString();
         }
+        // fetch all riders
+        $riders = \App\Models\User::where('role', 'rider')->get();
 
         if ($request->ajax()) {
-            return view('orders.partials.orders-table', compact('orders'))->render();
+            return view('orders.partials.orders-table', compact('orders', 'riders'))->render();
         }
 
-        return view('orders.index', compact('orders', 'search'));
+        return view('orders.index', compact('orders', 'search', 'riders'));
     }
 
 

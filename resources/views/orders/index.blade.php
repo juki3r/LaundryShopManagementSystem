@@ -130,6 +130,17 @@
                                     <option value="Completed" {{ $order->laundry_status === 'Completed' ? 'selected' : '' }}>Completed</option>
                                 </select>
                             </div>
+                            <div class="mb-3">
+                            <label class="form-label fw-semibold">Assign Rider</label>
+                            <select class="form-select rider_id-input">
+                                <option value="">Not yet</option>
+                                @foreach($riders as $rider)
+                                    <option value="{{ $rider->id }}" {{ $order->name == $rider->id ? 'selected' : '' }}>
+                                        {{ $rider->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
