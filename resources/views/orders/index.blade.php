@@ -135,12 +135,13 @@
                                 <select class="form-select rider_id-input">
                                     <option value="">Not yet</option>
                                     @foreach($riders as $rider)
-                                        <option value="{{ $rider->name }}" {{ $order->name == $rider->name ? 'selected' : '' }}>
+                                        <option value="{{ $rider->id }}" {{ $order->rider_id == $rider->id ? 'selected' : '' }}>
                                             {{ $rider->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
+
 
                         </div>
                         <div class="modal-footer">
@@ -232,6 +233,7 @@
                 const total = parseFloat(form.find('.total-input').val()) || 0;
                 const amount_status = form.find('.amount_status-input').val();
                 const laundry_status = form.find('.laundry_status-input').val();
+                const rider = form.find('.rider_id-input').val();
 
                 $.ajax({
                     url: '/orders/' + orderId,
@@ -242,7 +244,8 @@
                         weight,
                         total,
                         amount_status,
-                        laundry_status
+                        laundry_status,
+                        rider
                     },
                     success: function(res){
                         const modalEl = document.getElementById('editOrderModal' + orderId);
