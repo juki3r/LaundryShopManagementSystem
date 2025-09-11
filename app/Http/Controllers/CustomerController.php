@@ -10,7 +10,7 @@ class CustomerController extends Controller
 {
     public function showCustomers(Request $request)
     {
-        $query = User::where('role', '===', 'customer');
+        $query = User::where('role', '=', 'customer');
 
         if ($request->filled('search')) {
             $search = $request->search;
