@@ -99,8 +99,8 @@ class RiderController extends Controller
     public function delete($id)
     {
         try {
-            $customer = User::where('role', 'rider')->findOrFail($id);
-            $customer->delete();
+            $rider = User::where('role', 'rider')->findOrFail($id);
+            $rider->delete();
 
             return response()->json([
                 'success' => true,
