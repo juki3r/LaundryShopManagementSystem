@@ -287,6 +287,7 @@ class OrderController extends Controller
         }
 
         $order->delivered = 'Yes';
+        $order->delivery_date = now('Asia/Manila'); // set Manila time
         $order->save();
 
         return response()->json([
