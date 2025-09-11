@@ -35,6 +35,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('registercustomer', [CustomerController::class, 'registercustomer'])->name('register.customer');
     Route::delete('/customers/{id}', [CustomerController::class, 'delete'])->name('delete.customer');
 
+    // Riders Control
+    Route::get('/riders', [CustomerController::class, 'showRiders'])->name('show.riders');
+
 
     Route::get('/reports', [OrderController::class, 'showreports'])->name('reports.index');
 
