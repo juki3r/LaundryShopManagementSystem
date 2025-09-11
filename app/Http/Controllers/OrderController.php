@@ -266,6 +266,25 @@ class OrderController extends Controller
         ]);
     }
 
+    public function markDelivered(Request $request, \App\Models\Order $order)
+    {
+        $user = $request->user();
+
+        // Ensure only the assigned rider can mark as delivered
+        if ($order->rider !== $user->name) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $order->delivered = 'Yes';
+        $order->save();
+
+        return response()->json([
+            'message' => 'Order marked as delivered.',
+            'order' => $order,
+        ]);
+    }
+
+
 
     // CustomerController.php
     // public function storeorder(Request $request)

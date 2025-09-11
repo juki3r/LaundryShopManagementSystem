@@ -18,6 +18,8 @@ Route::middleware('auth:sanctum')->get('/orders', [OrderController::class, 'inde
 Route::middleware('auth:sanctum')->post('/save-expo-token', [RegisteredUserController::class, 'saveExpoToken']);
 Route::middleware('auth:sanctum')->post('/orders', [OrderController::class, 'storeApi']);
 Route::middleware('auth:sanctum')->get('/rider/orders', [OrderController::class, 'riderOrders']);
+Route::middleware('auth:sanctum')->put('/rider/orders/{order}/deliver', [OrderController::class, 'markDelivered']);
+
 
 
 
