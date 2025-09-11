@@ -135,7 +135,7 @@
                                 <select class="form-select rider_id-input">
                                     <option value="">Not yet</option>
                                     @foreach($riders as $rider)
-                                        <option value="{{ $rider->id }}" {{ $order->rider_id == $rider->id ? 'selected' : '' }}>
+                                        <option value="{{ $rider->name }}" {{ $order->rider_id == $rider->id ? 'selected' : '' }}>
                                             {{ $rider->name }}
                                         </option>
                                     @endforeach
