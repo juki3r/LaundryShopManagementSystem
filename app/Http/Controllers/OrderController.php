@@ -244,6 +244,27 @@ class OrderController extends Controller
         return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
     }
 
+    public function riderOrders()
+    {
+        $user = auth()->user();
+
+        // only riders can fetch this
+        if ($user->role !== 'rider') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $orders = \App\Models\Order::where('rider', $user->name)
+            ->with('user') // if you want customer details
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'count' => $orders->count(),
+            'orders' => $orders,
+        ]);
+    }
+
+
     // CustomerController.php
     // public function storeorder(Request $request)
     // {
