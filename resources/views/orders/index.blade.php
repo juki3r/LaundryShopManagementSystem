@@ -49,6 +49,7 @@
                                 <th>Date of Order</th>
                                 <th>Service</th>
                                 <th>Status</th>
+                                <th>Delivered</th>
                                 <th>Rider</th>
                                 <th>Actions</th>
                             </tr>
@@ -72,7 +73,8 @@
                                     <td>{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y h:i A') }}</td>
                                     <td>{{ $order->service_type }}</td>
                                     <td class="laundry_status">{{ $order->laundry_status }}</td>
-                                    <td class="laundry_status">
+                                    <td class="delivered">{{ $order->delivered }}</td>
+                                    <td class="rider">
                                          {{ $order->rider ? $order->rider : 'None' }}
                                     </td>
                                     <td class="text-center">
