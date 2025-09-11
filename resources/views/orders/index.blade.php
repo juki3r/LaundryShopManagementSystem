@@ -133,7 +133,7 @@
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Assign Rider</label>
                                 <select class="form-select rider_id-input">
-                                    <option value="">Not yet</option>
+                                   
                                     @foreach($riders as $rider)
                                         <option value="{{ $rider->name }}" {{ $order->rider_id == $rider->id ? 'selected' : '' }}>
                                             {{ $rider->name }}
