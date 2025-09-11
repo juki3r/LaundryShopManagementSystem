@@ -9,7 +9,7 @@ class RiderController extends Controller
 {
     public function showRiders(Request $request)
     {
-        $query = User::where('role', '=', 'admin');
+        $query = User::where('role', '=', 'rider');
 
         if ($request->filled('search')) {
             $search = $request->search;
