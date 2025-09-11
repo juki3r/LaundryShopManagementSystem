@@ -10,7 +10,11 @@ class Feedback extends Model
     use HasFactory;
 
     protected $table = 'feedbacks';
-    protected $fillable = ['user_id', 'feedback', 'rating'];
+    protected $fillable = [
+        'user_id',
+        'comment', // updated
+        'rating',
+    ];
 
 
     public function user()
