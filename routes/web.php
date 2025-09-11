@@ -38,8 +38,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Riders Control
     Route::get('/riders', [RiderController::class, 'showRiders'])->name('show.riders');
-    Route::post('registerrider', [CustomerController::class, 'registerrider'])->name('register.rider');
-    Route::delete('/riders/{id}', [CustomerController::class, 'delete'])->name('delete.rider');
+    Route::post('registerrider', [RiderController::class, 'registerrider'])->name('register.rider');
+    Route::delete('/riders/{id}', [RiderController::class, 'delete'])->name('delete.rider');
 
 
     Route::get('/reports', [OrderController::class, 'showreports'])->name('reports.index');
