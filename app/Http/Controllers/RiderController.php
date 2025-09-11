@@ -56,4 +56,61 @@ class RiderController extends Controller
             'pagination' => $riders
         ]);
     }
+
+
+    public function registerrider(Request $request)
+    {
+        // Simple checks
+        if (User::where('username', $request->username)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Username already taken!'
+            ], 400);
+        }
+
+        if (strlen($request->password) < 8) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Password must be at least 8 characters!'
+            ], 400);
+        }
+
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'username' => $request->username,
+                'password' => Hash::make($request->password),
+                'role' => 'rider',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Rider added successfully!',
+                'rider' => $user
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to add rider!'
+            ], 500);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $customer = User::where('role', 'customer')->findOrFail($id);
+            $customer->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Customer deleted successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete customer.'
+            ], 500);
+        }
+    }
 }
