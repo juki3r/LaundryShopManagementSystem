@@ -5,6 +5,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\RiderController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/customers/{id}', [CustomerController::class, 'delete'])->name('delete.customer');
 
     // Riders Control
-    Route::get('/riders', [CustomerController::class, 'showRiders'])->name('show.riders');
+    Route::get('/riders', [RiderController::class, 'showRiders'])->name('show.riders');
 
 
     Route::get('/reports', [OrderController::class, 'showreports'])->name('reports.index');
