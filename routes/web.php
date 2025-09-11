@@ -38,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Riders Control
     Route::get('/riders', [RiderController::class, 'showRiders'])->name('show.riders');
-    Route::post('register_rider', [RiderController::class, 'registerrider'])->name('register.rider');
+    Route::post('/register/rider', [RiderController::class, 'registerrider'])->name('register.rider');
     Route::delete('/riders/{id}', [RiderController::class, 'delete'])->name('delete.rider');
 
 
