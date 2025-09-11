@@ -93,7 +93,7 @@
             const tableBody = document.getElementById("ridersTable");
             const searchInput = document.getElementById("searchInput");
             const paginationContainer = document.getElementById("paginationContainer");
-            const addCustomerForm = document.getElementById("addRiderForm");
+            const addRiderForm = document.getElementById("addRiderForm");
             const addModal = document.getElementById("addModal");
 
             let currentPage = 1;
