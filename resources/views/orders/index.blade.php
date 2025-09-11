@@ -72,7 +72,9 @@
                                     <td>{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y h:i A') }}</td>
                                     <td>{{ $order->service_type }}</td>
                                     <td class="laundry_status">{{ $order->laundry_status }}</td>
-                                    <td class="laundry_status">{{ $order->rider }}</td>
+                                    <td class="laundry_status">
+                                         {{ $order->rider ? $order->rider : 'None' }}
+                                    </td>
                                     <td class="text-center">
                                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
                                             <i class="bi bi-pencil-square"></i> Edit
