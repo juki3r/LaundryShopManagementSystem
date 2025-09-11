@@ -16,7 +16,7 @@ class FeedbackController extends Controller
     {
         // Validation
         $validator = Validator::make($request->all(), [
-            'feedback' => 'required|string|max:1000',
+            'comment' => 'required|string|max:1000',
             'rating'  => 'required|integer|min:1|max:5',
         ]);
 
@@ -30,7 +30,7 @@ class FeedbackController extends Controller
         try {
             $feedback = Feedback::create([
                 'user_id' => Auth::id(),           // link to logged-in user
-                'feedback' => $request->feedback,
+                'comment' => $request->comment, // updated
                 'rating'  => $request->rating,
             ]);
 
