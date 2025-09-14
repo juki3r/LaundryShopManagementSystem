@@ -62,23 +62,11 @@ class FeedbackController extends Controller
     public function myFeedback()
     {
         try {
-            $userId = Auth::id();
-
-            $feedback = Feedback::with('user:id,name')
-                ->where('user_id', $userId)
-                ->first();
-
-            if (!$feedback) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'You have not submitted feedback yet.',
-                    'data'    => null
-                ]);
-            }
+            $feedbacks = Feedback::with('user:id,name')->get();
 
             return response()->json([
                 'success' => true,
-                'data'    => $feedback
+                'data'    => $feedbacks
             ]);
         } catch (\Exception $e) {
             return response()->json([
