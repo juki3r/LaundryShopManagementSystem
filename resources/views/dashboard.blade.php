@@ -20,7 +20,7 @@
                                         <strong>Total Profit Today</strong>
                                     </div>
                                     <div class="card-body">
-                                        0.00
+                                        ₱{{ number_format($totalProfitToday, 2) }}
                                     </div>
                                 </div>
                             </div>

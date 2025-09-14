@@ -7,13 +7,38 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\RiderController;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+
+    $today = Carbon::today();
+
+    $totalProfitToday = DB::table('orders')
+        ->whereDate('created_at', $today)
+        ->sum('total');
+
+    // $totalClaimedToday = DB::table('orders')
+    //     ->whereDate('created_at', $today)
+    //     ->where('status', 'claimed') // adjust column name/status value to match your app
+    //     ->count();
+
+    // $totalOrdersToday = DB::table('orders')
+    //     ->whereDate('created_at', $today)
+    //     ->count();
+
+    // $totalDeliveredToday = DB::table('orders')
+    //     ->whereDate('created_at', $today)
+    //     ->where('status', 'delivered') // adjust accordingly
+    //     ->count();
+
+    return view('dashboard', compact(
+        'totalProfitToday',
+    ));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
