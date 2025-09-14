@@ -34,6 +34,8 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Username</th>
+                                    <th>Number of deliveries</th>
+                                    <th>Earnings/Commission</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -118,6 +120,8 @@
                             <tr id="customerRow${rider.id}">
                                 <td>${rider.name}</td>
                                 <td>${rider.username}</td>
+                                <td>${rider.delivered_count}</td>
+                                <td>${rider.commission}</td>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-danger deleteRiderBtn" data-id="${rider.id}">
                                         <i class="bi bi-trash-fill"></i> Delete
