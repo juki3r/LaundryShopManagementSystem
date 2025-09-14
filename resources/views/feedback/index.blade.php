@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-5">
-        <div class="h-32 overflow-y-scroll border p-4 space-y-4">
+        <div class="overflow-y-scroll border p-4 space-y-4" style="height: 25%">
                     @if($feedbacks->count() > 0)
                         <div class="space-y-6">
                             @foreach($feedbacks as $feedback)
