@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\RiderController;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -36,27 +37,7 @@ Route::get('/dashboard', function () {
     return view('dashboard', ['data' => $data]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/reports', function () {
 
-    $today = Carbon::today();
-    $startOfMonth = Carbon::now()->startOfMonth();
-    $startOfYear = Carbon::now()->startOfYear();
-
-    $metrics = ['today' => $today, 'month' => $startOfMonth, 'year' => $startOfYear];
-
-    $data = [];
-
-    foreach ($metrics as $key => $startDate) {
-        $data[$key] = [
-            'profit' => DB::table('orders')->where('created_at', '>=', $startDate)->sum('total'),
-            'claimed' => DB::table('orders')->where('created_at', '>=', $startDate)->where('claimed', 'Yes')->count(),
-            'orders' => DB::table('orders')->where('created_at', '>=', $startDate)->count(),
-            'delivered' => DB::table('orders')->where('created_at', '>=', $startDate)->where('delivered', 'Yes')->count(),
-        ];
-    }
-
-    return view('reports.index', ['data' => $data]);
-})->middleware(['auth', 'verified'])->name('reports.index');
 
 
 
@@ -85,7 +66,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/riders/register', [RiderController::class, 'register'])->name('register.rider');
     Route::delete('/riders/{id}', [RiderController::class, 'delete'])->name('delete.rider');
 
-
+    //Reports
+    Route::get('/reports', [ReportsController::class, 'report'])->name('reports.index');
 
 
 
