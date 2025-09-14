@@ -75,4 +75,10 @@ class FeedbackController extends Controller
             ], 500);
         }
     }
+
+    public function Feedback()
+    {
+        $feedbacks = Feedback::with('user:id,name')->get();
+        return view('feedback.index', compact('feedbacks'));
+    }
 }
