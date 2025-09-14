@@ -11,9 +11,9 @@
 
                 <!-- Tabs -->
                 <div class="mb-3">
-                    <a href="{{ route('dashboard.report', ['period'=>'today']) }}" class="btn btn-sm {{ $period=='today' ? 'btn-primary' : 'btn-outline-primary' }}">Today</a>
-                    <a href="{{ route('dashboard.report', ['period'=>'weekly']) }}" class="btn btn-sm {{ $period=='weekly' ? 'btn-primary' : 'btn-outline-primary' }}">This Week</a>
-                    <a href="{{ route('dashboard.report', ['period'=>'monthly']) }}" class="btn btn-sm {{ $period=='monthly' ? 'btn-primary' : 'btn-outline-primary' }}">This Month</a>
+                    <a href="{{ route('reports.index', ['period'=>'today']) }}" class="btn btn-sm {{ $period=='today' ? 'btn-primary' : 'btn-outline-primary' }}">Today</a>
+                    <a href="{{ route('reports.index', ['period'=>'weekly']) }}" class="btn btn-sm {{ $period=='weekly' ? 'btn-primary' : 'btn-outline-primary' }}">This Week</a>
+                    <a href="{{ route('reports.index', ['period'=>'monthly']) }}" class="btn btn-sm {{ $period=='monthly' ? 'btn-primary' : 'btn-outline-primary' }}">This Month</a>
                 </div>
 
                 <!-- Date Range -->
