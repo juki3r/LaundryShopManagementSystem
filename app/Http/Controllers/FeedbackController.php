@@ -76,7 +76,7 @@ class FeedbackController extends Controller
         }
     }
 
-    public function Feedback()
+    public function Feedbacks()
     {
         $feedbacks = Feedback::with('user:id,name')->get();
         return view('feedback.index', compact('feedbacks'));

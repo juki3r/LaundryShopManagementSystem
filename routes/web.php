@@ -5,6 +5,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\RiderController;
 
 Route::get('/', function () {
@@ -46,7 +47,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    Route::get('/feedbacks', [OrderController::class, 'feedbacks'])->name('feedbacks.index');
+    Route::get('/feedbacks', [FeedbackController::class, 'Feedbacks'])->name('feedbacks.index');
 });
 
 
