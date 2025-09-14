@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->post('/orders', [OrderController::class, 'sto
 Route::middleware('auth:sanctum')->get('/rider/orders', [OrderController::class, 'riderOrders']);
 Route::middleware('auth:sanctum')->put('/rider/orders/{order}/deliver', [OrderController::class, 'markDelivered']);
 Route::middleware('auth:sanctum')->post('/feedback', [FeedbackController::class, 'store']);
+Route::middleware('auth:sanctum')->get('/feedback', [FeedbackController::class, 'myFeedback']);
 
 
 

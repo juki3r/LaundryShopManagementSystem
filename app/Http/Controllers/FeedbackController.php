@@ -58,4 +58,33 @@ class FeedbackController extends Controller
             ], 500);
         }
     }
+
+    public function myFeedback()
+    {
+        try {
+            $userId = Auth::id();
+
+            $feedback = Feedback::with('user:id,name')
+                ->where('user_id', $userId)
+                ->first();
+
+            if (!$feedback) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'You have not submitted feedback yet.',
+                    'data'    => null
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data'    => $feedback
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch feedback. ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
