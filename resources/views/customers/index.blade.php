@@ -163,7 +163,7 @@
                     data.customers.forEach(customer => {
                         tableBody.insertAdjacentHTML('beforeend', `
                             <tr id="customerRow${customer.id}">
-                                <td>${customer.name}</td>
+                                <td class="text-capitalize">${customer.name}</td>
                                 <td>${customer.username}</td>
                                 <td>${customer.address ?? ''}</td>
                                 <td>${customer.contact_number ?? ''}</td>
