@@ -36,6 +36,29 @@ Route::get('/dashboard', function () {
     return view('dashboard', ['data' => $data]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/reports', function () {
+
+    $today = Carbon::today();
+    $startOfMonth = Carbon::now()->startOfMonth();
+    $startOfYear = Carbon::now()->startOfYear();
+
+    $metrics = ['today' => $today, 'month' => $startOfMonth, 'year' => $startOfYear];
+
+    $data = [];
+
+    foreach ($metrics as $key => $startDate) {
+        $data[$key] = [
+            'profit' => DB::table('orders')->where('created_at', '>=', $startDate)->sum('total'),
+            'claimed' => DB::table('orders')->where('created_at', '>=', $startDate)->where('claimed', 'Yes')->count(),
+            'orders' => DB::table('orders')->where('created_at', '>=', $startDate)->count(),
+            'delivered' => DB::table('orders')->where('created_at', '>=', $startDate)->where('delivered', 'Yes')->count(),
+        ];
+    }
+
+    return view('reports.index', ['data' => $data]);
+})->middleware(['auth', 'verified'])->name('reports.index');
+
+
 
 
 
@@ -63,7 +86,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/riders/{id}', [RiderController::class, 'delete'])->name('delete.rider');
 
 
-    Route::get('/reports', [OrderController::class, 'showreports'])->name('reports.index');
+
 
 
 
