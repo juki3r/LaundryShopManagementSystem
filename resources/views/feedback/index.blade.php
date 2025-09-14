@@ -7,14 +7,9 @@
 
     <div class="py-5">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg h-[75vh] flex flex-col">
-                <!-- Sticky Header inside card -->
-                <div class="p-4 border-b bg-white sticky top-0 z-10">
-                    <h3 class="text-lg font-semibold text-gray-700">All Feedbacks</h3>
-                </div>
-
-                <!-- Scrollable content -->
-                <div class="p-6 text-gray-900 overflow-y-auto flex-1">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <!-- Fixed scrollable area just for feedbacks -->
+                <div class="h-[70vh] overflow-y-auto p-6 text-gray-900">
                     @if($feedbacks->count() > 0)
                         <div class="space-y-6">
                             @foreach($feedbacks as $feedback)
@@ -35,13 +30,11 @@
                                                 <div class="flex items-center space-x-1">
                                                     @for($i = 1; $i <= 5; $i++)
                                                         @if($i <= $feedback->rating)
-                                                            <!-- Filled star -->
-                                                            <svg class="w-5 h-5 text-warning fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                            <svg class="w-5 h-5 text-yellow-500 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                                                 <path d="M10 15l-5.878 3.09 1.122-6.545L.487 6.91l6.561-.955L10 0l2.952 5.955 6.561.955-4.757 4.635 1.122 6.545z"/>
                                                             </svg>
                                                         @else
-                                                            <!-- Empty star -->
-                                                            <svg class="w-5 h-5 text-secondary fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                            <svg class="w-5 h-5 text-gray-300 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                                                 <path d="M10 15l-5.878 3.09 1.122-6.545L.487 6.91l6.561-.955L10 0l2.952 5.955 6.561.955-4.757 4.635 1.122 6.545z"/>
                                                             </svg>
                                                         @endif
@@ -52,7 +45,7 @@
                                     </div>
 
                                     <!-- Feedback message -->
-                                    <blockquote class="mt-3 border-l-4 border-warning pl-3 text-gray-700 italic leading-relaxed">
+                                    <blockquote class="mt-3 border-l-4 border-yellow-400 pl-3 text-gray-700 italic leading-relaxed">
                                         "{{ $feedback->comment }}"
                                     </blockquote>
 
