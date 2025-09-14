@@ -1,7 +1,7 @@
 <nav class=" border-r border-gray-200 w-100 min-h-screen flex flex-col justify-start">
     
     <!-- Top: Logo -->
-    <div class=" flex items-center justify-center">
+    <div class=" flex items-center justify-center p-1">
         <a href="{{ route('dashboard') }}">
             <img src="{{ asset('logo1.png') }}" alt="Logo" style="height: 120px;">
         </a>
