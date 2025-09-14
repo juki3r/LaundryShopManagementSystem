@@ -24,9 +24,9 @@
                     <strong>Total Income:</strong> ₱{{ number_format($totalIncome, 2) }}
                 </div>
 
-                <!-- Orders Table -->
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
+                <!-- Orders Table with fixed height -->
+                <div style="height:400px; overflow-y:auto; border:1px solid #ddd; border-radius:8px; padding:0.5rem;">
+                    <table class="table table-bordered table-striped mb-0">
                         <thead class="table-dark">
                             <tr>
                                 <th>Date & Time</th>
