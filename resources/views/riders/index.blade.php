@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-5">
+    <div class="py-2">
         <div class="container-fluid">
             <div class="card shadow-sm rounded-3">
                 <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">

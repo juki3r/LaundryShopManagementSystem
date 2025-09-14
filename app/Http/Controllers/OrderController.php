@@ -166,7 +166,7 @@ class OrderController extends Controller
                         ->orWhere('laundry_status', 'like', "%{$search}%");
                 })
                 ->latest()
-                ->paginate(10)
+                ->paginate(5)
                 ->withQueryString();
         } else {
             $orders = auth()->user()->orders()

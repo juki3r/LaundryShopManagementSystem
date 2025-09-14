@@ -77,7 +77,7 @@ class RiderController extends Controller
         // Load orders relation
         $riders = $query->with(['orders' => function ($q) {
             $q->latest()->limit(1); // latest order for display
-        }])->orderBy('name')->paginate(10);
+        }])->orderBy('name')->paginate(5);
 
         // Transform data to include latest order info + commission
         $ridersTransformed = $riders->map(function ($user) {
