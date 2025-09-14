@@ -10,37 +10,43 @@ class ReportsController extends Controller
 {
     public function report(Request $request)
     {
-        $period = $request->get('period', 'today'); // default to today
-
-        $today = Carbon::today();
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $startOfMonth = Carbon::now()->startOfMonth();
+        $tz = 'Asia/Manila'; // PH timezone
+        $period = $request->get('period', 'today');
 
         switch ($period) {
             case 'weekly':
-                $startDate = $startOfWeek;
-                $endDate = Carbon::now();
+                $startDate = Carbon::now($tz)->startOfWeek();
+                $endDate = Carbon::now($tz);
                 $label = "This Week";
+                $orders = DB::table('orders')
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->orderBy('created_at', 'desc')
+                    ->get();
                 break;
+
             case 'monthly':
-                $startDate = $startOfMonth;
-                $endDate = Carbon::now();
+                $startDate = Carbon::now($tz)->startOfMonth();
+                $endDate = Carbon::now($tz);
                 $label = "This Month";
+                $orders = DB::table('orders')
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->orderBy('created_at', 'desc')
+                    ->get();
                 break;
-            default:
+
+            default: // today
+                $today = Carbon::today($tz);
                 $startDate = $today;
                 $endDate = $today;
                 $label = "Today";
+                $orders = DB::table('orders')
+                    ->whereDate('created_at', $today) // only date part, ignores timezone issues
+                    ->orderBy('created_at', 'desc')
+                    ->get();
                 break;
         }
 
-        $orders = DB::table('orders')
-            ->whereBetween('created_at', [$startDate->startOfDay(), $endDate->endOfDay()])
-            ->orderBy('created_at', 'desc')
-            ->get();
-
         $totalIncome = $orders->sum('total');
-
         return view('reports.index', compact('orders', 'totalIncome', 'startDate', 'endDate', 'label', 'period'));
     }
 }
