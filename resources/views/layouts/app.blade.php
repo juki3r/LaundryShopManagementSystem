@@ -21,8 +21,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         html, body {
-            height: 100vh;
-            width: 100vw;
+            height: 100%;
+            width: 100%;
             margin: 0;
             font-family: 'Figtree', system-ui, sans-serif;
         }
