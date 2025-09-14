@@ -7,9 +7,14 @@
 
     <div class="py-5">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg h-[75vh] flex flex-col">
+                <!-- Sticky Header inside card -->
+                <div class="p-4 border-b bg-white sticky top-0 z-10">
+                    <h3 class="text-lg font-semibold text-gray-700">All Feedbacks</h3>
+                </div>
 
+                <!-- Scrollable content -->
+                <div class="p-6 text-gray-900 overflow-y-auto flex-1">
                     @if($feedbacks->count() > 0)
                         <div class="space-y-6">
                             @foreach($feedbacks as $feedback)
@@ -47,7 +52,7 @@
                                     </div>
 
                                     <!-- Feedback message -->
-                                    <blockquote class="mt-3 border-l-4 border-yellow-400 pl-3 text-gray-700 italic leading-relaxed">
+                                    <blockquote class="mt-3 border-l-4 border-warning pl-3 text-gray-700 italic leading-relaxed">
                                         "{{ $feedback->comment }}"
                                     </blockquote>
 
@@ -61,7 +66,6 @@
                     @else
                         <p class="text-gray-500">No feedbacks yet.</p>
                     @endif
-
                 </div>
             </div>
         </div>
