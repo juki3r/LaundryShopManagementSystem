@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900">
 
                     <!-- Scrollable wrapper fixed to 50% of viewport height -->
-                    <div class="h-1/2 overflow-y-auto border p-4 space-y-4">
+                    <div class="h-[50vh] overflow-y-auto border p-4 space-y-4">
                         @if($feedbacks->count() > 0)
                             <div class="space-y-6">
                                 @foreach($feedbacks as $feedback)
