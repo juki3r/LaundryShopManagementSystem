@@ -28,9 +28,21 @@ class FeedbackController extends Controller
         }
 
         try {
+            $userId = Auth::id();
+
+            // Check if the user already submitted feedback
+            $existingFeedback = Feedback::where('user_id', $userId)->first();
+            if ($existingFeedback) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You have already submitted feedback.',
+                ], 403);
+            }
+
+            // Create new feedback
             $feedback = Feedback::create([
-                'user_id' => Auth::id(),           // link to logged-in user
-                'comment' => $request->comment, // updated
+                'user_id' => $userId,
+                'comment' => $request->comment,
                 'rating'  => $request->rating,
             ]);
 
