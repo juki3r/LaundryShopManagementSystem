@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-5">
+
         
                     <div class="h-64 overflow-y-scroll border p-4 space-y-4">
                     @if($feedbacks->count() > 0)
@@ -62,5 +62,4 @@
 
                 </div>
 
-    </div>
 </x-app-layout>
