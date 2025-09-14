@@ -24,7 +24,7 @@ Route::get('/dashboard', function () {
 
     $totalClaimedToday = DB::table('orders')
         ->whereDate('created_at', $today)
-        ->where('status', 'claimed') // adjust column name/status value to match your app
+        ->where('claimed', 'Yes') // adjust column name/status value to match your app
         ->count();
 
     $totalOrdersToday = DB::table('orders')
