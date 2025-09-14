@@ -17,31 +17,23 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
 
     $today = Carbon::today();
+    $startOfMonth = Carbon::now()->startOfMonth();
+    $startOfYear = Carbon::now()->startOfYear();
 
-    $totalProfitToday = DB::table('orders')
-        ->whereDate('created_at', $today)
-        ->sum('total');
+    $metrics = ['today' => $today, 'month' => $startOfMonth, 'year' => $startOfYear];
 
-    $totalClaimedToday = DB::table('orders')
-        ->whereDate('created_at', $today)
-        ->where('claimed', 'Yes') // adjust column name/status value to match your app
-        ->count();
+    $data = [];
 
-    $totalOrdersToday = DB::table('orders')
-        ->whereDate('created_at', $today)
-        ->count();
+    foreach ($metrics as $key => $startDate) {
+        $data[$key] = [
+            'profit' => DB::table('orders')->where('created_at', '>=', $startDate)->sum('total'),
+            'claimed' => DB::table('orders')->where('created_at', '>=', $startDate)->where('claimed', 'Yes')->count(),
+            'orders' => DB::table('orders')->where('created_at', '>=', $startDate)->count(),
+            'delivered' => DB::table('orders')->where('created_at', '>=', $startDate)->where('delivered', 'Yes')->count(),
+        ];
+    }
 
-    $totalDeliveredToday = DB::table('orders')
-        ->whereDate('created_at', $today)
-        ->where('delivered', 'Yes') // adjust accordingly
-        ->count();
-
-    return view('dashboard', compact(
-        'totalProfitToday',
-        'totalClaimedToday',
-        'totalOrdersToday',
-        'totalDeliveredToday'
-    ));
+    return view('dashboard', ['data' => $data]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
