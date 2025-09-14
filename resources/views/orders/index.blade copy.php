@@ -10,16 +10,16 @@
         {{-- AJAX & Session Messages --}}
         <div id="ajaxMessageContainer" style="position: fixed; top: 20px; right: 20px; z-index: 1050;"></div>
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
         @endif
         @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
         @endif
 
         {{-- Top Bar --}}
@@ -56,37 +56,37 @@
                         </thead>
                         <tbody>
                             @forelse($orders as $order)
-                                @php
-                                    $rowClass = match($order->amount_status) {
-                                        'Pending' => 'table-warning',
-                                        'Paid' => 'table-success',
-                                        default => '',
-                                    };
-                                @endphp
-                                <tr id="orderRow{{ $order->id }}" class="{{ $rowClass }}">
-                                    <td>{{ $order->customer_name }}</td>
-                                    <td>{{ $order->contact_number }}</td>
-                                    <td>{{ $order->address }}</td>
-                                    <td class="weight">{{ $order->weight }}</td>
-                                    <td class="total">{{ $order->total }}</td>
-                                    <td class="amount_status">{{ $order->amount_status }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y h:i A') }}</td>
-                                    <td>{{ $order->service_type }}</td>
-                                    <td class="laundry_status">{{ $order->laundry_status }}</td>
-                                    <td class="delivered">{{ $order->delivered }}</td>
-                                    <td class="rider">
-                                         {{ $order->rider ? $order->rider : 'None' }}
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
-                                            <i class="bi bi-pencil-square"></i> Edit
-                                        </button>
-                                    </td>
-                                </tr>
+                            @php
+                            $rowClass = match($order->amount_status) {
+                            'Pending' => 'table-warning',
+                            'Paid' => 'table-success',
+                            default => '',
+                            };
+                            @endphp
+                            <tr id="orderRow{{ $order->id }}" class="{{ $rowClass }}">
+                                <td>{{ $order->customer_name }}</td>
+                                <td>{{ $order->contact_number }}</td>
+                                <td>{{ $order->address }}</td>
+                                <td class="weight">{{ $order->weight }}</td>
+                                <td class="total">{{ $order->total }}</td>
+                                <td class="amount_status">{{ $order->amount_status }}</td>
+                                <td>{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y h:i A') }}</td>
+                                <td>{{ $order->service_type }}</td>
+                                <td class="laundry_status">{{ $order->laundry_status }}</td>
+                                <td class="delivered">{{ $order->delivered }}</td>
+                                <td class="rider">
+                                    {{ $order->rider ? $order->rider : 'None' }}
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </button>
+                                </td>
+                            </tr>
                             @empty
-                                <tr>
-                                    <td colspan="10" class="text-center">No orders found.</td>
-                                </tr>
+                            <tr>
+                                <td colspan="10" class="text-center">No orders found.</td>
+                            </tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -99,60 +99,60 @@
 
         {{-- Edit Order Modals --}}
         @foreach($orders as $order)
-            <div class="modal fade" id="editOrderModal{{ $order->id }}" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <form class="modal-content edit-order-form p-3 rounded-3" data-order-id="{{ $order->id }}">
-                        @csrf
-                        @method('PUT')
-                        <div class="modal-header bg-primary text-white">
-                            <h5 class="modal-title">Edit Order #{{ $order->id }}</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <div class="modal fade" id="editOrderModal{{ $order->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <form class="modal-content edit-order-form p-3 rounded-3" data-order-id="{{ $order->id }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">Edit Order #{{ $order->id }}</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Weight (kg)</label>
+                            <input type="number" min="1" class="form-control weight-input" data-order-id="{{ $order->id }}" value="{{ $order->weight }}">
                         </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Weight (kg)</label>
-                                <input type="number" min="1" class="form-control weight-input" data-order-id="{{ $order->id }}" value="{{ $order->weight }}">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Total (PHP)</label>
-                                <input type="text" class="form-control total-input" id="total{{ $order->id }}" value="{{ $order->total }}" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Amount Status</label>
-                                <select class="form-select amount_status-input">
-                                    <option value="Pending" {{ $order->amount_status === 'Pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="Paid" {{ $order->amount_status === 'Paid' ? 'selected' : '' }}>Paid</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Laundry Status</label>
-                                <select class="form-select laundry_status-input">
-                                    <option value="Waiting" {{ $order->laundry_status === 'Waiting' ? 'selected' : '' }}>Waiting</option>
-                                    <option value="Processing" {{ $order->laundry_status === 'Processing' ? 'selected' : '' }}>Processing</option>
-                                    <option value="Completed" {{ $order->laundry_status === 'Completed' ? 'selected' : '' }}>Completed</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Assign Rider</label>
-                                <select class="form-select rider_id-input">
-                                   
-                                    @foreach($riders as $rider)
-                                        <option value="{{ $rider->name }}" {{ $order->rider == $rider->name ? 'selected' : '' }}>
-                                            {{ $rider->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Total (PHP)</label>
+                            <input type="text" class="form-control total-input" id="total{{ $order->id }}" value="{{ $order->total }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Amount Status</label>
+                            <select class="form-select amount_status-input">
+                                <option value="Pending" {{ $order->amount_status === 'Pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="Paid" {{ $order->amount_status === 'Paid' ? 'selected' : '' }}>Paid</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Laundry Status</label>
+                            <select class="form-select laundry_status-input">
+                                <option value="Waiting" {{ $order->laundry_status === 'Waiting' ? 'selected' : '' }}>Waiting</option>
+                                <option value="Processing" {{ $order->laundry_status === 'Processing' ? 'selected' : '' }}>Processing</option>
+                                <option value="Completed" {{ $order->laundry_status === 'Completed' ? 'selected' : '' }}>Completed</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Assign Rider</label>
+                            <select class="form-select rider_id-input">
+
+                                @foreach($riders as $rider)
+                                <option value="{{ $rider->name }}" {{ $order->rider == $rider->name ? 'selected' : '' }}>
+                                    {{ $rider->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
 
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary btn-sm">Save changes</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Save changes</button>
+                    </div>
+                </form>
             </div>
+        </div>
         @endforeach
 
         @else
@@ -171,17 +171,17 @@
                     </thead>
                     <tbody>
                         @forelse($orders as $order)
-                            <tr>
-                                <td>{{ $order->id }}</td>
-                                <td>{{ $order->service_type }}</td>
-                                <td>{{ $order->weight }}</td>
-                                <td>{{ $order->total }}</td>
-                                <td>{{ $order->laundry_status }}</td>
-                            </tr>
+                        <tr>
+                            <td>{{ $order->id }}</td>
+                            <td>{{ $order->service_type }}</td>
+                            <td>{{ $order->weight }}</td>
+                            <td>{{ $order->total }}</td>
+                            <td>{{ $order->laundry_status }}</td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="5" class="text-center">No orders found.</td>
-                            </tr>
+                        <tr>
+                            <td colspan="5" class="text-center">No orders found.</td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -206,7 +206,7 @@
             $(document).on('input', '.weight-input', function() {
                 const orderId = $(this).data('order-id');
                 const weight = parseFloat($(this).val()) || 0;
-                const total = weight <= 6 ? 130 : 130 + (weight - 6) * 20;
+                const total = weight <= 6 ? 140 : 140 + (weight - 6) * 20;
                 $('#total' + orderId).val(total.toFixed(2));
                 const row = $('#orderRow' + orderId);
                 row.find('.weight').text(weight);
@@ -222,12 +222,16 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>`;
                 $('#ajaxMessageContainer').append(html);
-                setTimeout(() => { $('#' + msgId).alert('close'); }, 4000);
-                setTimeout(() => { location.reload(); }, 500);
+                setTimeout(() => {
+                    $('#' + msgId).alert('close');
+                }, 4000);
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
             }
 
             // Edit order AJAX
-            $(document).on('submit', '.edit-order-form', function(e){
+            $(document).on('submit', '.edit-order-form', function(e) {
                 e.preventDefault();
                 const form = $(this);
                 const orderId = form.data('order-id');
@@ -249,13 +253,16 @@
                         laundry_status,
                         rider
                     },
-                    success: function(res){
+                    success: function(res) {
                         const modalEl = document.getElementById('editOrderModal' + orderId);
                         const modal = bootstrap.Modal.getInstance(modalEl);
-                        if (modal) { modal.hide(); $('.modal-backdrop').remove(); }
+                        if (modal) {
+                            modal.hide();
+                            $('.modal-backdrop').remove();
+                        }
                         showMessage('Order updated successfully!', 'success');
                     },
-                    error: function(err){
+                    error: function(err) {
                         showMessage('Update failed. Please try again.', 'danger');
                     }
                 });
@@ -266,7 +273,9 @@
                 const query = $(this).val();
                 $.ajax({
                     url: "{{ route('orders.index') }}",
-                    data: { search: query },
+                    data: {
+                        search: query
+                    },
                     success: function(data) {
                         $('#ordersTableContainer').html(data);
                     }
