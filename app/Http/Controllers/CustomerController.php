@@ -28,7 +28,7 @@ class CustomerController extends Controller
         // Load latest order for each user
         $customers = $query->with(['orders' => function ($q) {
             $q->latest()->limit(1);
-        }])->orderBy('name')->paginate(10);
+        }])->orderBy('name')->paginate(5);
 
         // Transform data to include latest order info
         $customersTransformed = $customers->map(function ($user) {
