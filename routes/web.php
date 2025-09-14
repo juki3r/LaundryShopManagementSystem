@@ -42,11 +42,6 @@ Route::get('/dashboard', function () {
         'totalOrdersToday',
         'totalDeliveredToday'
     ));
-
-
-
-
-    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
