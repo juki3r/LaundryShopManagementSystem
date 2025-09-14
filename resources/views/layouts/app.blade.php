@@ -27,7 +27,10 @@
             font-family: 'Figtree', system-ui, sans-serif;
         }
         .sidebar {
-            min-height: 100vh;
+            position: sticky;
+            top: 0;
+            height: 100vh; /* keep full height */
+            overflow-y: auto; /* allow sidebar itself to scroll if content is taller */
         }
         .content {
             min-height: 100vh;
