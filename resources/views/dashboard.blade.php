@@ -30,7 +30,7 @@
                                         <strong>Total Claimed Laundry Today</strong>
                                     </div>
                                     <div class="card-body">
-                                        0.00
+                                        {{ $totalClaimedToday }}
                                     </div>
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
                                         <strong>Total Orders Today</strong>
                                     </div>
                                     <div class="card-body">
-                                        0.00
+                                        {{ $totalOrdersToday }}
                                     </div>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@
                                         <strong>Total Delivered Orders Today</strong>
                                     </div>
                                     <div class="card-body">
-                                        0.00
+                                        {{ $totalDeliveredToday }}
                                     </div>
                                 </div>
                             </div>

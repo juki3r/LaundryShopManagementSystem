@@ -22,23 +22,31 @@ Route::get('/dashboard', function () {
         ->whereDate('created_at', $today)
         ->sum('total');
 
-    // $totalClaimedToday = DB::table('orders')
-    //     ->whereDate('created_at', $today)
-    //     ->where('status', 'claimed') // adjust column name/status value to match your app
-    //     ->count();
+    $totalClaimedToday = DB::table('orders')
+        ->whereDate('created_at', $today)
+        ->where('status', 'claimed') // adjust column name/status value to match your app
+        ->count();
 
-    // $totalOrdersToday = DB::table('orders')
-    //     ->whereDate('created_at', $today)
-    //     ->count();
+    $totalOrdersToday = DB::table('orders')
+        ->whereDate('created_at', $today)
+        ->count();
 
-    // $totalDeliveredToday = DB::table('orders')
-    //     ->whereDate('created_at', $today)
-    //     ->where('status', 'delivered') // adjust accordingly
-    //     ->count();
+    $totalDeliveredToday = DB::table('orders')
+        ->whereDate('created_at', $today)
+        ->where('delivered', 'Yes') // adjust accordingly
+        ->count();
 
     return view('dashboard', compact(
         'totalProfitToday',
+        'totalClaimedToday',
+        'totalOrdersToday',
+        'totalDeliveredToday'
     ));
+
+
+
+
+    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
