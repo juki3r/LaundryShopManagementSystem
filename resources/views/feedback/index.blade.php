@@ -24,7 +24,7 @@
                                         @for($i = 1; $i <= 5; $i++)
                                             @if($i <= $feedback->rating)
                                                 <!-- Filled star -->
-                                                <svg class="w-5 h-5 text-warning-500 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                <svg class="w-5 h-5 text-warning fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                                     <path d="M10 15l-5.878 3.09 1.122-6.545L.487 6.91l6.561-.955L10 0l2.952 5.955 6.561.955-4.757 4.635 1.122 6.545z"/>
                                                 </svg>
                                             @else
