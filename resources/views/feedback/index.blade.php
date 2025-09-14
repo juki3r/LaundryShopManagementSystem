@@ -6,10 +6,7 @@
     </x-slot>
 
     <div class="py-5">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white  shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <div class="h-64 overflow-y-scroll border p-4 space-y-4">
+        <div class="h-32 overflow-y-scroll border p-4 space-y-4">
                     @if($feedbacks->count() > 0)
                         <div class="space-y-6">
                             @foreach($feedbacks as $feedback)
@@ -63,8 +60,5 @@
                     @endif
 
                 </div>
-            </div>
-            </div>
-        </div>
     </div>
 </x-app-layout>
