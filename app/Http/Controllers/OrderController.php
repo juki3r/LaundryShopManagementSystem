@@ -154,9 +154,44 @@ class OrderController extends Controller
 
 
 
+    // public function index(Request $request)
+    // {
+    //     $search = $request->input('search');
+
+    //     if (auth()->user()->role === 'admin') {
+    //         $orders = \App\Models\Order::query()
+    //             ->when($search, function ($query, $search) {
+    //                 $query->where('customer_name', 'like', "%{$search}%")
+    //                     ->orWhere('service_type', 'like', "%{$search}%")
+    //                     ->orWhere('laundry_status', 'like', "%{$search}%");
+    //             })
+    //             ->latest()
+    //             ->paginate(5)
+    //             ->withQueryString();
+    //     } else {
+    //         $orders = auth()->user()->orders()
+    //             ->when($search, function ($query, $search) {
+    //                 $query->where('service_type', 'like', "%{$search}%")
+    //                     ->orWhere('laundry_status', 'like', "%{$search}%");
+    //             })
+    //             ->latest()
+    //             ->paginate(10)
+    //             ->withQueryString();
+    //     }
+    //     // fetch all riders
+    //     $riders = \App\Models\User::where('role', 'rider')->get();
+
+    //     if ($request->ajax()) {
+    //         return view('orders.partials.orders-table', compact('orders', 'riders'))->render();
+    //     }
+
+    //     return view('orders.index', compact('orders', 'search', 'riders'));
+    // }
+
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $amountStatus = $request->input('amount_status');
 
         if (auth()->user()->role === 'admin') {
             $orders = \App\Models\Order::query()
@@ -164,6 +199,9 @@ class OrderController extends Controller
                     $query->where('customer_name', 'like', "%{$search}%")
                         ->orWhere('service_type', 'like', "%{$search}%")
                         ->orWhere('laundry_status', 'like', "%{$search}%");
+                })
+                ->when($amountStatus, function ($query, $amountStatus) {
+                    $query->where('amount_status', $amountStatus);
                 })
                 ->latest()
                 ->paginate(5)
@@ -174,19 +212,23 @@ class OrderController extends Controller
                     $query->where('service_type', 'like', "%{$search}%")
                         ->orWhere('laundry_status', 'like', "%{$search}%");
                 })
+                ->when($amountStatus, function ($query, $amountStatus) {
+                    $query->where('amount_status', $amountStatus);
+                })
                 ->latest()
                 ->paginate(10)
                 ->withQueryString();
         }
-        // fetch all riders
+
         $riders = \App\Models\User::where('role', 'rider')->get();
 
         if ($request->ajax()) {
             return view('orders.partials.orders-table', compact('orders', 'riders'))->render();
         }
 
-        return view('orders.index', compact('orders', 'search', 'riders'));
+        return view('orders.index', compact('orders', 'search', 'riders', 'amountStatus'));
     }
+
 
 
 

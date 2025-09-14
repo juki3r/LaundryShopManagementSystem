@@ -1,4 +1,5 @@
 @if(Auth::user()->role === 'admin')
+{{-- Admin Table --}}
 <div class="card shadow-sm rounded-3 mb-4">
     <div class="card-body">
         <div class="table-responsive">
@@ -21,9 +22,9 @@
                     @forelse($orders as $order)
                         @php
                             $rowClass = match($order->amount_status) {
-                                'Pending' => 'table-warning',
-                                'Paid' => 'table-success',
-                                default => '',
+                                'Pending' => 'table-warning',   // Yellow
+                                'Paid' => 'table-success',      // Green
+                                default => '',                   // Default
                             };
                         @endphp
                         <tr id="orderRow{{ $order->id }}" class="{{ $rowClass }}">
@@ -55,62 +56,6 @@
         </div>
     </div>
 </div>
-
-{{-- Edit Modals --}}
-@foreach($orders as $order)
-<div class="modal fade" id="editOrderModal{{ $order->id }}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <form class="modal-content edit-order-form p-3 rounded-3" data-order-id="{{ $order->id }}">
-            @csrf
-            @method('PUT')
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Edit Order #{{ $order->id }}</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Weight (kg)</label>
-                    <input type="number" min="1" class="form-control weight-input" data-order-id="{{ $order->id }}" value="{{ $order->weight }}">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Total (PHP)</label>
-                    <input type="text" class="form-control total-input" id="total{{ $order->id }}" value="{{ $order->total }}" readonly>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Amount Status</label>
-                    <select class="form-select amount_status-input">
-                        <option value="Pending" {{ $order->amount_status === 'Pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="Paid" {{ $order->amount_status === 'Paid' ? 'selected' : '' }}>Paid</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Laundry Status</label>
-                    <select class="form-select laundry_status-input">
-                        <option value="Waiting" {{ $order->laundry_status === 'Waiting' ? 'selected' : '' }}>Waiting</option>
-                        <option value="Processing" {{ $order->laundry_status === 'Processing' ? 'selected' : '' }}>Processing</option>
-                        <option value="Completed" {{ $order->laundry_status === 'Completed' ? 'selected' : '' }}>Completed</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Assign Rider</label>
-                    <select class="form-select rider_id-input">
-                        <option value="">None</option>
-                        @foreach($riders as $rider)
-                            <option value="{{ $rider->name }}" {{ $order->rider == $rider->name ? 'selected' : '' }}>
-                                {{ $rider->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary btn-sm">Save changes</button>
-            </div>
-        </form>
-    </div>
-</div>
-@endforeach
 
 @else
 {{-- Non-admin Table --}}
