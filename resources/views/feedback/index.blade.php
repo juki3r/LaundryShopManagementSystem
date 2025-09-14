@@ -6,10 +6,11 @@
     </x-slot>
 
     <div class="py-5">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <!-- Fixed scrollable area just for feedbacks -->
-                <div class="h-[70vh] overflow-y-auto p-6 text-gray-900">
+    <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <!-- Fixed height container -->
+            <div class="p-6 text-gray-900">
+                <div class="h-[70vh] overflow-y-auto pr-3">
                     @if($feedbacks->count() > 0)
                         <div class="space-y-6">
                             @foreach($feedbacks as $feedback)
@@ -63,4 +64,6 @@
             </div>
         </div>
     </div>
+</div>
+
 </x-app-layout>
