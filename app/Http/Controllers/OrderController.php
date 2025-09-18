@@ -260,8 +260,10 @@ class OrderController extends Controller
     {
         $user = $request->user();
 
-        // Customer sees their own orders with laundry_status = Waiting
-        $orders = Order::where('delivered', 'Yes')->latest()->get();
+        if ($user->role === 'customer') {
+            // Admin sees all orders with laundry_status = Waiting
+            $orders = Order::where('delivered', 'Yes')->latest()->get();
+        }
 
         return response()->json([
             'success' => true,
