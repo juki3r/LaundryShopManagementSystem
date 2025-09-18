@@ -3,7 +3,7 @@
     <!-- Top: Logo -->
     <div class=" flex items-center justify-center p-1">
         <a href="{{ route('dashboard') }}">
-            <img src="{{ asset('logo1.png') }}" alt="Logo" style="height: 120px;">
+            <img src="{{ asset('logo1.png') }}" alt="Logo" style="height: 150px;">
         </a>
     </div>
 
