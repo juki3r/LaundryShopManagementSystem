@@ -70,7 +70,18 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Weight (kg)</label>
-                    <input type="number" min="1" class="form-control weight-input" data-order-id="{{ $order->id }}" value="{{ $order->weight }}">
+                    <input 
+                        type="number" 
+                        min="6" 
+                        class="form-control weight-input" 
+                        data-order-id="{{ $order->id }}" 
+                        value="{{ $order->weight }}" 
+                        placeholder="Minimum 6 kg" 
+                        required
+                    >
+                    <div class="invalid-feedback">
+                        Weight must be at least 6 kg.
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Total (PHP)</label>
