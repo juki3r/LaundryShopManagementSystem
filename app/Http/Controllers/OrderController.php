@@ -244,9 +244,12 @@ class OrderController extends Controller
         if ($user->role === 'admin') {
             // Admin sees all orders with laundry_status = Waiting
             $orders = Order::where('laundry_status', 'Waiting')->latest()->get();
-        } else {
-            // Customer sees their own orders with laundry_status = Waiting
-            $orders = Order::where('delivered', 'No')->latest()->get();
+        } else if ($user->role === 'customer') {
+            // Fetch only this user's delivered orders
+            $orders = Order::where('user_id', $user->id)
+                ->where('delivered', 'No')
+                ->latest()
+                ->get();
         }
 
         return response()->json([
@@ -261,8 +264,13 @@ class OrderController extends Controller
         $user = $request->user();
 
         if ($user->role === 'customer') {
-            // Admin sees all orders with laundry_status = Waiting
-            $orders = Order::where('delivered', 'Yes')->latest()->get();
+            // Fetch only this user's delivered orders
+            $orders = Order::where('user_id', $user->id)
+                ->where('delivered', 'Yes')
+                ->latest()
+                ->get();
+        } else {
+            $orders = collect(); // return empty if not customer
         }
 
         return response()->json([
