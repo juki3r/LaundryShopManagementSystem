@@ -44,7 +44,7 @@
     <div class="container-fluid h-100 p-0">
         <div class="row g-0 h-100">
             <!-- Sidebar -->
-            <div class="col-12 col-md-2 col-lg-1 bg-dark text-light sidebar">
+            <div class="col-12 col-md-2 col-lg-1  sidebar">
                 @include('layouts.navigation')
             </div>
 
