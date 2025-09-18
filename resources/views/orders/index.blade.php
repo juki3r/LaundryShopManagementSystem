@@ -58,7 +58,7 @@ $(document).ready(function() {
     $(document).on('input', '.weight-input', function() {
         const orderId = $(this).data('order-id');
         const weight = parseFloat($(this).val()) || 0;
-        const total = weight <= 6 ? 130 : 130 + (weight - 6) * 20;
+        const total = weight <= 6 ? 140 : 140 + (weight - 6) * 20;
         $('#total' + orderId).val(total.toFixed(2));
         const row = $('#orderRow' + orderId);
         row.find('.weight').text(weight);
