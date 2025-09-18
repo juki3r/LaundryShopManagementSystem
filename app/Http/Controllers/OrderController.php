@@ -246,7 +246,7 @@ class OrderController extends Controller
             $orders = Order::where('laundry_status', 'Waiting')->latest()->get();
         } else {
             // Customer sees their own orders with laundry_status = Waiting
-            $orders = $user->orders()->get();
+            $orders = Order::where('delivered', 'No')->latest()->get();
         }
 
         return response()->json([
