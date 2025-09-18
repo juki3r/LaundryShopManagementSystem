@@ -255,6 +255,20 @@ class OrderController extends Controller
         ]);
     }
 
+    //API
+    public function indexApiHistory(Request $request)
+    {
+        $user = $request->user();
+
+        // Customer sees their own orders with laundry_status = Waiting
+        $orders = Order::where('delivered', 'Yes')->latest()->get();
+
+        return response()->json([
+            'success' => true,
+            'orders' => $orders,
+        ]);
+    }
+
     public function update(Request $request, Order $order)
     {
         $request->validate([
