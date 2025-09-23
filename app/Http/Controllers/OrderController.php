@@ -402,6 +402,12 @@ class OrderController extends Controller
     //API
     public function profile(Request $request)
     {
-        return response()->json($request->user());
+        $user = $request->user();
+        $orders = Order::where('user_id', $user->id)->get();
+
+        return response()->json([
+            'user' => $user,
+            'orders' => $orders,
+        ]);
     }
 }
