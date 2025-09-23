@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/rider/orders', [OrderController::class,
 Route::middleware('auth:sanctum')->put('/rider/orders/{order}/deliver', [OrderController::class, 'markDelivered']);
 Route::middleware('auth:sanctum')->post('/feedback', [FeedbackController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/feedbacks', [FeedbackController::class, 'myFeedback']);
+Route::middleware('auth:sanctum')->get('/profile', [OrderController::class, 'profile']);
 
 
 

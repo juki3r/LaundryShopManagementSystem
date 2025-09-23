@@ -398,4 +398,10 @@ class OrderController extends Controller
     {
         return "Reports";
     }
+
+    //API
+    public function profile(Request $request)
+    {
+        return response()->json($request->user());
+    }
 }
