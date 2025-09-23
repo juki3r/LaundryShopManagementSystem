@@ -402,6 +402,8 @@ class OrderController extends Controller
     //API
     public function profile(Request $request)
     {
-        return response()->json($request->user());
+        $user = $request->user()->load('orders');
+
+        return response()->json($user);
     }
 }
