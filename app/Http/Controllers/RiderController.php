@@ -118,6 +118,7 @@ class RiderController extends Controller
     {
         $query = User::where('role', 'rider');
 
+        // --- Search filter ---
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -130,28 +131,38 @@ class RiderController extends Controller
             });
         }
 
+        // --- Fetch riders with all orders ---
         $riders = $query
-            ->withCount(['orders as delivered_count' => function ($q) {
-                $q->where('delivered', 'Yes'); // only count delivered orders
-            }])
+            ->with(['orders']) // fetch all orders of each rider
+            ->withCount([
+                'orders as delivered_count' => function ($q) {
+                    $q->where('delivered', 'Yes'); // only count delivered orders
+                }
+            ])
             ->orderBy('name')
             ->paginate(5);
 
+        // --- Transform response ---
         $ridersTransformed = $riders->map(function ($user) {
-            $latestOrder = $user->orders->first();
-
             return [
                 'id' => $user->id,
                 'name' => $user->name,
                 'username' => $user->username,
-                'address' => $latestOrder->address ?? '',
-                'contact_number' => $latestOrder->contact_number ?? '',
                 'commission' => $user->delivered_count * 30,
                 'delivered_count' => $user->delivered_count,
+                'orders' => $user->orders->map(function ($order) {
+                    return [
+                        'id' => $order->id,
+                        'address' => $order->address,
+                        'contact_number' => $order->contact_number,
+                        'delivered' => $order->delivered,
+                        'created_at' => $order->created_at->toDateTimeString(),
+                    ];
+                }),
             ];
         });
 
-        if (request()->ajax()) {
+        if ($request->ajax()) {
             return response()->json([
                 'riders' => $ridersTransformed,
                 'pagination' => [
@@ -166,6 +177,7 @@ class RiderController extends Controller
             'pagination' => $riders
         ]);
     }
+
 
 
 
