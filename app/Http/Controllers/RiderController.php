@@ -136,7 +136,7 @@ class RiderController extends Controller
             ->with(['orders']) // fetch all orders of each rider
             ->withCount([
                 'orders as delivered_count' => function ($q) {
-                    $q->where('delivered', 1); // only count delivered orders
+                    $q->where('delivered', 'Yes'); // only count delivered orders
                 }
             ])
             ->orderBy('name')
