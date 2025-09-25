@@ -58,6 +58,62 @@ class RiderController extends Controller
     //     ]);
     // }
 
+    // public function showRiders(Request $request)
+    // {
+    //     $query = User::where('role', 'rider');
+
+    //     if ($request->filled('search')) {
+    //         $search = $request->search;
+    //         $query->where(function ($q) use ($search) {
+    //             $q->where('name', 'like', "%{$search}%")
+    //                 ->orWhere('username', 'like', "%{$search}%")
+    //                 ->orWhereHas('orders', function ($q2) use ($search) {
+    //                     $q2->where('address', 'like', "%{$search}%")
+    //                         ->orWhere('contact_number', 'like', "%{$search}%");
+    //                 });
+    //         });
+    //     }
+
+    //     // Load orders relation
+    //     $riders = $query->with(['orders' => function ($q) {
+    //         $q->latest()->limit(1); // latest order for display
+    //     }])->orderBy('name')->paginate(5);
+
+    //     // Transform data to include latest order info + commission
+    //     $ridersTransformed = $riders->map(function ($user) {
+    //         $latestOrder = $user->orders->first();
+
+    //         // Count delivered orders for this rider
+    //         $deliveredCount = $user->orders()->where('delivered', 'Yes')->count();
+
+    //         return [
+    //             'id' => $user->id,
+    //             'name' => $user->name,
+    //             'username' => $user->username,
+    //             'address' => $latestOrder->address ?? '',
+    //             'contact_number' => $latestOrder->contact_number ?? '',
+    //             'commission' => $deliveredCount * 0.3, // 0.3 per delivered order
+    //             'delivered_count' => $deliveredCount,
+    //         ];
+    //     });
+
+    //     if ($request->ajax()) {
+    //         return response()->json([
+    //             'riders' => $ridersTransformed,
+    //             'pagination' => [
+    //                 'current_page' => $riders->currentPage(),
+    //                 'last_page' => $riders->lastPage(),
+    //             ]
+    //         ]);
+    //     }
+
+    //     return view('riders.index', [
+    //         'riders' => $ridersTransformed,
+    //         'pagination' => $riders
+    //     ]);
+    // }
+
+
     public function showRiders(Request $request)
     {
         $query = User::where('role', 'rider');
@@ -74,17 +130,18 @@ class RiderController extends Controller
             });
         }
 
-        // Load orders relation
-        $riders = $query->with(['orders' => function ($q) {
-            $q->latest()->limit(1); // latest order for display
-        }])->orderBy('name')->paginate(5);
+        $riders = $query
+            ->with(['orders' => function ($q) {
+                $q->latest()->limit(1); // latest order
+            }])
+            ->withCount(['orders as delivered_count' => function ($q) {
+                $q->where('delivered', 'Yes');
+            }])
+            ->orderBy('name')
+            ->paginate(5);
 
-        // Transform data to include latest order info + commission
         $ridersTransformed = $riders->map(function ($user) {
             $latestOrder = $user->orders->first();
-
-            // Count delivered orders for this rider
-            $deliveredCount = $user->orders()->where('delivered', 'Yes')->count();
 
             return [
                 'id' => $user->id,
@@ -92,12 +149,12 @@ class RiderController extends Controller
                 'username' => $user->username,
                 'address' => $latestOrder->address ?? '',
                 'contact_number' => $latestOrder->contact_number ?? '',
-                'commission' => $deliveredCount * 0.3, // 0.3 per delivered order
-                'delivered_count' => $deliveredCount,
+                'commission' => $user->delivered_count * 30,
+                'delivered_count' => $user->delivered_count,
             ];
         });
 
-        if ($request->ajax()) {
+        if (request()->ajax()) {
             return response()->json([
                 'riders' => $ridersTransformed,
                 'pagination' => [
@@ -112,6 +169,7 @@ class RiderController extends Controller
             'pagination' => $riders
         ]);
     }
+
 
 
 
