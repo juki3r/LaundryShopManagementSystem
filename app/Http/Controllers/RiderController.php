@@ -113,6 +113,7 @@ class RiderController extends Controller
     //     ]);
     // }
 
+
     public function showRiders(Request $request)
     {
         $query = User::where('role', 'rider');
@@ -130,55 +131,38 @@ class RiderController extends Controller
         }
 
         $riders = $query
-            ->with(['orders' => function ($q) {
-                $q->latest(); // load all orders ordered newest first
-            }])
             ->withCount(['orders as delivered_count' => function ($q) {
-                // Be tolerant: handle "Yes"/"yes"/1/"1"/true
-                $q->where(function ($q2) {
-                    $q2->where('delivered', 'Yes')
-                        ->orWhere('delivered', 'yes')
-                        ->orWhere('delivered', 1)
-                        ->orWhere('delivered', '1')
-                        ->orWhere('delivered', true);
-                });
+                $q->where('delivered', 'Yes'); // only count delivered orders
             }])
             ->orderBy('name')
             ->paginate(5);
 
-        // Transform the Paginator's collection (important)
-        $riders->getCollection()->transform(function ($user) {
+        $ridersTransformed = $riders->map(function ($user) {
+            $latestOrder = $user->orders->first();
+
             return [
                 'id' => $user->id,
                 'name' => $user->name,
                 'username' => $user->username,
-                // full list of orders (if you need)
-                'orders' => $user->orders->map(function ($o) {
-                    return [
-                        'id' => $o->id,
-                        'address' => $o->address,
-                        'contact_number' => $o->contact_number,
-                        'delivered' => $o->delivered,
-                    ];
-                })->values(),
-                'delivered_count' => (int) $user->delivered_count,
-                // commission = delivered_count * 0.3
-                'commission' => round($user->delivered_count * 0.3, 2),
+                'address' => $latestOrder->address ?? '',
+                'contact_number' => $latestOrder->contact_number ?? '',
+                'commission' => $user->delivered_count * 30,
+                'delivered_count' => $user->delivered_count,
             ];
         });
 
-        if ($request->ajax()) {
+        if (request()->ajax()) {
             return response()->json([
-                'riders' => $riders->items(), // transformed items
+                'riders' => $ridersTransformed,
                 'pagination' => [
                     'current_page' => $riders->currentPage(),
                     'last_page' => $riders->lastPage(),
-                ],
+                ]
             ]);
         }
 
         return view('riders.index', [
-            'riders' => $riders->items(), // pass array of transformed riders
+            'riders' => $ridersTransformed,
             'pagination' => $riders
         ]);
     }
