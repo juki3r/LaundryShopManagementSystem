@@ -8,16 +8,65 @@ use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
+    // public function showCustomers(Request $request)
+    // {
+    //     $query = User::where('role', '=', 'customer');
+
+    //     if ($request->filled('search')) {
+    //         $search = $request->search;
+    //         $query->where(function ($q) use ($search) {
+    //             $q->where('name', 'like', "%{$search}%")
+    //                 ->orWhere('username', 'like', "%{$search}%")
+    //                 // address & contact_number are in orders, so we filter via relation
+    //                 ->orWhereHas('orders', function ($q2) use ($search) {
+    //                     $q2->where('address', 'like', "%{$search}%")
+    //                         ->orWhere('contact_number', 'like', "%{$search}%");
+    //                 });
+    //         });
+    //     }
+
+    //     // Load latest order for each user
+    //     $customers = $query->with(['orders' => function ($q) {
+    //         $q->latest()->limit(1);
+    //     }])->orderBy('name')->paginate(5);
+
+    //     // Transform data to include latest order info
+    //     $customersTransformed = $customers->map(function ($user) {
+    //         $latestOrder = $user->orders->first();
+    //         return [
+    //             'id' => $user->id,
+    //             'name' => $user->name,
+    //             'username' => $user->username,
+    //             'address' => $latestOrder->address ?? '',
+    //             'contact_number' => $latestOrder->contact_number ?? '',
+    //         ];
+    //     });
+
+    //     if ($request->ajax()) {
+    //         return response()->json([
+    //             'customers' => $customersTransformed,
+    //             'pagination' => [
+    //                 'current_page' => $customers->currentPage(),
+    //                 'last_page' => $customers->lastPage(),
+    //             ]
+    //         ]);
+    //     }
+
+    //     return view('customers.index', [
+    //         'customers' => $customersTransformed,
+    //         'pagination' => $customers
+    //     ]);
+    // }
+
     public function showCustomers(Request $request)
     {
-        $query = User::where('role', '=', 'customer');
+        $query = User::where('role', 'customer');
 
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('username', 'like', "%{$search}%")
-                    // address & contact_number are in orders, so we filter via relation
                     ->orWhereHas('orders', function ($q2) use ($search) {
                         $q2->where('address', 'like', "%{$search}%")
                             ->orWhere('contact_number', 'like', "%{$search}%");
@@ -25,20 +74,19 @@ class CustomerController extends Controller
             });
         }
 
-        // Load latest order for each user
-        $customers = $query->with(['orders' => function ($q) {
-            $q->latest()->limit(1);
-        }])->orderBy('name')->paginate(5);
+        // Load latest order for each customer
+        $customers = $query->with('latestOrder')
+            ->orderBy('name')
+            ->paginate(5);
 
-        // Transform data to include latest order info
+        // Transform data
         $customersTransformed = $customers->map(function ($user) {
-            $latestOrder = $user->orders->first();
             return [
-                'id' => $user->id,
-                'name' => $user->name,
-                'username' => $user->username,
-                'address' => $latestOrder->address ?? '',
-                'contact_number' => $latestOrder->contact_number ?? '',
+                'id'             => $user->id,
+                'name'           => $user->name,
+                'username'       => $user->username,
+                'address'        => $user->latestOrder->address ?? '',
+                'contact_number' => $user->latestOrder->contact_number ?? '',
             ];
         });
 
@@ -47,7 +95,7 @@ class CustomerController extends Controller
                 'customers' => $customersTransformed,
                 'pagination' => [
                     'current_page' => $customers->currentPage(),
-                    'last_page' => $customers->lastPage(),
+                    'last_page'    => $customers->lastPage(),
                 ]
             ]);
         }
@@ -57,6 +105,7 @@ class CustomerController extends Controller
             'pagination' => $customers
         ]);
     }
+
 
 
 
