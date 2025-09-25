@@ -131,11 +131,8 @@ class RiderController extends Controller
         }
 
         $riders = $query
-            ->with(['orders' => function ($q) {
-                $q->latest(); // Load all orders with rider only
-            }])
             ->withCount(['orders as delivered_count' => function ($q) {
-                $q->where('delivered', 'Yes');
+                $q->where('delivered', 'Yes'); // only count delivered orders
             }])
             ->orderBy('name')
             ->paginate(5);
