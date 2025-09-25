@@ -286,6 +286,7 @@ class OrderController extends Controller
             'total' => 'required|numeric|min:0',
             'amount_status' => 'required|in:Pending,Paid',
             'laundry_status' => 'required|in:Waiting,Processing,Completed',
+            'claimed'   => 'required',
         ]);
 
         $order->update([
@@ -293,6 +294,7 @@ class OrderController extends Controller
             'total' => $request->total,
             'amount_status' => $request->amount_status,
             'laundry_status' => $request->laundry_status,
+            'claimed' => $request->claimed,
             'rider' => $request->rider,
 
         ]);
@@ -355,6 +357,7 @@ class OrderController extends Controller
         $order->delivered = 'Yes';
         $order->delivery_date = now('Asia/Manila'); // set Manila time
         $order->amount_status = 'Paid';
+        $order->claimed = 'Yes';
         $order->save();
 
         return response()->json([

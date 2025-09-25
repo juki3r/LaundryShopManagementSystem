@@ -92,6 +92,13 @@
                     </select>
                 </div>
                 <div class="mb-3">
+                    <label class="form-label fw-semibold">Claimed</label>
+                    <select class="form-select claimed-input">
+                        <option value="No" {{ $order->calimed === 'No' ? 'selected' : '' }}>No</option>
+                        <option value="Yes" {{ $order->calimed === 'Yes' ? 'selected' : '' }}>Yes</option>
+                    </select>
+                </div>
+                <div class="mb-3">
                     <label class="form-label fw-semibold">Assign Rider</label>
                     <select class="form-select rider_id-input">
                         <option value="">None</option>
