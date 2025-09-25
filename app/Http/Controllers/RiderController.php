@@ -132,7 +132,7 @@ class RiderController extends Controller
 
         $riders = $query
             ->with(['orders' => function ($q) {
-                $q->latest()->limit(1); // latest order
+                $q->latest(); // latest order
             }])
             ->withCount(['orders as delivered_count' => function ($q) {
                 $q->where('delivered', 'Yes');
