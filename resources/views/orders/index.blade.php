@@ -98,7 +98,8 @@ $(document).ready(function() {
                 total,
                 amount_status,
                 laundry_status,
-                rider
+                rider,
+                claimed 
             },
             success: function(res){
                 const modalEl = document.getElementById('editOrderModal' + orderId);

@@ -281,32 +281,32 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
-        // $request->validate([
-        //     'weight' => 'required|numeric|min:1',
-        //     'total' => 'required|numeric|min:0',
-        //     'amount_status' => 'required|in:Pending,Paid',
-        //     'laundry_status' => 'required|in:Waiting,Processing,Completed',
-        //     'claimed'   => 'required',
-        // ]);
+        $request->validate([
+            'weight' => 'required|numeric|min:1',
+            'total' => 'required|numeric|min:0',
+            'amount_status' => 'required|in:Pending,Paid',
+            'laundry_status' => 'required|in:Waiting,Processing,Completed',
+            'claimed'   => 'required',
+        ]);
 
-        // $order->update([
-        //     'weight' => $request->weight,
-        //     'total' => $request->total,
-        //     'amount_status' => $request->amount_status,
-        //     'laundry_status' => $request->laundry_status,
-        //     'claimed' => $request->claimed,
-        //     'rider' => $request->rider,
+        $order->update([
+            'weight' => $request->weight,
+            'total' => $request->total,
+            'amount_status' => $request->amount_status,
+            'laundry_status' => $request->laundry_status,
+            'claimed' => $request->claimed,
+            'rider' => $request->rider,
 
-        // ]);
+        ]);
 
-        // // Return JSON for AJAX
-        // if ($request->ajax()) {
-        //     return response()->json([
-        //         'success' => true,
-        //         'message' => 'Order updated successfully!',
-        //         'order' => $order
-        //     ]);
-        // }
+        // Return JSON for AJAX
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Order updated successfully!',
+                'order' => $order
+            ]);
+        }
 
         // Fallback for traditional requests
         return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
