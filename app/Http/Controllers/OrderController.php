@@ -296,6 +296,7 @@ class OrderController extends Controller
             'laundry_status' => $request->laundry_status,
             'claimed' => $request->claimed,
             'rider' => $request->rider,
+            'claimed' => $request->claimed,
 
         ]);
 
