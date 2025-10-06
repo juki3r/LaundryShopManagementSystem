@@ -87,6 +87,7 @@ $(document).ready(function() {
         const amount_status = form.find('.amount_status-input').val();
         const laundry_status = form.find('.laundry_status-input').val();
         const rider = form.find('.rider_id-input').val();
+         const claimed = form.find('.claimed-input').val();
 
         $.ajax({
             url: '/orders/' + orderId,
