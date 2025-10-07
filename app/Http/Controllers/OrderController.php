@@ -115,16 +115,16 @@ class OrderController extends Controller
         $user = Auth::user();
 
         // Check if there is already a pending order for this user
-        // $pendingOrder = $user->orders()
-        //     ->where('amount_status', 'Pending')
-        //     ->first();
+        $pendingOrder = $user->orders()
+            ->where('amount_status', 'Pending')
+            ->first();
 
-        // if ($pendingOrder) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'You still have a pending payment. Please settle it before creating a new order.',
-        //     ], 422); // Unprocessable Entity
-        // }
+        if ($pendingOrder) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You still have a pending payment. Please settle it before creating a new order.',
+            ], 422); // Unprocessable Entity
+        }
 
         // // Convert order_date to PHT
         // $orderDate = Carbon::parse($request->order_date)
