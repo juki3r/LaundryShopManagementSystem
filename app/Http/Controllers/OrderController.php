@@ -130,19 +130,19 @@ class OrderController extends Controller
             ->setTimezone('Asia/Manila');
 
         // Create order
-        // $order = $user->orders()->create([
-        //     'customer_name'  => $request->customer_name,
-        //     'contact_number' => $request->contact_number,
-        //     'address'        => $request->address,
-        //     'service_type'   => $request->service_type,
-        //     'weight'         => 0,
-        //     'laundry_status' => 'Waiting',
-        //     'claimed'        => 'No',
-        //     'delivered'      => 'No',
-        //     'total'          => 0,
-        //     'amount_status'  => 'Pending',
-        //     'order_date'     => $orderDate,
-        // ]);
+        $order = Auth::user()->orders()->create([
+            'customer_name'  => $request->customer_name,
+            'contact_number' => $request->contact_number,
+            'address'        => $request->address,
+            'service_type'   => $request->service_type,
+            'weight'         => 0,
+            'laundry_status' => 'Waiting',
+            'claimed'        => 'No',
+            'delivered'      => 'No',
+            'total'          => 0,
+            'amount_status'  => 'Pending',
+            'order_date'     => $orderDate,
+        ]);
 
         return response()->json([
             'success' => true,
