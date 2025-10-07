@@ -149,6 +149,7 @@ class OrderController extends Controller
             'success' => true,
             'user' => $user,
             'orderDate' => $orderDate,
+            'validate' => $request->validate,
             // 'message' => 'Inquire placed successfully! Please check your dashboard for an update. Thanks',
             // 'order'   => $order,
         ], 201);
