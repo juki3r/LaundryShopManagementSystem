@@ -147,8 +147,8 @@ class OrderController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Inquire placed successfully! Please check your dashboard for an update. Thanks',
-            'order'   => $order,
+            // 'message' => 'Inquire placed successfully! Please check your dashboard for an update. Thanks',
+            // 'order'   => $order,
         ], 201);
     }
 
