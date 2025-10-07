@@ -104,46 +104,46 @@ class OrderController extends Controller
     public function storeApi(Request $request)
     {
         // Validate input
-        $request->validate([
-            'customer_name'  => 'required|string|max:255',
-            'contact_number' => 'required|string|max:20',
-            'address'        => 'required|string|max:500',
-            'service_type'   => 'required|in:Delivery,Pickup',
-            'order_date'     => 'required|date',
-        ]);
+        // $request->validate([
+        //     'customer_name'  => 'required|string|max:255',
+        //     'contact_number' => 'required|string|max:20',
+        //     'address'        => 'required|string|max:500',
+        //     'service_type'   => 'required|in:Delivery,Pickup',
+        //     'order_date'     => 'required|date',
+        // ]);
 
-        $user = Auth::user();
+        // $user = Auth::user();
 
-        // Check if there is already a pending order for this user
-        $pendingOrder = $user->orders()
-            ->where('amount_status', 'Pending')
-            ->first();
+        // // Check if there is already a pending order for this user
+        // $pendingOrder = $user->orders()
+        //     ->where('amount_status', 'Pending')
+        //     ->first();
 
-        if ($pendingOrder) {
-            return response()->json([
-                'success' => false,
-                'message' => 'You still have a pending payment. Please settle it before creating a new order.',
-            ], 422); // Unprocessable Entity
-        }
+        // if ($pendingOrder) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'You still have a pending payment. Please settle it before creating a new order.',
+        //     ], 422); // Unprocessable Entity
+        // }
 
-        // Convert order_date to PHT
-        $orderDate = Carbon::parse($request->order_date)
-            ->setTimezone('Asia/Manila');
+        // // Convert order_date to PHT
+        // $orderDate = Carbon::parse($request->order_date)
+        //     ->setTimezone('Asia/Manila');
 
-        // Create order
-        $order = $user->orders()->create([
-            'customer_name'  => $request->customer_name,
-            'contact_number' => $request->contact_number,
-            'address'        => $request->address,
-            'service_type'   => $request->service_type,
-            'weight'         => 0,
-            'laundry_status' => 'Waiting',
-            'claimed'        => 'No',
-            'delivered'      => 'No',
-            'total'          => 0,
-            'amount_status'  => 'Pending',
-            'order_date'     => $orderDate,
-        ]);
+        // // Create order
+        // $order = $user->orders()->create([
+        //     'customer_name'  => $request->customer_name,
+        //     'contact_number' => $request->contact_number,
+        //     'address'        => $request->address,
+        //     'service_type'   => $request->service_type,
+        //     'weight'         => 0,
+        //     'laundry_status' => 'Waiting',
+        //     'claimed'        => 'No',
+        //     'delivered'      => 'No',
+        //     'total'          => 0,
+        //     'amount_status'  => 'Pending',
+        //     'order_date'     => $orderDate,
+        // ]);
 
         return response()->json([
             'success' => true,
