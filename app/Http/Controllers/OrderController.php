@@ -145,6 +145,7 @@ class OrderController extends Controller
         // ]);
         try {
             $order = $user->orders()->create([
+                'user_id' => $user->id,
                 'customer_name'  => $request->customer_name,
                 'contact_number' => $request->contact_number,
                 'address'        => $request->address,

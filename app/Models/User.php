@@ -56,11 +56,6 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'rider', 'name');
     }
 
-    public function customerOrders()
-    {
-        // This will fetch orders by customer_id
-        return $this->hasMany(Order::class, 'user_id', 'id');
-    }
 
     public function feedbacks()
     {
