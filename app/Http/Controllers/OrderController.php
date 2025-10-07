@@ -103,8 +103,7 @@ class OrderController extends Controller
 
     public function storeApi(Request $request)
     {
-        // Validate input
-        $request->validate([
+        $validated = $request->validate([
             'customer_name'  => 'required|string|max:255',
             'contact_number' => 'required|string|max:20',
             'address'        => 'required|string|max:500',
