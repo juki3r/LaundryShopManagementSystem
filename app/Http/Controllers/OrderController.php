@@ -126,9 +126,9 @@ class OrderController extends Controller
             ], 422); // Unprocessable Entity
         }
 
-        // // Convert order_date to PHT
-        // $orderDate = Carbon::parse($request->order_date)
-        //     ->setTimezone('Asia/Manila');
+        // Convert order_date to PHT
+        $orderDate = Carbon::parse($request->order_date)
+            ->setTimezone('Asia/Manila');
 
         // // Create order
         // $order = $user->orders()->create([
