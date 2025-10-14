@@ -24,7 +24,7 @@ class OrderController extends Controller
             'customer_name'  => 'required|string|max:255',
             'contact_number' => 'required|string|max:20',
             'address'        => 'required|string|max:500',
-            'service_type'   => 'required|in:Delivery,Pick-up',
+            'service_type'   => 'required|in:Delivery,Pickup',
             'order_date'     => 'required|date',
         ]);
 
