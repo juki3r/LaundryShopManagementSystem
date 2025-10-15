@@ -233,8 +233,7 @@ class OrderController extends Controller
             $orders = auth()->user()->orders()
                 ->where('delivered', 'No')
                 ->when($search, function ($query, $search) {
-                    $query->where('service_type', 'like', "%{$search}%")
-                        ->orWhere('laundry_status', 'like', "%{$search}%");
+                    $query->where('service_type', 'like', "%{$search}%");
                 })
                 ->when($amountStatus, function ($query, $amountStatus) {
                     $query->where('amount_status', $amountStatus);
