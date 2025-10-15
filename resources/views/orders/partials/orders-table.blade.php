@@ -5,15 +5,15 @@
             <table class="table table-bordered table-hover align-middle">
                 <thead class="table-dark text-center">
                     <tr>
-                        <th>Customer</th>
+                        <th>Customer Name</th>
                         <th>Contact #</th>
                         <th>Address</th>
                         <th>Weight (kg)</th>
                         <th>Total (PHP)</th>
-                        <th>Payment</th>
+                        <th>Payment status</th>
                         <th>Date of Order</th>
-                        <th>Service</th>
-                        <th>Status</th>
+                        <th>Service type</th>
+                        <th>Laundry Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
