@@ -33,7 +33,7 @@
                             <td class="weight text-center">{{ $order->weight }}</td>
                             <td class="total text-center">{{ $order->total }}</td>
                             <td class="amount_status text-center">{{ $order->amount_status }}</td>
-                            <td>{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y h:i A') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y h:i A') }}</td>
                             <td class="text-center">{{ $order->service_type }}</td>
                             <td class="laundry_status text-center">
                                 @if($order->laundry_status == 'Processing' || $order->laundry_status == 'Waiting')
