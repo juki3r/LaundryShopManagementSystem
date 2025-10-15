@@ -14,6 +14,7 @@
                         <th>Date of Order</th>
                         <th>Service type</th>
                         <th>Laundry Status</th>
+                        <th>Claimed / Delivered</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -36,6 +37,7 @@
                             <td>{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y h:i A') }}</td>
                             <td class="text-center">{{ $order->service_type }}</td>
                             <td class="laundry_status text-center">{{ $order->laundry_status }}</td>
+                            <td class="laundry_status text-center">{{ $order->claimed }}</td>
                             <td class="text-center">
                                 <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
                                     <i class="bi bi-pencil-square"></i> Edit
