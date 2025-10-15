@@ -218,7 +218,7 @@ class OrderController extends Controller
 
         if (auth()->user()->role === 'admin') {
             $orders = \App\Models\Order::query()
-                ->where('delivered', 'No')
+                ->where('claimed', 'No')
                 ->when($search, function ($query, $search) {
                     $query->where('customer_name', 'like', "%{$search}%")
                         ->orWhere('service_type', 'like', "%{$search}%");
@@ -231,7 +231,7 @@ class OrderController extends Controller
                 ->withQueryString();
         } else {
             $orders = auth()->user()->orders()
-                ->where('delivered', 'No')
+                ->where('claimed', 'No')
                 ->when($search, function ($query, $search) {
                     $query->where('service_type', 'like', "%{$search}%");
                 })
