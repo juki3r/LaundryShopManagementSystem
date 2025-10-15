@@ -221,8 +221,7 @@ class OrderController extends Controller
                 ->where('delivered', 'No')
                 ->when($search, function ($query, $search) {
                     $query->where('customer_name', 'like', "%{$search}%")
-                        ->orWhere('service_type', 'like', "%{$search}%")
-                        ->orWhere('delivered', 'like', "%{$search}%");
+                        ->orWhere('service_type', 'like', "%{$search}%");
                 })
                 ->when($amountStatus, function ($query, $amountStatus) {
                     $query->where('amount_status', $amountStatus);
