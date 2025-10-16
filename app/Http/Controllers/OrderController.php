@@ -289,7 +289,7 @@ class OrderController extends Controller
         if ($user->role === 'customer') {
             // Fetch only this user's delivered orders
             $orders = Order::where('user_id', $user->id)
-                ->where('delivered', 'Yes')
+                ->where('Claimed', 'Yes')
                 ->latest()
                 ->get();
         } else {
