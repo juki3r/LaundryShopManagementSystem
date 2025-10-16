@@ -34,6 +34,7 @@
                                 <th>Address</th>
                                 <th>Service Type</th>
                                 <th>Price (₱)</th>
+                                <th>Action</th> 
                             </tr>
                         </thead>
                         <tbody>
@@ -44,6 +45,11 @@
                                     <td>{{ $order->address }}</td>
                                     <td>{{ $order->service_type }}</td>
                                     <td>{{ number_format($order->total, 2) }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ route('reports.receipt', $order->id) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Print
+                                        </a>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>

@@ -68,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
 
     //Reports
     Route::get('/reports', [ReportsController::class, 'report'])->name('reports.index');
+    Route::get('/reports/receipt/{order}', [ReportsController::class, 'receipt'])->name('reports.receipt');
 
 
 

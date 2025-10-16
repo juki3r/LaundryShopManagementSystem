@@ -52,4 +52,9 @@ class ReportsController extends Controller
         $totalIncome = $orders->sum('total');
         return view('reports.index', compact('orders', 'totalIncome', 'startDate', 'endDate', 'label', 'period'));
     }
+
+    public function receipt(Request $request, $order)
+    {
+        return view('reports.receipt', compact('order'));
+    }
 }
