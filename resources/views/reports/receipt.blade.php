@@ -52,7 +52,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($order as $item)
+                {{-- @foreach($order as $item)
                 <tr>
                     <td>{{ $item->quantity }}</td>
                     <td>{{ $item->description }}</td>
@@ -63,7 +63,7 @@
                 <tr>
                     <td colspan="3" class="total text-right">TOTAL</td>
                     <td class="total text-right">₱{{ number_format($order->total, 2) }}</td>
-                </tr>
+                </tr> --}}
             </tbody>
         </table>
 
