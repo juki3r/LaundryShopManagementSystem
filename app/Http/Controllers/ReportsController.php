@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\Order;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
@@ -53,7 +54,7 @@ class ReportsController extends Controller
         return view('reports.index', compact('orders', 'totalIncome', 'startDate', 'endDate', 'label', 'period'));
     }
 
-    public function receipt(Request $request, $order)
+    public function receipt(Order $order)
     {
         return view('reports.receipt', compact('order'));
     }
