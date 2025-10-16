@@ -52,7 +52,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($order->items as $item)
+                @foreach($order as $item)
                 <tr>
                     <td>{{ $item->quantity }}</td>
                     <td>{{ $item->description }}</td>
