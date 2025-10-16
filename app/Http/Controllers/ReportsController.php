@@ -19,6 +19,7 @@ class ReportsController extends Controller
                 $endDate = Carbon::now($tz);
                 $label = "This Week";
                 $orders = DB::table('orders')
+                    ->where('claimed', 'Yes')
                     ->whereBetween('created_at', [$startDate, $endDate])
                     ->orderBy('created_at', 'desc')
                     ->get();
@@ -29,6 +30,7 @@ class ReportsController extends Controller
                 $endDate = Carbon::now($tz);
                 $label = "This Month";
                 $orders = DB::table('orders')
+                    ->where('claimed', 'Yes')
                     ->whereBetween('created_at', [$startDate, $endDate])
                     ->orderBy('created_at', 'desc')
                     ->get();
@@ -40,6 +42,7 @@ class ReportsController extends Controller
                 $endDate = $today;
                 $label = "Today";
                 $orders = DB::table('orders')
+                    ->where('claimed', 'Yes')
                     ->whereDate('created_at', $today) // only date part, ignores timezone issues
                     ->orderBy('created_at', 'desc')
                     ->get();
