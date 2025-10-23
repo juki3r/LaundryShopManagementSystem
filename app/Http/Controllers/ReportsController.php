@@ -15,22 +15,16 @@ class ReportsController extends Controller
         $period = $request->get('period', 'today');
         $from = $request->get('from');
         $to = $request->get('to');
+        $serviceType = $request->get('service_type'); // NEW
 
-        // Default
-        $startDate = null;
-        $endDate = null;
-        $label = '';
+        // Base query
+        $query = DB::table('orders')->where('claimed', 'Yes');
 
+        // Handle custom date range
         if ($from && $to) {
-            // Custom range filter
             $startDate = Carbon::parse($from, $tz)->startOfDay();
             $endDate = Carbon::parse($to, $tz)->endOfDay();
             $label = "Custom Range";
-            $orders = DB::table('orders')
-                ->where('claimed', 'Yes')
-                ->whereBetween('created_at', [$startDate, $endDate])
-                ->orderBy('created_at', 'desc')
-                ->get();
         } else {
             switch ($period) {
                 case 'weekly':
@@ -43,25 +37,34 @@ class ReportsController extends Controller
                     $endDate = Carbon::now($tz)->endOfDay();
                     $label = "This Month";
                     break;
-                default: // today
+                default:
                     $startDate = Carbon::now($tz)->startOfDay();
                     $endDate = Carbon::now($tz)->endOfDay();
                     $label = "Today";
                     break;
             }
-
-            // Convert to UTC before querying
-            $startUtc = $startDate->copy()->timezone('UTC');
-            $endUtc = $endDate->copy()->timezone('UTC');
-
-            $orders = DB::table('orders')
-                ->where('claimed', 'Yes')
-                ->whereBetween('created_at', [$startUtc, $endUtc])
-                ->orderBy('created_at', 'desc')
-                ->get();
         }
 
+        // Convert to UTC for DB query
+        $startUtc = $startDate->copy()->timezone('UTC');
+        $endUtc = $endDate->copy()->timezone('UTC');
+
+        // Apply date range
+        $query->whereBetween('created_at', [$startUtc, $endUtc]);
+
+        // Apply service type filter if selected
+        if ($serviceType && $serviceType !== 'all') {
+            $query->where('service_type', $serviceType);
+        }
+
+        $orders = $query->orderBy('created_at', 'desc')->get();
         $totalIncome = $orders->sum('total');
+
+        // Get distinct service types for dropdown
+        $serviceTypes = DB::table('orders')
+            ->select('service_type')
+            ->distinct()
+            ->pluck('service_type');
 
         return view('reports.index', compact(
             'orders',
@@ -71,7 +74,9 @@ class ReportsController extends Controller
             'label',
             'period',
             'from',
-            'to'
+            'to',
+            'serviceType',
+            'serviceTypes'
         ));
     }
 }

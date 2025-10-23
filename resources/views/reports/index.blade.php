@@ -16,15 +16,28 @@
                     <a href="{{ route('reports.index', ['period'=>'monthly']) }}" class="btn btn-sm {{ $period=='monthly' ? 'btn-primary' : 'btn-outline-primary' }}">This Month</a>
                 </div>
 
-                <!-- Custom Date Filter -->
-                <form method="GET" action="{{ route('reports.index') }}" class="row g-2 mb-3">
+                <!-- Filter Form -->
+                <form method="GET" action="{{ route('reports.index') }}" class="row g-2 mb-3 align-items-end">
                     <div class="col-md-3">
+                        <label class="form-label">From</label>
                         <input type="date" name="from" class="form-control" value="{{ request('from') }}">
                     </div>
                     <div class="col-md-3">
+                        <label class="form-label">To</label>
                         <input type="date" name="to" class="form-control" value="{{ request('to') }}">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
+                        <label class="form-label">Service Type</label>
+                        <select name="service_type" class="form-select">
+                            <option value="all" {{ ($serviceType ?? 'all') == 'all' ? 'selected' : '' }}>All Services</option>
+                            @foreach($serviceTypes as $type)
+                                <option value="{{ $type }}" {{ ($serviceType ?? '') == $type ? 'selected' : '' }}>
+                                    {{ ucfirst($type) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-1">
                         <button type="submit" class="btn btn-success w-100">Filter</button>
                     </div>
                     <div class="col-md-2">
@@ -36,6 +49,9 @@
                 <p class="mb-2">
                     <strong>Showing:</strong>
                     {{ $label }} ({{ $startDate->format('F d, Y') }} to {{ $endDate->format('F d, Y') }})
+                    @if($serviceType && $serviceType !== 'all')
+                        • <strong>Service:</strong> {{ ucfirst($serviceType) }}
+                    @endif
                 </p>
 
                 <!-- Total Income -->
@@ -58,7 +74,7 @@
                         <tbody>
                             @forelse($orders as $order)
                                 <tr>
-                                    <td>{{ \Carbon\Carbon::parse($order->created_at)->format('F d, Y · h:i A') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($order->created_at)->setTimezone('Asia/Manila')->format('F d, Y · h:i A') }}</td>
                                     <td>{{ $order->customer_name ?? 'Anonymous' }}</td>
                                     <td>{{ $order->address }}</td>
                                     <td>{{ $order->service_type }}</td>
@@ -77,6 +93,7 @@
         </div>
     </div>
 
+    <!-- Print styling -->
     <style>
         @media print {
             body * {
