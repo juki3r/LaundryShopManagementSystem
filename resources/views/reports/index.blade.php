@@ -116,7 +116,7 @@
                     <div class="text-center mt-3 d-none d-print-block">
                         <small>Generated on {{ now('Asia/Manila')->format('F d, Y · h:i A') }}</small>
                         <br>
-                        <small>Thank you for choosing PONG Laundry Services!</small>
+                        <small>Thank you for choosing The Laundry Club!</small>
                     </div>
                 </div>
 
