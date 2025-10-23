@@ -71,10 +71,10 @@ class ReportsController extends Controller
                     ->select('service_type')
                     ->distinct()
                     ->pluck('service_type')
+                    ->map(fn($type) => strtolower(trim($type))) // normalize
             )
             ->unique()
-            ->values(); // reindex after removing duplicates
-
+            ->values();
 
         return view('reports.index', compact(
             'orders',
