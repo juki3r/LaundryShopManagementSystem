@@ -67,10 +67,14 @@ class ReportsController extends Controller
         //     ->pluck('service_type');
         $serviceTypes = collect(['delivery', 'pickup'])
             ->merge(
-                DB::table('orders')->select('service_type')->distinct()->pluck('service_type')
+                DB::table('orders')
+                    ->select('service_type')
+                    ->distinct()
+                    ->pluck('service_type')
             )
             ->unique()
-            ->values();
+            ->values(); // reindex after removing duplicates
+
 
         return view('reports.index', compact(
             'orders',
