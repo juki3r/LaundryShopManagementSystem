@@ -56,14 +56,23 @@
 
                 <!-- Printable Area -->
                 <div id="print-area" style="overflow-y:auto; border:1px solid #ddd; border-radius:8px; padding:1rem;">
+                    
                     <!-- Header for Print -->
                     <div class="text-center mb-3 d-print-block">
-                        <h3 class="fw-bold mb-0">PONG LAUNDRY SERVICES</h3>
-                        <small>{{ $label }} Report ({{ $startDate->format('F d, Y') }} - {{ $endDate->format('F d, Y') }})</small>
-                        @if($serviceType && $serviceType !== 'all')
-                            <div><strong>Service Type:</strong> {{ ucfirst($serviceType) }}</div>
-                        @endif
-                        <hr>
+                        <h2 class="fw-bold mb-0 text-uppercase">PONG Laundry Services</h2>
+                        <p class="mb-0">Poblacion, Carles, Iloilo</p>
+                        <p class="mb-0">Contact: 0912-345-6789 | Email: ponglaundry@gmail.com</p>
+                        <hr style="border-top:2px solid black; margin:8px 0;">
+                        <h5 class="fw-bold mb-2">Transaction Report</h5>
+                        <p class="mb-0">
+                            Period:
+                            <strong>
+                                {{ $startDate->format('F d, Y') }} - {{ $endDate->format('F d, Y') }}
+                            </strong>
+                            @if($serviceType && $serviceType !== 'all')
+                                <br><strong>Service Type:</strong> {{ ucfirst($serviceType) }}
+                            @endif
+                        </p>
                     </div>
 
                     <!-- Orders Table -->
@@ -95,9 +104,9 @@
 
                         @if($orders->count() > 0)
                             <tfoot>
-                                <tr class="table-secondary">
-                                    <th colspan="4" class="text-end">TOTAL INCOME:</th>
-                                    <th>₱{{ number_format($totalIncome, 2) }}</th>
+                                <tr class="table-secondary fw-bold">
+                                    <td colspan="4" class="text-end">TOTAL INCOME:</td>
+                                    <td>₱{{ number_format($totalIncome, 2) }}</td>
                                 </tr>
                             </tfoot>
                         @endif
@@ -106,6 +115,8 @@
                     <!-- Footer Note -->
                     <div class="text-center mt-3 d-print-block">
                         <small>Generated on {{ now('Asia/Manila')->format('F d, Y · h:i A') }}</small>
+                        <br>
+                        <small>Thank you for choosing PONG Laundry Services!</small>
                     </div>
                 </div>
 
@@ -131,6 +142,16 @@
             }
             button, form, .btn, .mb-3.d-flex {
                 display: none !important;
+            }
+            table, th, td {
+                border: 1px solid black !important;
+                border-collapse: collapse !important;
+            }
+            th, td {
+                padding: 8px !important;
+            }
+            th {
+                background-color: #f0f0f0 !important;
             }
         }
     </style>
