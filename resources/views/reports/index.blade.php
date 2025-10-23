@@ -10,22 +10,41 @@
             <div class="bg-white shadow-sm sm:rounded-lg p-4">
 
                 <!-- Tabs -->
-                <div class="mb-3">
+                <div class="mb-3 d-flex gap-2">
                     <a href="{{ route('reports.index', ['period'=>'today']) }}" class="btn btn-sm {{ $period=='today' ? 'btn-primary' : 'btn-outline-primary' }}">Today</a>
                     <a href="{{ route('reports.index', ['period'=>'weekly']) }}" class="btn btn-sm {{ $period=='weekly' ? 'btn-primary' : 'btn-outline-primary' }}">This Week</a>
                     <a href="{{ route('reports.index', ['period'=>'monthly']) }}" class="btn btn-sm {{ $period=='monthly' ? 'btn-primary' : 'btn-outline-primary' }}">This Month</a>
                 </div>
 
-                <!-- Date Range -->
-                <p class="mb-2"><strong>Showing:</strong> {{ $startDate->format('F d, Y') }} to {{ $endDate->format('F d, Y') }}</p>
+                <!-- Custom Date Filter -->
+                <form method="GET" action="{{ route('reports.index') }}" class="row g-2 mb-3">
+                    <div class="col-md-3">
+                        <input type="date" name="from" class="form-control" value="{{ request('from') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="date" name="to" class="form-control" value="{{ request('to') }}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-success w-100">Filter</button>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-secondary w-100" onclick="window.print()">🖨 Print</button>
+                    </div>
+                </form>
+
+                <!-- Date Range Label -->
+                <p class="mb-2">
+                    <strong>Showing:</strong>
+                    {{ $label }} ({{ $startDate->format('F d, Y') }} to {{ $endDate->format('F d, Y') }})
+                </p>
 
                 <!-- Total Income -->
                 <div class="alert alert-info">
                     <strong>Total Income:</strong> ₱{{ number_format($totalIncome, 2) }}
                 </div>
 
-                <!-- Orders Table with fixed height -->
-                <div style="height:300px; overflow-y:auto; border:1px solid #ddd; border-radius:8px; padding:0.5rem;">
+                <!-- Orders Table -->
+                <div id="print-area" style="height:300px; overflow-y:auto; border:1px solid #ddd; border-radius:8px; padding:0.5rem;">
                     <table class="table table-bordered table-striped mb-0">
                         <thead class="table-dark">
                             <tr>
@@ -57,4 +76,21 @@
             </div>
         </div>
     </div>
+
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-area, #print-area * {
+                visibility: visible;
+            }
+            #print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
 </x-app-layout>

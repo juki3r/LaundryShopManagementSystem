@@ -11,49 +11,65 @@ class ReportsController extends Controller
 {
     public function report(Request $request)
     {
-        $tz = 'Asia/Manila'; // PH timezone
+        $tz = 'Asia/Manila';
         $period = $request->get('period', 'today');
+        $from = $request->get('from');
+        $to = $request->get('to');
 
-        switch ($period) {
-            case 'weekly':
-                $startDate = Carbon::now($tz)->startOfWeek();
-                $endDate = Carbon::now($tz);
-                $label = "This Week";
-                $orders = DB::table('orders')
-                    ->where('claimed', 'Yes')
-                    ->whereBetween('created_at', [$startDate, $endDate])
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-                break;
+        // Default values
+        $startDate = null;
+        $endDate = null;
+        $label = '';
 
-            case 'monthly':
-                $startDate = Carbon::now($tz)->startOfMonth();
-                $endDate = Carbon::now($tz);
-                $label = "This Month";
-                $orders = DB::table('orders')
-                    ->where('claimed', 'Yes')
-                    ->whereBetween('created_at', [$startDate, $endDate])
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-                break;
+        if ($from && $to) {
+            // Custom date range
+            $startDate = Carbon::parse($from, $tz)->startOfDay();
+            $endDate = Carbon::parse($to, $tz)->endOfDay();
+            $label = "Custom Range";
+            $orders = DB::table('orders')
+                ->where('claimed', 'Yes')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else {
+            switch ($period) {
+                case 'weekly':
+                    $startDate = Carbon::now($tz)->startOfWeek();
+                    $endDate = Carbon::now($tz);
+                    $label = "This Week";
+                    break;
+                case 'monthly':
+                    $startDate = Carbon::now($tz)->startOfMonth();
+                    $endDate = Carbon::now($tz);
+                    $label = "This Month";
+                    break;
+                default:
+                    $startDate = Carbon::today($tz);
+                    $endDate = Carbon::today($tz);
+                    $label = "Today";
+                    break;
+            }
 
-            default: // today
-                $today = Carbon::today($tz);
-                $startDate = $today;
-                $endDate = $today;
-                $label = "Today";
-                $orders = DB::table('orders')
-                    ->where('claimed', 'Yes')
-                    ->whereDate('created_at', $today) // only date part, ignores timezone issues
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-                break;
+            $orders = DB::table('orders')
+                ->where('claimed', 'Yes')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->orderBy('created_at', 'desc')
+                ->get();
         }
 
         $totalIncome = $orders->sum('total');
-        return view('reports.index', compact('orders', 'totalIncome', 'startDate', 'endDate', 'label', 'period'));
-    }
 
+        return view('reports.index', compact(
+            'orders',
+            'totalIncome',
+            'startDate',
+            'endDate',
+            'label',
+            'period',
+            'from',
+            'to'
+        ));
+    }
     public function receipt(Order $order)
     {
         return view('reports.receipt', compact('order'));
