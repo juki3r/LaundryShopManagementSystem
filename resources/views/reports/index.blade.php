@@ -59,9 +59,9 @@
 
                     <!-- Header for Print Only -->
                     <div class="text-center mb-3 d-none d-print-block">
-                        <h2 class="fw-bold mb-0 text-uppercase">PONG Laundry Services</h2>
-                        <p class="mb-0">Poblacion, Carles, Iloilo</p>
-                        <p class="mb-0">Contact: 0912-345-6789 | Email: ponglaundry@gmail.com</p>
+                        <h2 class="fw-bold mb-0 text-uppercase">The Laundry Club</h2>
+                        <p class="mb-0">Golingan Street, Pob. Zone 2 Estancia Iloilo</p>
+                        <p class="mb-0">Contact: 0930-455-1516 | Email: allysamaesolis@gmail.com</p>
                         <hr style="border-top:2px solid black; margin:8px 0;">
                         <h5 class="fw-bold mb-2">Transaction Report</h5>
                         <p class="mb-0">
