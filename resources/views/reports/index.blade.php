@@ -56,9 +56,9 @@
 
                 <!-- Printable Area -->
                 <div id="print-area" style="overflow-y:auto; border:1px solid #ddd; border-radius:8px; padding:1rem;">
-                    
-                    <!-- Header for Print -->
-                    <div class="text-center mb-3 d-print-block">
+
+                    <!-- Header for Print Only -->
+                    <div class="text-center mb-3 d-none d-print-block">
                         <h2 class="fw-bold mb-0 text-uppercase">PONG Laundry Services</h2>
                         <p class="mb-0">Poblacion, Carles, Iloilo</p>
                         <p class="mb-0">Contact: 0912-345-6789 | Email: ponglaundry@gmail.com</p>
@@ -113,7 +113,7 @@
                     </table>
 
                     <!-- Footer Note -->
-                    <div class="text-center mt-3 d-print-block">
+                    <div class="text-center mt-3 d-none d-print-block">
                         <small>Generated on {{ now('Asia/Manila')->format('F d, Y · h:i A') }}</small>
                         <br>
                         <small>Thank you for choosing PONG Laundry Services!</small>
