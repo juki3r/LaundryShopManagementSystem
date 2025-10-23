@@ -54,13 +54,19 @@
                     @endif
                 </p>
 
-                <!-- Total Income -->
-                <div class="alert alert-info">
-                    <strong>Total Income:</strong> ₱{{ number_format($totalIncome, 2) }}
-                </div>
+                <!-- Printable Area -->
+                <div id="print-area" style="overflow-y:auto; border:1px solid #ddd; border-radius:8px; padding:1rem;">
+                    <!-- Header for Print -->
+                    <div class="text-center mb-3 d-print-block">
+                        <h3 class="fw-bold mb-0">PONG LAUNDRY SERVICES</h3>
+                        <small>{{ $label }} Report ({{ $startDate->format('F d, Y') }} - {{ $endDate->format('F d, Y') }})</small>
+                        @if($serviceType && $serviceType !== 'all')
+                            <div><strong>Service Type:</strong> {{ ucfirst($serviceType) }}</div>
+                        @endif
+                        <hr>
+                    </div>
 
-                <!-- Orders Table -->
-                <div id="print-area" style="height:300px; overflow-y:auto; border:1px solid #ddd; border-radius:8px; padding:0.5rem;">
+                    <!-- Orders Table -->
                     <table class="table table-bordered table-striped mb-0">
                         <thead class="table-dark">
                             <tr>
@@ -77,7 +83,7 @@
                                     <td>{{ \Carbon\Carbon::parse($order->created_at)->setTimezone('Asia/Manila')->format('F d, Y · h:i A') }}</td>
                                     <td>{{ $order->customer_name ?? 'Anonymous' }}</td>
                                     <td>{{ $order->address }}</td>
-                                    <td>{{ $order->service_type }}</td>
+                                    <td>{{ ucfirst($order->service_type) }}</td>
                                     <td>{{ number_format($order->total, 2) }}</td>
                                 </tr>
                             @empty
@@ -86,14 +92,28 @@
                                 </tr>
                             @endforelse
                         </tbody>
+
+                        @if($orders->count() > 0)
+                            <tfoot>
+                                <tr class="table-secondary">
+                                    <th colspan="4" class="text-end">TOTAL INCOME:</th>
+                                    <th>₱{{ number_format($totalIncome, 2) }}</th>
+                                </tr>
+                            </tfoot>
+                        @endif
                     </table>
+
+                    <!-- Footer Note -->
+                    <div class="text-center mt-3 d-print-block">
+                        <small>Generated on {{ now('Asia/Manila')->format('F d, Y · h:i A') }}</small>
+                    </div>
                 </div>
 
             </div>
         </div>
     </div>
 
-    <!-- Print styling -->
+    <!-- Print Styling -->
     <style>
         @media print {
             body * {
@@ -107,6 +127,10 @@
                 left: 0;
                 top: 0;
                 width: 100%;
+                padding: 1rem;
+            }
+            button, form, .btn, .mb-3.d-flex {
+                display: none !important;
             }
         }
     </style>
