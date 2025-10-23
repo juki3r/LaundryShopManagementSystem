@@ -16,13 +16,13 @@ class ReportsController extends Controller
         $from = $request->get('from');
         $to = $request->get('to');
 
-        // Default values
+        // Default
         $startDate = null;
         $endDate = null;
         $label = '';
 
         if ($from && $to) {
-            // Custom date range
+            // Custom range filter
             $startDate = Carbon::parse($from, $tz)->startOfDay();
             $endDate = Carbon::parse($to, $tz)->endOfDay();
             $label = "Custom Range";
@@ -35,24 +35,28 @@ class ReportsController extends Controller
             switch ($period) {
                 case 'weekly':
                     $startDate = Carbon::now($tz)->startOfWeek();
-                    $endDate = Carbon::now($tz);
+                    $endDate = Carbon::now($tz)->endOfDay();
                     $label = "This Week";
                     break;
                 case 'monthly':
                     $startDate = Carbon::now($tz)->startOfMonth();
-                    $endDate = Carbon::now($tz);
+                    $endDate = Carbon::now($tz)->endOfDay();
                     $label = "This Month";
                     break;
-                default:
-                    $startDate = Carbon::today($tz);
-                    $endDate = Carbon::today($tz);
+                default: // today
+                    $startDate = Carbon::now($tz)->startOfDay();
+                    $endDate = Carbon::now($tz)->endOfDay();
                     $label = "Today";
                     break;
             }
 
+            // Convert to UTC before querying
+            $startUtc = $startDate->copy()->timezone('UTC');
+            $endUtc = $endDate->copy()->timezone('UTC');
+
             $orders = DB::table('orders')
                 ->where('claimed', 'Yes')
-                ->whereBetween('created_at', [$startDate, $endDate])
+                ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->orderBy('created_at', 'desc')
                 ->get();
         }
@@ -69,9 +73,5 @@ class ReportsController extends Controller
             'from',
             'to'
         ));
-    }
-    public function receipt(Order $order)
-    {
-        return view('reports.receipt', compact('order'));
     }
 }
