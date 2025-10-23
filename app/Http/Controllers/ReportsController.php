@@ -61,10 +61,16 @@ class ReportsController extends Controller
         $totalIncome = $orders->sum('total');
 
         // Get distinct service types for dropdown
-        $serviceTypes = DB::table('orders')
-            ->select('service_type')
-            ->distinct()
-            ->pluck('service_type');
+        // $serviceTypes = DB::table('orders')
+        //     ->select('service_type')
+        //     ->distinct()
+        //     ->pluck('service_type');
+        $serviceTypes = collect(['delivery', 'pickup'])
+            ->merge(
+                DB::table('orders')->select('service_type')->distinct()->pluck('service_type')
+            )
+            ->unique()
+            ->values();
 
         return view('reports.index', compact(
             'orders',
