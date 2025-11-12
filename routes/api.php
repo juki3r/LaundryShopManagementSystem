@@ -17,7 +17,7 @@ Route::post('register', [RegisteredUserController::class, 'registerapi']);
 
 Route::middleware('auth:sanctum')->get('/orders', [OrderController::class, 'indexApi']);
 Route::middleware('auth:sanctum')->get('/orders/history', [OrderController::class, 'indexApiHistory']);
-Route::middleware('auth:sanctum')->post('/save-expo-token', [RegisteredUserController::class, 'saveExpoToken']);
+Route::middleware('auth:sanctum')->post('/users/{id}/update-token', [RegisteredUserController::class, 'updateToken']);
 Route::middleware('auth:sanctum')->post('/orders', [OrderController::class, 'storeApi']);
 Route::middleware('auth:sanctum')->get('/rider/orders', [OrderController::class, 'riderOrders']);
 Route::middleware('auth:sanctum')->put('/rider/orders/{order}/deliver', [OrderController::class, 'markDelivered']);

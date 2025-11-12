@@ -75,4 +75,18 @@ class RegisteredUserController extends Controller
             'user' => $user,
         ]);
     }
+
+    // UserController.php
+    public function updateToken(Request $request, $id)
+    {
+        $request->validate([
+            'expo_token' => 'required|string',
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->expo_token = $request->expo_token;
+        $user->save();
+
+        return response()->json(['message' => 'Token updated successfully']);
+    }
 }
