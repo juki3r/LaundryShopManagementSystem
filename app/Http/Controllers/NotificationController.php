@@ -23,6 +23,13 @@ class NotificationController extends Controller
             // ✅ Find user or fail
             $user = User::findOrFail($id);
 
+            $user = User::findOrFail($id);
+
+            $unclaimedServiceTypes = $user->orders()
+                ->where('claimed', 'NO')
+                ->get('service_type');
+
+
             // ✅ Ensure FCM token exists
             if (!$user->expo_token) {
                 return response()->json([
@@ -34,8 +41,9 @@ class NotificationController extends Controller
             // ✅ Send notification via FirebaseService
             (new \App\Services\FirebaseService)->sendNotification(
                 $user->expo_token,
-                'Basta Carles the Best!',
-                'Info: This is a test for information desimanation.'
+                'Laundry Shop',
+                'Your order is ready for ' . $unclaimedServiceTypes . '.'
+
             );
 
             return response()->json([
