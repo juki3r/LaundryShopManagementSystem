@@ -40,7 +40,7 @@ class NotificationController extends Controller
 
             return response()->json([
                 'status'  => 'success',
-                'message' => "Notification sent to {$user->fullname}"
+                'message' => "Notification sent to {$user->name}"
             ]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
