@@ -1,15 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\ReportsController;
-use App\Http\Controllers\RiderController;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\RiderController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -82,5 +83,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+//Blast notification
+// Can use as broadcast to all prefer admin
+Route::get('/notify-blast', [NotificationController::class, 'sendBlast']);
+//This is for 1 notification
+Route::get('/send-to-one/{id}', [NotificationController::class, 'sendToOne']);
 
 require __DIR__ . '/auth.php';
