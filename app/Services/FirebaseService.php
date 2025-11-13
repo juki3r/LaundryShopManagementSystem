@@ -57,7 +57,7 @@ class FirebaseService
     public function sendNotificationToAll($title, $body)
     {
         // 1️⃣ Get all users who have FCM tokens
-        $tokens = \App\Models\CarlesUser::whereNotNull('fcm_token')
+        $tokens = \App\Models\User::whereNotNull('fcm_token')
             ->pluck('fcm_token')
             ->toArray();
 
