@@ -27,7 +27,7 @@ class NotificationController extends Controller
 
             $unclaimedServiceTypes = $user->orders()
                 ->where('claimed', 'NO')
-                ->get('service_type');
+                ->value('service_type');
 
 
             // ✅ Ensure FCM token exists
