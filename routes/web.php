@@ -91,4 +91,14 @@ Route::get('/notify-blast', [NotificationController::class, 'sendBlast']);
 //This is for 1 notification
 Route::get('/send-to-one/{id}', [NotificationController::class, 'sendToOne']);
 
+Route::get('/test-fcm', function () {
+    $service = new \App\Services\FirebaseService;
+    return $service->sendNotification(
+        '<PUT_A_REAL_FCM_TOKEN_HERE>',
+        'Test Title',
+        'Hello from Laravel!'
+    );
+});
+
+
 require __DIR__ . '/auth.php';
