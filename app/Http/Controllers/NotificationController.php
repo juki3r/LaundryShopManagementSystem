@@ -7,15 +7,7 @@ use App\Services\FirebaseService;
 
 class NotificationController extends Controller
 {
-    public function sendBlast()
-    {
-        (new FirebaseService)->sendNotificationToAll(
-            'Carles Information',
-            'This is a test broadcast to all users.'
-        );
 
-        return response()->json(['status' => 'success', 'message' => 'Notification sent to all users']);
-    }
 
     public function sendToOne($id)
     {

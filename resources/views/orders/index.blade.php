@@ -132,5 +132,21 @@ $(document).ready(function() {
     $('#amountStatusFilter').on('change', fetchOrders);
 
 });
+
+function sendNotification(userId) {
+    fetch(`/send-to-one/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert("📢 " + data.message);
+            } else {
+                alert("❌ " + data.message);
+            }
+        })
+        .catch(error => {
+            alert("Error sending notification.");
+            console.error(error);
+        });
+}
 </script>
 </x-app-layout>

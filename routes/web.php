@@ -85,20 +85,10 @@ Route::middleware('auth')->group(function () {
 });
 
 
-//Blast notification
-// Can use as broadcast to all prefer admin
-Route::get('/notify-blast', [NotificationController::class, 'sendBlast']);
-//This is for 1 notification
+
+//This is for notification
 Route::get('/send-to-one/{id}', [NotificationController::class, 'sendToOne']);
 
-Route::get('/test-fcm', function () {
-    $service = new \App\Services\FirebaseService;
-    return $service->sendNotification(
-        'fkbZPi6tRjCXxi9hCM2InG:APA91bEPnBePmAfJNdP4yeghDZbuoiRD6LvPEEdLOIR34kaADiNFXbSyOtl_aUtgnxe0eDNMZcO_upTyDwmuZxNQqWCky6_JgO84edebRSwtfwvjzkXPEXw',
-        'Test Title',
-        'Hello from Laravel!'
-    );
-});
 
 
 require __DIR__ . '/auth.php';

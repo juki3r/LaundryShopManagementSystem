@@ -44,6 +44,10 @@
                             </td>
 
                             <td class="text-center">
+                                <button onclick="sendNotification({{ $order->user_id }})" 
+                                        class="btn btn-sm btn-success">
+                                    <i class="bi bi-bell-fill"></i> Notify
+                                </button>
                                 <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editOrderModal{{ $order->id }}">
                                     <i class="bi bi-pencil-square"></i> Edit
                                 </button>
