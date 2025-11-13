@@ -24,7 +24,7 @@ class NotificationController extends Controller
             $user = User::findOrFail($id);
 
             // ✅ Ensure FCM token exists
-            if (!$user->fcm_token) {
+            if (!$user->expo_token) {
                 return response()->json([
                     'status'  => 'error',
                     'message' => 'User has no FCM token registered.'
@@ -33,7 +33,7 @@ class NotificationController extends Controller
 
             // ✅ Send notification via FirebaseService
             (new \App\Services\FirebaseService)->sendNotification(
-                $user->fcm_token,
+                $user->expo_token,
                 'Basta Carles the Best!',
                 'Info: This is a test for information desimanation.'
             );
