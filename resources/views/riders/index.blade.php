@@ -124,7 +124,7 @@
                                 <td>${rider.commission}</td>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-danger deleteRiderBtn" data-id="${rider.id}">
-                                        <i class="bi bi-trash-fill"></i> Delete
+                                        <i class="bi bi-archive"></i> Archive
                                     </button>
                                 </td>
                             </tr>
