@@ -123,7 +123,7 @@
                                 <td>${rider.delivered_count}</td>
                                 <td>${rider.commission}</td>
                                 <td class="text-center">
-                                    <button class="btn btn-sm btn-danger deleteRiderBtn" data-id="${rider.id}">
+                                    <button class="btn btn-sm btn-warning deleteRiderBtn" data-id="${rider.id}">
                                         <i class="bi bi-archive"></i> Archive
                                     </button>
                                 </td>
